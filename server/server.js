@@ -30,24 +30,8 @@ app.use(
 
 app.use(express.static("public"));
 
-app.post("/",async (req,res)=>{
-    const {name} = req.body
-    if(!name){
-        return res.json({message:"Input required"})
-    }
-
-    const newCate = new Category({
-        name:name
-    })
-
-    newCate.save()
-    .then(()=>{
-        return res.json({message: "Add successful"})
-    })
-    .catch((err)=>{
-        console.log(err)
-        return res.json({message: "Error"})
-    })
+app.get("/",async (req,res)=>{
+   res.json({message:"TEst fetch"})
 
 })
 
