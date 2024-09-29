@@ -7,8 +7,6 @@ const customerSchema = new mongoose.Schema({
     },
     numberphone: {
       type: String,
-      required: true,
-      unique: true
     },
     password: {
       type: String,
@@ -37,11 +35,11 @@ const customerSchema = new mongoose.Schema({
     },
     address: {
       type: String,
-      required: true
+     
     },
     birthday: {
       type: Date,
-      required: true
+     
     },
     role: {
       type: String,

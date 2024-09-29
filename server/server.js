@@ -1,13 +1,14 @@
 const dotenv = require('dotenv')
 const express = require('express')
 const mongoose = require('mongoose')
-const Category = require('./scr/models/Category.model')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const PORT = process.env.PORT || 3000
 const allowedOrigins = ["http://localhost:5001"];
 dotenv.config()
+//route 
+const authRouter = require('./scr/route/Auth.route')
 
 const app = express()
 app.use(bodyParser.json())
@@ -30,10 +31,7 @@ app.use(
 
 app.use(express.static("public"));
 
-app.get("/",async (req,res)=>{
-   res.json({message:"TEst fetch"})
-
-})
+app.use("/auth",authRouter)
 
 mongoose.connect(
    process.env.StringUrlMongo)
