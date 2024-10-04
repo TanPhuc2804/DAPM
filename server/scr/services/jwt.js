@@ -27,7 +27,7 @@ const verifyAdmin = async (req,res,next)=>{
     if(!token){
         return res.status(401).json({message:"Unauthorized"})
     }
-
+    console.log(token)
     const decode = await jwt.verify(token,process.env.ACCESS_TOKEN)
     const idUser = decode._id
     const checkStaff = await Staff.findById({
