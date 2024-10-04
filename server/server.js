@@ -9,7 +9,7 @@ const allowedOrigins = ["http://localhost:5001"];
 dotenv.config()
 //route 
 const authRouter = require('./scr/route/Auth.route')
-
+const customerRouter =require('./scr/route/Customer.route')
 const app = express()
 app.use(bodyParser.json())
 app.use(cookieParser())
@@ -32,6 +32,8 @@ app.use(
 app.use(express.static("public"));
 
 app.use("/auth",authRouter)
+app.use("/customer",customerRouter)
+
 
 mongoose.connect(
    process.env.StringUrlMongo)

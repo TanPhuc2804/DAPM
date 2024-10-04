@@ -93,7 +93,7 @@ const login = async (req, res) => {
             .cookie("token", access_token, { httpOnly: true, secure: true })
             .json({
                 status: true,
-                redirect: "/",
+                redirect: "/admin",
                 message: "Login staff Successful"
             })
     }
@@ -101,7 +101,12 @@ const login = async (req, res) => {
     return res.status(404).json({status:false, message:"You haven’t registered yet"})
 }
 
+const logout = async  (req,res)=>{
+    res.clearCookie('token')
+    return res.json({logout:true})
+}
 module.exports = {
     registerCus,
-    login
+    login,
+    logout
 }
