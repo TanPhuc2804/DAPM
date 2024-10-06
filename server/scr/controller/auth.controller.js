@@ -93,7 +93,7 @@ const login = async (req, res) => {
             .cookie("token", access_token, { httpOnly: true, secure: true })
             .json({
                 status: true,
-                redirect: "/",
+                redirect: "/admin",
                 message: "Login staff Successful"
             })
     }
