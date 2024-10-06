@@ -5,7 +5,6 @@ function Footer() {
     <footer className="footer-background text-gray-200 bg-[#224F34] p-6 max-w-full">
       <div className="max-w-screen-xl mx-auto px-4">
         <div className="footer-grid grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Khung 1: Tên shop và mạng xã hội */}
           <div className="footer-brand flex flex-col items-start">
             <h2 className="footer-brand-name text-lg font-bold mb-2">
               F<span className="text-orange-500">M</span>EN Store
@@ -26,7 +25,7 @@ function Footer() {
             </div>
           </div>
 
-          {/* Khung 2: Liên kết điều hướng */}
+
           <div className="footer-navigation flex flex-col items-start">
             <h2 className="navigation-title text-lg font-bold mb-2">Liên kết nhanh</h2>
             <a href="/" className="navigation-link text-gray-400 hover:text-white transition-colors duration-300 mb-1">Trang chủ</a>
@@ -35,7 +34,7 @@ function Footer() {
             <a href="/contact" className="navigation-link text-gray-400 hover:text-white transition-colors duration-300">Liên hệ</a>
           </div>
 
-          {/* Khung 3: Địa chỉ và Google Maps */}
+
           <div className="footer-contact flex flex-col items-start">
             <h2 className="contact-title text-lg font-bold mb-2">Địa chỉ cửa hàng</h2>
             <p className="contact-address text-gray-400 mb-2">123 Đường ABC, Quận 1, TP.HCM</p>
