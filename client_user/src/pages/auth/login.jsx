@@ -8,8 +8,8 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    axios.post("http://localhost:5000/login", { username, password })
+    axios.defaults.withCredentials=true
+    axios.post("http://localhost:3000/auth/login", { username, password })
       .then(res => console.log(res))
       .catch(err => console.log(err));
   };
