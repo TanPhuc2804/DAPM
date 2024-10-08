@@ -129,20 +129,22 @@ const insertProductToCard = async (req, res) => {
         price: price
     }
 
-    try{
+    try {
         const customer = await Customer.findById({
             _id: idCus
         })
         const oldCart = customer.carts
-        const newCart = [...oldCart,cart]
+        const newCart = [...oldCart, cart]
+        customer.set({
+            carts: newCart
+        })
 
-        c
+        await customer.save()
+        return res.status(200).json({ status: true, message: "Insert into cart successful !", carts: newCart })
 
-    }catch(e){
+    } catch (e) {
         return res.status(500).json({ status: false, message: e.message })
-
     }
-
 
 }
 module.exports = {

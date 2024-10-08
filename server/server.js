@@ -1,48 +1,52 @@
-const dotenv = require('dotenv')
-const express = require('express')
-const mongoose = require('mongoose')
-const cors = require('cors')
-const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
-const PORT = process.env.PORT || 3000
+
+const dotenv = require('dotenv');
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const PORT = process.env.PORT || 3000;
 const allowedOrigins = ["http://localhost:5001"];
-dotenv.config()
-//route 
-const authRouter = require('./scr/route/Auth.route')
-const customerRouter =require('./scr/route/Customer.route')
-const app = express()
-app.use(bodyParser.json())
-app.use(cookieParser())
+dotenv.config();
 
-app.use(
-    cors({
-        origin: (origin, callback) => {
-            if (!origin) return callback(null, true);
+// Import routes
+const authRouter = require('./scr/route/Auth.route');
+const productRouter = require('./scr/route/Product.route');
+const supplierRoute = require('./scr/route/Supplier.route')
+const customerRouter = require('./scr/route/Customer.route')
+const app = express();
 
-            if (allowedOrigins.includes(origin)) {
-                callback(null, true);
-            } else {
-                callback(new Error("Not allowed by CORS"));
-            }
-        },
-        credentials: true
-    })
-);
+// Middleware setup
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
+}));
 
+// Serve static files
 app.use(express.static("public"));
 
-app.use("/auth",authRouter)
+// Route setup
+app.use("/auth", authRouter);
+app.use("/products", productRouter);  // Example product routes
+app.use("/supplier",supplierRoute)
 app.use("/customer",customerRouter)
-
-
-mongoose.connect(
-   process.env.StringUrlMongo)
+// Database connection
+mongoose.connect(process.env.StringUrlMongo)
     .then(() => {
-        console.log("Connect date successfully")
+        console.log("Database connected successfully");
     })
-    .catch((err) => console.log(err))
+    .catch((err) => console.log("Database connection error: ", err));
 
-
+// Start server
 app.listen(PORT, () => {
-    console.log("Server listening to Port", PORT)
-})
+    console.log(`Server listening on port ${PORT}`);
+});
