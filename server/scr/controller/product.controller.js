@@ -14,7 +14,7 @@ const createProduct = async (req, res) => {
 // Get all products
 const getAllProducts = async (req, res) => {
     try {
-        const products = await Product.find().populate('category supplier comments');
+        const products = await Product.find({})
         res.status(200).json({ status: true, products });
     } catch (error) {
         res.status(500).json({ status: false, message: "Failed to retrieve products", error: error.message });
@@ -24,7 +24,9 @@ const getAllProducts = async (req, res) => {
 // Get a single product by ID
 const getProductById = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id).populate('category supplier comments');
+        const product = await Product.findById({
+            _id:req.params.id
+        })
         if (!product) {
             return res.status(404).json({ status: false, message: "Product not found" });
         }
@@ -36,6 +38,14 @@ const getProductById = async (req, res) => {
 
 // Update a product by ID
 const updateProduct = async (req, res) => {
+    const id = req.params.id
+    const product = req.body
+
+    if(!id)
+        return res.status(403).json({status:false,message:"Id disappear !"})
+    if(!product)
+        return res.status(403).json({status:false,message:"Input required !"})
+
     try {
         const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         if (!product) {

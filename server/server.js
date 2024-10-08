@@ -12,8 +12,8 @@ dotenv.config();
 // Import routes
 const authRouter = require('./scr/route/Auth.route');
 const productRouter = require('./scr/route/Product.route');
-const adminRouter = require('./scr/route/Admin.route');
-
+const supplierRoute = require('./scr/route/Supplier.route')
+const customerRouter = require('./scr/route/Customer.route')
 const app = express();
 
 // Middleware setup
@@ -37,8 +37,8 @@ app.use(express.static("public"));
 // Route setup
 app.use("/auth", authRouter);
 app.use("/products", productRouter);  // Example product routes
-app.use("/admin", adminRouter);  // Example admin routes
-
+app.use("/supplier",supplierRoute)
+app.use("/customer",customerRouter)
 // Database connection
 mongoose.connect(process.env.StringUrlMongo)
     .then(() => {
