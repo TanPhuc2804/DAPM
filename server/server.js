@@ -1,48 +1,52 @@
-const dotenv = require('dotenv')
-const express = require('express')
-const mongoose = require('mongoose')
-const cors = require('cors')
-const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
-const PORT = process.env.PORT || 3000
+
+const dotenv = require('dotenv');
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const PORT = process.env.PORT || 3000;
 const allowedOrigins = ["http://localhost:5001"];
-dotenv.config()
-//route 
-const authRouter = require('./scr/route/Auth.route')
-const customerRouter =require('./scr/route/Customer.route')
-const app = express()
-app.use(bodyParser.json())
-app.use(cookieParser())
+dotenv.config();
 
-app.use(
-    cors({
-        origin: (origin, callback) => {
-            if (!origin) return callback(null, true);
+// Import routes
+const authRouter = require('./scr/route/Auth.route');
+const productRouter = require('./scr/route/Product.route');
+const adminRouter = require('./scr/route/Admin.route');
 
-            if (allowedOrigins.includes(origin)) {
-                callback(null, true);
-            } else {
-                callback(new Error("Not allowed by CORS"));
-            }
-        },
-        credentials: true
-    })
-);
+const app = express();
 
+// Middleware setup
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
+}));
+
+// Serve static files
 app.use(express.static("public"));
 
-app.use("/auth",authRouter)
-app.use("/customer",customerRouter)
+// Route setup
+app.use("/auth", authRouter);
+app.use("/products", productRouter);  // Example product routes
+app.use("/admin", adminRouter);  // Example admin routes
 
-
-mongoose.connect(
-   process.env.StringUrlMongo)
+// Database connection
+mongoose.connect(process.env.StringUrlMongo)
     .then(() => {
-        console.log("Connect date successfully")
+        console.log("Database connected successfully");
     })
-    .catch((err) => console.log(err))
+    .catch((err) => console.log("Database connection error: ", err));
 
-
+// Start server
 app.listen(PORT, () => {
-    console.log("Server listening to Port", PORT)
-})
+    console.log(`Server listening on port ${PORT}`);
+});
