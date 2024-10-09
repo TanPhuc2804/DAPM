@@ -1,5 +1,5 @@
 import React from 'react';
-import ProductCardb from '../../Productcard';
+import ProductCard from '../../Productcard';
 
 const HotFashion = () => {
   const products = [
