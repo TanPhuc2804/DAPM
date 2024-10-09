@@ -3,8 +3,17 @@ const { getAllProducts, getProductById } = require('../controllers/productContro
 
 const router = express.Router();
 
-// Public routes
-router.get('/products', getAllProducts);
-router.get('/products/:id', getProductById);
+productRouter.get('/', getProducts);
 
+// Route to get a specific product by ID
+productRouter.get('/:id', getProductById);
+
+// Route to create a new product (admin only)
+productRouter.post('/', verifyAdmin, createProduct);
+
+// Route to update an existing product by ID (admin only)
+productRouter.put('/:id', verifyAdmin, updateProduct);
+
+// Route to delete a product by ID (admin only)
+productRouter.delete('/:id', verifyAdmin, deleteProduct);
 module.exports = router;
