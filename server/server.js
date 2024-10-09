@@ -12,7 +12,7 @@ dotenv.config();
 // Import routes
 const authRouter = require('./scr/route/Auth.route');
 const productRouter = require('./scr/route/Product.route');
-const adminRouter = require('./scr/route/Admin.route');
+const adminRouter = require('./scr/route/admin.route');
 
 const app = express();
 
