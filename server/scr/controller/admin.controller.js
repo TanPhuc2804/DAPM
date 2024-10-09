@@ -1,76 +1,101 @@
-const Staff = require('../models/Staff.model');
+const Product = require('../models/Product.model');
 
-// Get Admin by ID
-const getAdmin = async (req, res) => {
+// Get product list
+const getProducts = async (req, res) => {
     try {
-        const admin = await Staff.findById(req.params.id).select('-password'); // Exclude the password field
-        if (!admin) {
-            return res.status(404).json({ status: false, message: 'Admin not found' });
-        }
-        res.status(200).json({ status: true, data: admin });
+        const products = await Product.find().populate('category supplier');
+        res.status(200).json({ status: true, data: products });
     } catch (error) {
         res.status(500).json({ status: false, message: 'Server error', error: error.message });
     }
 };
 
-// Create Admin
-const createAdmin = async (req, res) => {
-    const { fullname, username, email, password, role } = req.body;
+// Get a single product by ID
+const getProductById = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id).populate('category supplier');
+        if (!product) {
+            return res.status(404).json({ status: false, message: 'Product not found' });
+        }
+        res.status(200).json({ status: true, data: product });
+    } catch (error) {
+        res.status(500).json({ status: false, message: 'Server error', error: error.message });
+    }
+};
 
-    if (!fullname || !username || !email || !password || !role) {
+// Create a new product
+const createProduct = async (req, res) => {
+    const { name, price, quantity, description, image, size, category, supplier } = req.body;
+
+    if (!name || !price || !quantity || !description || !image || !category || !supplier) {
         return res.status(400).json({ status: false, message: 'All fields are required' });
     }
 
     try {
-        const existedAdmin = await Staff.findOne({ email: email });
-        if (existedAdmin) {
-            return res.status(400).json({ status: false, message: 'Email already exists' });
-        }
-
-        const hashPassword = await bcrypt.hash(password, 10);
-        const newAdmin = new Staff({
-            fullname,
-            username,
-            email,
-            password: hashPassword,
-            role
+        const newProduct = new Product({
+            name,
+            price,
+            quantity,
+            description,
+            image,
+            size,
+            category,
+            supplier
         });
 
-        await newAdmin.save();
-        res.status(201).json({ status: true, message: 'Admin created successfully' });
+        await newProduct.save();
+        res.status(201).json({ status: true, message: 'Product created successfully', data: newProduct });
     } catch (error) {
         res.status(500).json({ status: false, message: 'Server error', error: error.message });
     }
 };
 
-// Update Admin by ID
-const updateAdmin = async (req, res) => {
-    const { fullname, username, email, password, role } = req.body;
+// Update a product by ID
+const updateProduct = async (req, res) => {
+    const { name, price, quantity, description, image, size, category, supplier } = req.body;
 
     try {
-        const admin = await Staff.findById(req.params.id);
-        if (!admin) {
-            return res.status(404).json({ status: false, message: 'Admin not found' });
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).json({ status: false, message: 'Product not found' });
         }
 
         // Update fields
-        admin.fullname = fullname || admin.fullname;
-        admin.username = username || admin.username;
-        admin.email = email || admin.email;
-        if (password) {
-            admin.password = await bcrypt.hash(password, 10);
-        }
-        admin.role = role || admin.role;
+        product.name = name || product.name;
+        product.price = price || product.price;
+        product.quantity = quantity || product.quantity;
+        product.description = description || product.description;
+        product.image = image || product.image;
+        product.size = size || product.size;
+        product.category = category || product.category;
+        product.supplier = supplier || product.supplier;
 
-        await admin.save();
-        res.status(200).json({ status: true, message: 'Admin updated successfully', data: admin });
+        await product.save();
+        res.status(200).json({ status: true, message: 'Product updated successfully', data: product });
+    } catch (error) {
+        res.status(500).json({ status: false, message: 'Server error', error: error.message });
+    }
+};
+
+// Delete a product by ID
+const deleteProduct = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).json({ status: false, message: 'Product not found' });
+        }
+
+        await product.remove();
+        res.status(200).json({ status: true, message: 'Product deleted successfully' });
     } catch (error) {
         res.status(500).json({ status: false, message: 'Server error', error: error.message });
     }
 };
 
 module.exports = {
-    getAdmin,
-    createAdmin,
-    updateAdmin
+    getProducts,
+    getProductById,
+    createProduct,
+    updateProduct,
+    deleteProduct
 };
