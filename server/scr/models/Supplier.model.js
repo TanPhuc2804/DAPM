@@ -32,5 +32,5 @@ const supplierSchema = new mongoose.Schema({
     }
 });
 
-const Supplier = mongoose.model("Role", supplierSchema)
+const Supplier = mongoose.model("Supplier", supplierSchema)
 module.exports = Supplier

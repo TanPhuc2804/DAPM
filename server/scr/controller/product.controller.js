@@ -1,25 +1,17 @@
 const Product = require('../models/Product.model');
 
-// Get product list
-const getProducts = async (req, res) => {
-    try {
-        const products = await Product.find().populate('category supplier');
-        res.status(200).json({ status: true, data: products });
-    } catch (error) {
-        res.status(500).json({ status: false, message: 'Server error', error: error.message });
-    }
-};
-
 // Get a single product by ID
 const getProductById = async (req, res) => {
-    try {
-        const product = await Product.findById(req.params.id).populate('category supplier');
+   try {
+        const product = await Product.findById({
+            _id:req.params.id
+        })
         if (!product) {
-            return res.status(404).json({ status: false, message: 'Product not found' });
+            return res.status(404).json({ status: false, message: "Product not found" });
         }
-        res.status(200).json({ status: true, data: product });
+        res.status(200).json({ status: true, product });
     } catch (error) {
-        res.status(500).json({ status: false, message: 'Server error', error: error.message });
+        res.status(500).json({ status: false, message: "Failed to retrieve product", error: error.message });
     }
 };
 
@@ -32,6 +24,7 @@ const createProduct = async (req, res) => {
     }
 
     try {
+
         const newProduct = new Product({
             name,
             price,
@@ -52,7 +45,9 @@ const createProduct = async (req, res) => {
 
 // Update a product by ID
 const updateProduct = async (req, res) => {
+
     const { name, price, quantity, description, image, size, category, supplier } = req.body;
+
 
     try {
         const product = await Product.findById(req.params.id);
@@ -84,7 +79,6 @@ const deleteProduct = async (req, res) => {
         if (!product) {
             return res.status(404).json({ status: false, message: 'Product not found' });
         }
-
         await product.remove();
         res.status(200).json({ status: true, message: 'Product deleted successfully' });
     } catch (error) {
