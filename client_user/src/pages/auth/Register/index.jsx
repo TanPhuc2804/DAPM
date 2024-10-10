@@ -1,31 +1,47 @@
 import { useState } from 'react';
 import axios from 'axios';
-import "../App.css"; // Ensure you have global styles if needed
 
-function Login() {
+
+function Register() {
   const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [cofirmpassword, setConfirmPassword] = useState('');
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.defaults.withCredentials=true
-    axios.post("http://localhost:3000/auth/login", { username, password })
+    axios.post("http://localhost:3000/auth/registerCus ", { username,name, password,cofirmpassword })
       .then(res => console.log(res))
       .catch(err => console.log(err));
+      
+      
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center  items-center h-screen">
       <div className="flex bg-white rounded-lg shadow-lg">
-        <div className="hidden md:block md:w-[600px]">
+        <div className="hidden md:block md:w-[500px]">
           <div className="h-full bg-gradient-to-br from-purple-400 to-pink-400 rounded-l-lg"></div>
         </div>
-        <div className="p-10">
+        <div className="p-5">
           <h1 className="text-2xl font-bold mb-4">Tạo tài khoản</h1>
           <p className="mb-4">Bạn đã có tài khoản? <span className="text-orange-500 underline cursor-pointer">Đăng nhập</span></p>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-sm font-medium">Họ và tên</label>
+              <label className="block text-sm text-left font-medium">Họ và tên</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full h-12 px-4 border rounded-lg"
+                placeholder="Nhập"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm text-left font-medium">Tên đăng nhập</label>
               <input
                 type="text"
                 value={username}
@@ -36,18 +52,7 @@ function Login() {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium">Tên đăng nhập</label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full h-12 px-4 border rounded-lg"
-                placeholder="Nhập"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium">Mật khẩu</label>
+              <label className="block text-sm  text-left font-medium">Mật khẩu</label>
               <input
                 type="password"
                 value={password}
@@ -58,7 +63,18 @@ function Login() {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium">Email</label>
+              <label className="block text-sm  text-left font-medium">Nhập lại mật khẩu</label>
+              <input
+                type="password"
+                value={cofirmpassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full h-12 px-4 border rounded-lg"
+                placeholder="Nhập"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm text-left font-medium">Email</label>
               <input
                 type="email"
                 className="w-full h-12 px-4 border rounded-lg"
@@ -83,4 +99,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

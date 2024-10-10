@@ -4,7 +4,7 @@ import axios from 'axios';
 import { BrowserRouter as Router, Routes,Route } from 'react-router-dom';
 import { publicRoutes } from './routes';
 import { DefaultLayout } from './assets/Component/Layout';
-
+import { Fragment } from 'react';
 function App() {
   const [count, setCount] = useState(0)
   axios.defaults.withCredentials=true
@@ -20,7 +20,7 @@ function App() {
     <div className="App">
       <Routes>
         {publicRoutes.map((route, index) => {
-          const Layout = route.layout || DefaultLayout
+          const Layout = route.layout ===null ? Fragment : DefaultLayout;
           const Page = route.component;
           return (
             <Route key={index}
