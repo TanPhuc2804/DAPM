@@ -13,8 +13,12 @@ dotenv.config();
 // Import routes
 const authRouter = require('./scr/route/Auth.route');
 const productRouter = require('./scr/route/Product.route');
+
 const supplierRoute = require('./scr/route/Supplier.route')
 const customerRouter = require('./scr/route/Customer.route')
+
+const adminRouter = require('./scr/route/admin.route');
+
 const app = express();
 
 // Middleware setup
