@@ -101,7 +101,12 @@ const login = async (req, res) => {
     return res.status(404).json({status:false, message:"You haven’t registered yet"})
 }
 
+const logout = async  (req,res)=>{
+    res.clearCookie('token')
+    return res.json({logout:true})
+}
 module.exports = {
     registerCus,
-    login
+    login,
+    logout
 }
