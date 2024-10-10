@@ -12,7 +12,7 @@ dotenv.config();
 
 // Import routes
 const authRouter = require('./scr/route/Auth.route');
-const productRouter = require('./scr/route/Product.route');
+const router = require('./scr/route/Product.route');
 
 const supplierRoute = require('./scr/route/Supplier.route')
 const customerRouter = require('./scr/route/Customer.route')
@@ -81,7 +81,7 @@ mongoose.connect(process.env.StringUrlMongo)
 
 // Route setup
 app.use("/auth", authRouter);
-app.use("/products", productRouter);  // Example product routes
+app.use("/products", router);  // Example product routes
 app.use("/supplier", supplierRoute)
 app.use("/customer", customerRouter)
 
