@@ -9,7 +9,15 @@ import BestSelling from './BestSelling/bestselling';
 import HotFashion from './HotFasion/hotfashion';
 import ImageGallery from './ImageGallery/ImageGallery';
 import CustomDesign from './CustomDesign/CustomDesign';
+import { useEffect } from 'react';
+import axios from 'axios'
 function Home() {
+
+  useEffect(()=>{
+    axios.get("http://localhost:3000/products/list-product")
+      .then(res=>console.log(res))
+      .catch(err => console.log(err))
+  },[])
 
   return (
     <div className="flex flex-col items-center">
@@ -57,5 +65,5 @@ function Home() {
   
     </div>
   );
-
+}
 export default Home;

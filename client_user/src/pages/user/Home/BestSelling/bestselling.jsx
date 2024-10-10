@@ -1,6 +1,6 @@
 import React from 'react';
 import Slider from 'react-slick';
-import ProductCard from '../../ProductCard'; // Sửa tên import nếu cần
+import ProductCard from '../../Productcard'; // Sửa tên import nếu cần
 import products from '../../Products'; 
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
