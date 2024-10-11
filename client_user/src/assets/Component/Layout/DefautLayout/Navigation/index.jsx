@@ -39,7 +39,7 @@ const Navigation = () => {
             <a href="/" className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}>
               Trang chủ
             </a>
-            <a href="/products" className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}>
+            <a href="/product/Ao" className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}>
               Áo
             </a>
             <a href="/products" className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}>
