@@ -85,3 +85,4 @@ app.use("/products", router);  // Example product routes
 app.use("/supplier", supplierRoute)
 app.use("/customer", customerRouter)
 app.use('/category', categoryRouter);
+app.use('/admin', adminRouter);
