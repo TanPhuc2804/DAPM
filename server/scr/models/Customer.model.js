@@ -50,7 +50,25 @@ const customerSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Voucher' // Assuming you have a Voucher schema defined
       }
-    }]
+    }],
+    carts: [
+      {
+          productId: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'Product',
+              required: true
+          },
+          quantity: {
+              type: Number,
+              required: true,
+              min: 1
+          },
+          price: {
+              type: Number,
+              required: true
+          }
+      }
+  ]
   },{timestamps:true});
   
 const Customer = mongoose.model('Customer',customerSchema)
