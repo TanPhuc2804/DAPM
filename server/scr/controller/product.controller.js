@@ -70,6 +70,10 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+const getProductForCate = async (req,res)=>{
+    
+}
+
 module.exports = {
     createProduct,
     getAllProducts,

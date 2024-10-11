@@ -144,5 +144,4 @@ router.get('/list-product/:id', getProductById);
 router.post('/create-product', verifyAdmin, createProduct);
 router.post('/update-product/:id', verifyAdmin, updateProduct);
 router.delete('/delete-product/:id', verifyAdmin, deleteProduct);
-
 module.exports = router;
