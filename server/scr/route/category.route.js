@@ -9,7 +9,7 @@ const {
 
 const categoryRouter = express.Router();
 
-categoryRouter.post('/', createCategory);
+//categoryRouter.post('/', createCategory);
 
 categoryRouter.get('/', getAllCategories);
 
