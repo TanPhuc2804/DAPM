@@ -1,15 +1,15 @@
 const Category = require('../models/Category.model');
 
 // Create a new category
-const createCategory = async (req, res) => {
-    try {
-        const category = new Category(req.body);
-        await category.save();
-        res.status(201).json({ status: true, message: "Category created successfully", category });
-    } catch (error) {
-        res.status(400).json({ status: false, message: "Failed to create category", error: error.message });
-    }
-};
+//const createCategory = async (req, res) => {
+  // try {
+      //  const category = new Category(req.body);
+      //  await category.save();
+     //   res.status(201).json({ status: true, message: "Category created successfully", category });
+  //  } catch (error) {
+   //     res.status(400).json({ status: false, message: "Failed to create category", error: error.message });
+ //   }
+//};
 
 // Get all categories
 const getAllCategories = async (req, res) => {
@@ -61,7 +61,7 @@ const deleteCategory = async (req, res) => {
 };
 
 module.exports = {
-    createCategory,
+    //createCategory,
     getAllCategories,
     getCategoryById,
     updateCategory,
