@@ -1,23 +1,42 @@
-import { useState } from 'react';
+import { useState,useContext } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import {AuthContext} from '../../../assets/hooks/auth.context'
+
+// A-> B -> C
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
+  //context
+  const {auth, setAuth} = useContext(AuthContext)
+  //useNavigate
+  const navigate = useNavigate()
+
+  //gui du lieu qua BE thong API
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.defaults.withCredentials = true;
-
-    axios.post("http://localhost:3000/auth/login", { username, password })
-      .then(res => {
-        console.log(res.data);
+    axios.post("http://localhost:3000/auth/login",{username,password})
+      .then(res=>{
+        if(res.data.status){
+          setAuth({
+            isAuthenticated: true,
+            user: {
+                id: res.data.id,
+                email: res.data.email,
+                name: res.data.fullanme
+            }
+          })
+          navigate(res.data.redirect)
+        }else{
+          console.log("DN ko thanh cong")
+        }
+        
       })
-      .catch(err => {
-        console.error(err);
-        setErrorMessage("Login failed. Please check your credentials.");
-      });
+      .catch(err=>console.log(err))
   };
 
   return (

@@ -1,3 +1,4 @@
+
 const Product = require('../models/Product.model');
 
 // Create a new product

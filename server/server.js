@@ -1,19 +1,24 @@
-
 const dotenv = require('dotenv');
 const express = require('express');
+const swaggerjsdoc = require('swagger-jsdoc')
+const swaggerui= require('swagger-ui-express')
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const PORT = process.env.PORT || 3000;
-const allowedOrigins = ["http://localhost:5001"];
+const allowedOrigins = ["http://localhost:5001","http://localhost:3000"];
 dotenv.config();
 
 // Import routes
 const authRouter = require('./scr/route/Auth.route');
-const productRouter = require('./scr/route/Product.route');
+const router = require('./scr/route/Product.route');
+
 const supplierRoute = require('./scr/route/Supplier.route')
 const customerRouter = require('./scr/route/Customer.route')
+
+const adminRouter = require('./scr/route/admin.route');
+
 const app = express();
 
 // Middleware setup
@@ -34,11 +39,38 @@ app.use(cors({
 // Serve static files
 app.use(express.static("public"));
 
-// Route setup
-app.use("/auth", authRouter);
-app.use("/products", productRouter);  // Example product routes
-app.use("/supplier",supplierRoute)
-app.use("/customer",customerRouter)
+
+const options = {
+    definition:{
+        openapi:'3.1.0',
+        info:{
+            title:"API của web bán hàng thời trang",
+            version:"0.1.0",
+            description: "Đây là trang web để quản lý các APIs đã có ở trang web bán hàng thời trang",
+            contact:{
+                name:"Phan Tấn Phúc",
+                email:"phantanphuc282004@gmail.com"
+            }
+        },
+        servers:[
+            {
+                url:"http://localhost:3000/",
+            }
+        ]
+    },
+    apis:["./scr/route/*.js"]
+}
+const spacs = swaggerjsdoc(options)
+app.use(
+    "/api-docs",
+    swaggerui.serve,
+    swaggerui.setup(spacs)
+)
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+});
+
 // Database connection
 mongoose.connect(process.env.StringUrlMongo)
     .then(() => {
@@ -46,7 +78,10 @@ mongoose.connect(process.env.StringUrlMongo)
     })
     .catch((err) => console.log("Database connection error: ", err));
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
-});
+
+// Route setup
+app.use("/auth", authRouter);
+app.use("/products", router);  // Example product routes
+app.use("/supplier", supplierRoute)
+app.use("/customer", customerRouter)
+

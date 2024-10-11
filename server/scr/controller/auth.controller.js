@@ -64,7 +64,10 @@ const login = async (req, res) => {
             .json({
                 status: true,
                 redirect: "/",
-                message: "Login Successful"
+                message: "Login Successful",
+                fullanme:customer.fullname,
+                email: customer.email,
+                id: customer._id,
             })
     }
 

@@ -1,3 +1,5 @@
+import axios from "axios";
+import { Link } from "react-router-dom";
 const ProductCard = ({ image, name, price, originalPrice, discount, description }) => {
   return (
     <div className="flex flex-col w-full rounded-1xl max-md:max-w-full overflow-hidden group max-w-[380px] mx-4 my-2 transition-all duration-300 hover:shadow-lg hover:border hover:border-black"> {/* Thêm hiệu ứng hover */}
@@ -25,7 +27,7 @@ const ProductCard = ({ image, name, price, originalPrice, discount, description 
           )}
         </div>
       </div>
-    </div>
+
   );
 };
 

@@ -1,10 +1,14 @@
-import React, { useState } from 'react'; // Thêm useState
+import React, { useState,useContext } from 'react'; // Thêm useState
 import { FaSearch, FaShoppingCart, FaBars, FaTimes } from "react-icons/fa"; 
-
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../../../../hooks/auth.context';
 const Navigation = () => {
   const [cartItemCount, setCartItemCount] = useState(0); 
   const [isMenuOpen, setIsMenuOpen] = useState(false); 
 
+  //context
+  const {auth,setAuth} = useContext(AuthContext)
+  console.log("[Auth navifation]",auth)
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -60,9 +64,9 @@ const Navigation = () => {
               </div>
 
               {/* Login Button */}
-              <button className="ml-4 px-3 py-2 rounded-md text-sm font-medium text-white bg-green-500 hover:bg-green-600">
-                Đăng nhập
-              </button>
+              <Link to={"/auth/login"} className="ml-4 px-3 py-2 rounded-md text-sm font-medium text-white bg-green-500 hover:bg-green-600">
+                { auth.isAuthenticated ? auth.user.name : "Đăng nhập"}
+              </Link>
 
               {/* Shopping Cart */}
               <button className="ml-4 flex items-center relative text-gray-800">
