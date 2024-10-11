@@ -1,6 +1,6 @@
 const express = require('express');
 const {
-    createCategory,
+    //createCategory,
     getAllCategories,
     getCategoryById,
     updateCategory,
