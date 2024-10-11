@@ -11,12 +11,12 @@ const categoryRouter = express.Router();
 
 //categoryRouter.post('/', createCategory);
 
-categoryRouter.get('/', getAllCategories);
+categoryRouter.get('/get-categorylist', getAllCategories);
 
-categoryRouter.get('/:id', getCategoryById);
+categoryRouter.get('/get-category/:id', getCategoryById);
 
-categoryRouter.put('/:id', updateCategory);
+categoryRouter.put('/update-category/:id', updateCategory);
 
-categoryRouter.delete('/:id', deleteCategory);
+categoryRouter.delete('/delete-category/:id', deleteCategory);
 
 module.exports = categoryRouter;
