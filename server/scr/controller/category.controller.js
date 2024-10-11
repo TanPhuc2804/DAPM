@@ -1,15 +1,16 @@
 const Category = require('../models/Category.model');
+const Product = require('../models/Product.model');
 
 // Create a new category
-//const createCategory = async (req, res) => {
-  // try {
-      //  const category = new Category(req.body);
-      //  await category.save();
-     //   res.status(201).json({ status: true, message: "Category created successfully", category });
-  //  } catch (error) {
-   //     res.status(400).json({ status: false, message: "Failed to create category", error: error.message });
- //   }
-//};
+const createCategory = async (req, res) => {
+  try {
+       const category = new Category(req.body);
+       await category.save();
+       res.status(201).json({ status: true, message: "Category created successfully", category });
+   } catch (error) {
+       res.status(400).json({ status: false, message: "Failed to create category", error: error.message });
+   }
+};
 
 // Get all categories
 const getAllCategories = async (req, res) => {
@@ -36,6 +37,8 @@ const getCategoryById = async (req, res) => {
 
 // Update a category by ID
 const updateCategory = async (req, res) => {
+    if(!req.body.name )
+       res.status(403).json({ status: false, message: "Input required !" });
     try {
         const category = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         if (!category) {
@@ -49,7 +52,16 @@ const updateCategory = async (req, res) => {
 
 // Delete a category by ID
 const deleteCategory = async (req, res) => {
+    const id = req.params.id
+    if(!id){
+        res.status(403).json({ status: false, message: "Input required !" });
+    }
     try {
+        const countCategoryInProduct = await Product.countDocuments({category:id})
+        console.log(countCategoryInProduct)
+        if(countCategoryInProduct >0){
+            return res.status(400).json({ status: false, message: "Dont deleted category !" });
+        }
         const category = await Category.findByIdAndDelete(req.params.id);
         if (!category) {
             return res.status(404).json({ status: false, message: "Category not found" });
@@ -61,7 +73,7 @@ const deleteCategory = async (req, res) => {
 };
 
 module.exports = {
-    //createCategory,
+    createCategory,
     getAllCategories,
     getCategoryById,
     updateCategory,
