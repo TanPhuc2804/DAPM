@@ -3,10 +3,10 @@ const { getAdmin, createAdmin, updateAdmin } = require('../controller/admin.cont
 const { verifyAdmin } = require('../services/jwt');
 const adminRouter = express.Router();
 
-adminRouter.get('/:id', verifyAdmin, getAdmin);
+adminRouter.get('/get-admin/:id', verifyAdmin, getAdmin);
 
-adminRouter.post('/', verifyAdmin, createAdmin);
+adminRouter.post('/create-admin/', verifyAdmin, createAdmin);
 
-adminRouter.put('/:id', verifyAdmin, updateAdmin);
+adminRouter.put('/update-admin/:id', verifyAdmin, updateAdmin);
 
 module.exports = adminRouter;
