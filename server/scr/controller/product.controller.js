@@ -1,5 +1,5 @@
 const Product = require('../models/Product.model');
-
+const Category = require('../models/Category.model')
 // Create a new product
 const createProduct = async (req, res) => {
     try {
@@ -71,7 +71,14 @@ const deleteProduct = async (req, res) => {
 };
 
 const getProductForCate = async (req,res)=>{
+    const idCate = req.params.id
+    if(!idCate)
+        return res.status(403).json({status:false, message:"Missing id category"})
+    const listPro = await Product.find({
+        category:idCate
+    }) 
     
+    return res.status(200).json({status:true, message:"Get product for category success",product: listPro})
 }
 
 module.exports = {
@@ -79,5 +86,6 @@ module.exports = {
     getAllProducts,
     getProductById,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getProductForCate
 };
