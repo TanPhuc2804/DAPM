@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt")
 const Customer = require('../models/Customer.model')
+const Product = require("../models/Product.model")
 
 const getListCustomer = async (req, res) => {
     const listCustomer = await Customer.find({})
@@ -96,8 +97,7 @@ const changePassword = async (req, res) => {
 }
 
 const getListCart = async (req, res) => {
-    console.log(req.params)
-    const id = req.params.id
+    const id = req.user._id
     if (!id || id === ':id')
         return res.status(401).json({ status: false, message: "Id disappointed !" })
     try {
@@ -106,7 +106,6 @@ const getListCart = async (req, res) => {
         })
         if (!customer)
             return res.status(404).json({ status: false, message: "Customer not found !" })
-        console.log(customer.carts)
         const cart = customer.carts
         return res.status(200).json({ status: true, message: "Get cart successfully !", cart: cart })
     } catch (e) {
@@ -115,8 +114,8 @@ const getListCart = async (req, res) => {
 }
 
 const insertProductToCard = async (req, res) => {
-    const idCus = req.params.id
-    if (!idCus || idCus === ':id')
+    const idCus = req.user._id
+    if (!idCus)
         return res.status(401).json({ status: false, message: "Id disappointed !" })
     const { idProduct, quantity, price } = req.body
 
@@ -133,8 +132,20 @@ const insertProductToCard = async (req, res) => {
         const customer = await Customer.findById({
             _id: idCus
         })
+        const product = await Product.findById({ _id: idProduct })
         const oldCart = customer.carts
-        const newCart = [...oldCart, cart]
+
+        const index = oldCart.findIndex(product => product.productId == idProduct)
+        let newCart = []
+        if (index > -1) {
+            oldCart[index].quantity += quantity
+            if (oldCart[index].quantity > product.quantity) {
+                return res.status(400).json({ status: false, message: "Insufficient inventory" })
+            }
+            newCart = oldCart
+        } else {
+            newCart = [...oldCart, cart]
+        }
         customer.set({
             carts: newCart
         })
@@ -147,6 +158,39 @@ const insertProductToCard = async (req, res) => {
     }
 
 }
+
+const updateQuanityCart = async (req, res) => {
+    const idCus = req.user._id // id customer
+    const { idProduct, quantity } = req.body
+    console.log({ idProduct, quantity })
+    if (!idProduct || !quantity) {
+        res.status(403).json({ status: false, message: "Input required !" })
+    }
+    try {
+        const customer = await Customer.findById({
+            _id: idCus
+        })
+        const product = await Product.findById({ _id: idProduct })
+        const quantityStore = product.quantity
+        if (!customer)
+            return res.status(404).json({ status: false, message: "Customer not found" })
+        const carts = customer.carts
+        const index = carts.findIndex(item => item.productId == idProduct)
+        if (quantityStore < quantity) {
+            return res.status(400).json({ status: false, message: "Insufficient inventory" })
+        }
+        carts[index].quantity = quantity
+        customer.set({
+            carts: carts
+        })
+        await customer.save()
+        return res.status(200).json({ status: true, message: "Increase quantity successful !", carts: carts })
+    } catch (err) {
+        return res.status(500).json({ status: false, message: err.message })
+
+    }
+}
+
 module.exports = {
     getListCustomer,
     getCustomerByID,
@@ -154,5 +198,5 @@ module.exports = {
     changePassword,
     getListCart,
     insertProductToCard,
-
+    updateQuanityCart
 }
