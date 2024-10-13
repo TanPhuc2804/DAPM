@@ -73,13 +73,18 @@ const deleteProduct = async (req, res) => {
 
 const getProductForCate = async (req,res)=>{
     const idCate = req.params.id
-    if(!idCate)
+    if(!idCate || idCate ==="id")
         return res.status(403).json({status:false, message:"Missing id category"})
-    const listPro = await Product.find({
-        category:idCate
-    }) 
-    
-    return res.status(200).json({status:true, message:"Get product for category success",product: listPro})
+    try{
+        const listPro = await Product.find({
+            category:idCate
+        }) 
+        return res.status(200).json({status:true, message:"Get product for category success",product: listPro})
+    }catch(err){
+        return res.status(500).json({status:false, message:err.message})
+        
+    }
+
 }
 
 module.exports = {
