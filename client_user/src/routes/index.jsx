@@ -16,6 +16,7 @@ import UpdateProduct from "../pages/Admin/pages/Product/UpdateProduct";
 import ViewDetailProduct from "../pages/Admin/pages/Product/ViewDetailProduct";
 import EditVoucher from "../pages/Admin/pages/Vourchers/EditVoucher";
 import AddVoucher from "../pages/Admin/pages/Vourchers/AddVoucher";
+import AddOrder from "../pages/Admin/pages/Order/addOrder";
 const publicRoutes = [
     { path: '/', component: Home },
     { path: '/profile', component: Profile },
@@ -75,6 +76,10 @@ const publicRoutes = [
             {
                 path: 'addvoucher',
                 page: AddVoucher,
+            },
+            {
+                path: 'addorder',
+                page: AddOrder,
             },
         ]
     }
