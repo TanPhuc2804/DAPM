@@ -3,14 +3,17 @@ import Profile from "../pages/user/Profile";
 import Login from "../pages/auth/login"; 
 import Register from "../pages/auth/Register"; 
 import ListProduct from "../pages/user/ListProduct";
-
-
+import DetailProduct from "../pages/user/DetailProduct/DetailProduct";
+import Cart from "../pages/user/Card/Pagecart";
 const publicRoutes = [
     { path: '/', component: Home },
     { path: '/profile', component: Profile },
-    { path: '/product/Ao', component: ListProduct },
-    { path: '/auth/login', component: Login, layout:null }, 
-    { path: '/auth/logup', component: Register, layout:null },
+
+    { path: '/auth/login', component: Login, layout: null }, 
+    { path: '/auth/register', component: Register, layout: null }, 
+    { path: '/product/:id', component: DetailProduct },
+    { path: '/product-category/:id', component: ListProduct }, 
+    { path: '/customer/cart', component: Cart },
 ];
 
 const privateRoutes = [];

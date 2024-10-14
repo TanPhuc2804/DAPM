@@ -4,6 +4,7 @@ import { useState,useEffect } from 'react';
 import axios from "axios"
 const HotFashion = () => {
   const[products, setProduct] = useState([])
+  axios.defaults.withCredentials=true
 
   useEffect(()=>{
     axios.get("http://localhost:3000/products/list-product")
@@ -21,9 +22,9 @@ const HotFashion = () => {
       <div className="mt-9 w-full max-w-[1474px] max-md:max-w-full">
 
         <div className="flex flex-wrap gap-6  max-md:flex-col">
-          {hotFashionProducts.map((product, index) => (
+          {products.map((product, index) => (
             <div key={index} className="flex flex-col w-[32%] max-md:ml-0 my-12 max-md:w-full">
-              <ProductCard {...product} />
+              <ProductCardb {...product} />
             </div>
           ))}
         </div>

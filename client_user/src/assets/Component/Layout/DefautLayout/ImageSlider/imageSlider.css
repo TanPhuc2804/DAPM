@@ -1,0 +1,17 @@
+/* ImageSlider.css */
+.swiper {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-slide img {
+    border-radius: 10px;
+    width: 100%;
+    height: auto;
+}
