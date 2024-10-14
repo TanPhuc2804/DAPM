@@ -135,7 +135,7 @@
 
 
 const express = require('express');
-const { getAllProducts, getProductById, createProduct, updateProduct, deleteProduct } = require('../controller/product.controller');
+const { getAllProducts, getProductById, createProduct, updateProduct, deleteProduct,getProductForCate } = require('../controller/product.controller');
 const { verifyAdmin } = require('../services/jwt')
 const router = express.Router();
  
@@ -145,6 +145,5 @@ router.get('/list-product/:id', getProductById);
 router.post('/create-product', verifyAdmin, createProduct);
 router.post('/update-product/:id', verifyAdmin, updateProduct);
 router.delete('/delete-product/:id', verifyAdmin, deleteProduct);
-
-
+router.get('/list-product-category/:id',getProductForCate)
 module.exports = router;

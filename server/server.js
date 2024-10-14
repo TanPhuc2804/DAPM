@@ -16,7 +16,7 @@ const router = require('./scr/route/Product.route');
 
 const supplierRoute = require('./scr/route/Supplier.route')
 const customerRouter = require('./scr/route/Customer.route')
-
+const categoryRouter = require('./scr/route/category.route'); 
 const adminRouter = require('./scr/route/admin.route');
 
 const app = express();
@@ -85,4 +85,5 @@ app.use("/auth", authRouter);
 app.use("/products", router);  // Example product routes
 app.use("/supplier", supplierRoute)
 app.use("/customer", customerRouter)
-
+app.use('/category', categoryRouter);
+app.use('/admin', adminRouter);
