@@ -42,15 +42,23 @@ const Image = styled.img`
 `;
 
 const InputField = styled.div`
-  display: flex;
-  flex-direction: column;
+   display: flex;
+  align-items: center;
   margin: 10px 0;
   width: 100%;
+
+  & > label {
+    flex: 0.3; /* Chiếm 30% không gian */
+    margin-right: 10px;
+  }
+
+  & > input {
+    flex: 0.7; /* Chiếm 70% không gian */
+  }
 `;
 
 const Label = styled.label`
-  margin-bottom: 5px;
-  font-weight: bold;
+   font-weight: bold;
 `;
 
 const Input = styled.input`
@@ -155,10 +163,10 @@ const AddProduct = () => {
           <Input type="date" />
         </InputField>
         <ButtonContainer>
-          <Link to="/viewdetailproduct"> {/* Đường link cho nút Back */}
+          <Link to="/admin/viewdetailproduct"> {/* Đường link cho nút Back */}
             <Button className="back">Back</Button>
           </Link>
-          <Link to="/viewdetailproduct"> {/* Đường link cho nút Thêm */}
+          <Link to="/admin/viewdetailproduct"> {/* Đường link cho nút Thêm */}
             <Button className="add">THÊM</Button>
           </Link>
         </ButtonContainer>

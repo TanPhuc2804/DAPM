@@ -89,10 +89,10 @@ const ViewDetailProduct = () => {
       <Link to="/delete-product">
         <Button style={{backgroundColor:"red", color:"black",borderRadius:"10px"}}>Xóa</Button>
       </Link>
-       <Link to="/updateproduct">
+       <Link to="/admin/updateproduct">
         <Button style={{backgroundColor:"yellow", color:"black",borderRadius:"10px"}}>Sửa</Button>
       </Link>
-      <Link to="/addproduct">
+      <Link to="/admin/addproduct">
         <Button style={{backgroundColor:"green", color:"black",borderRadius:"10px"}}>Thêm</Button>
       </Link>
     </ButtonGroup>

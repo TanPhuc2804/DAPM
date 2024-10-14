@@ -13,7 +13,10 @@ function Admin() {
                 <aside className="sidebar">
                     <SideBar />
                 </aside>
+                <div className="content">
                 <Outlet />
+                </div>
+
             </div>
         </div>
     )

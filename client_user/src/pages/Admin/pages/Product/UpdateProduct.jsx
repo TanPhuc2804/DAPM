@@ -42,14 +42,22 @@ const Image = styled.img`
 `;
 
 const InputField = styled.div`
-  display: flex;
-  flex-direction: column;
+   display: flex;
+  align-items: center;
   margin: 10px 0;
   width: 100%;
+
+  & > label {
+    flex: 0.3; /* Chiếm 30% không gian */
+    margin-right: 10px;
+  }
+
+  & > input, & > select {
+    flex: 0.7; /* Chiếm 70% không gian */
+  }
 `;
 
 const Label = styled.label`
-  margin-bottom: 5px;
   font-weight: bold;
 `;
 
@@ -64,6 +72,7 @@ const Select = styled.select`
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 100%;
+  
 `;
 const ButtonContainer = styled.div`
   display: flex;
@@ -163,10 +172,10 @@ const UpdateProduct = () => {
           <Input type="date" defaultValue="2023-10-10"/>
         </InputField>
         <ButtonContainer>
-          <Link to="/viewdetailproduct"> {/* Đường link cho nút Back */}
+          <Link to="/admin/viewdetailproduct"> {/* Đường link cho nút Back */}
             <Button className="back">Back</Button>
           </Link>
-          <Link to="/viewdetailproduct"> {/* Đường link cho nút Cập nhật */}
+          <Link to="/admin/viewdetailproduct"> {/* Đường link cho nút Cập nhật */}
             <Button className="update">Update</Button>
           </Link>
         </ButtonContainer>

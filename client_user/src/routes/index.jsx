@@ -11,6 +11,11 @@ import Staff from "../pages/Admin/pages/Staff/Staff";
 import Supplier from "../pages/Admin/pages/Supplier/Supplier";
 import Vourchers from "../pages/Admin/pages/Vourchers/Vourchers";
 import Pricing from "../pages/Admin/pages/Pricing/Pricing";
+import AddProduct from "../pages/Admin/pages/Product/AddProduct";
+import UpdateProduct from "../pages/Admin/pages/Product/UpdateProduct";
+import ViewDetailProduct from "../pages/Admin/pages/Product/ViewDetailProduct";
+import EditVoucher from "../pages/Admin/pages/Vourchers/EditVoucher";
+import AddVoucher from "../pages/Admin/pages/Vourchers/AddVoucher";
 const publicRoutes = [
     { path: '/', component: Home },
     { path: '/profile', component: Profile },
@@ -50,7 +55,27 @@ const publicRoutes = [
                 path: 'pricing',
                 page: Pricing,
             },
-
+            {
+                path: 'addproduct',
+                page: AddProduct,
+            },
+            {
+                path: 'updateproduct',
+                page: UpdateProduct,
+                isShowHeader: true
+            },
+            {
+                path: 'viewdetailproduct',
+                page: ViewDetailProduct,
+            },
+            {
+                path: 'editvoucher',
+                page: EditVoucher,
+            },
+            {
+                path: 'addvoucher',
+                page: AddVoucher,
+            },
         ]
     }
 ];

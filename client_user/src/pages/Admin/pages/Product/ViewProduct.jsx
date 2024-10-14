@@ -19,7 +19,7 @@ const WrapperProduct1 = styled.p`
     font-weight: bold;
 `
 const WrapperProductBackground = styled.div`
-    background-color: pink;
+    background-color: #FFF0F5;
     weight:100%;
 `
 const ViewProduct = ({ title, color }) => {
@@ -28,7 +28,7 @@ const ViewProduct = ({ title, color }) => {
       <WrapperProduct style={{ borderLeftColor: color }}>
        <div>
         <WrapperProduct1>
-          <Link to ="/viewdetailproduct">
+          <Link to ="/admin/viewdetailproduct">
         <p>{title}</p>
         </Link>
         </WrapperProduct1>
