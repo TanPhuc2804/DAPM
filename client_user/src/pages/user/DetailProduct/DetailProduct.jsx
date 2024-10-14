@@ -1,22 +1,23 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import { useCart } from '../Card/CartContext/Cartcontext';
+import axios from 'axios';
 import DeliveryInfo from './DeliveryInfo/DeliveryInfo';
 import ProductDescription from './ProductDescription/ProductDescription';
 import RelatedProducts from './RelatedProducts/RelatedProducts';
-import Quantity from './QuantitySelector/Quantity';
 import Size from './Size/Size';
-import InfoSection from '../ListProduct/InfoSection/InfoSection';
+import Breadcrumb from '../ListProduct/Breadcrumb/Breadcrumb';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-import Breadcrumb from '../ListProduct/Breadcrumb/Breadcrumb';
+import Quantity from './Quantity/Quantity';
 
 function DetailProduct() {
     const { id } = useParams();
+    const { addToCart } = useCart(); 
     const [product, setProduct] = useState({});
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
-    const navigate = useNavigate();
+    const [selectedSize, setSelectedSize] = useState(''); 
 
     useEffect(() => {
         axios.get(`http://localhost:3000/products/list-product/${id}`)
@@ -32,11 +33,13 @@ function DetailProduct() {
             });
     }, [id]);
 
-    
-
     if (loading) {
         return <div>Loading...</div>;
     }
+
+    const handleAddToCart = () => {
+        addToCart({ ...product, quantity, size: selectedSize }); 
+    };
 
     return (
         <div className="container mx-auto px-4">
@@ -60,15 +63,17 @@ function DetailProduct() {
                     <hr className="mt-3 mb-3 border-t-[1px] border-[#E4E4E4] w-[80%] self-start" />
 
                     <div className="mb-4 w-full">
-                        <Size />
+                        <Size selectedSize={selectedSize} setSelectedSize={setSelectedSize} />
                     </div>
                     <hr className="mt-3 mb-3 border-t-[1px] border-[#E4E4E4] w-[80%] self-start" />
 
                     <div className="flex flex-col sm:flex-row items-center mb-12 mx-5 mt-6 w-full">
-                        <Quantity value={quantity} onChange={(value) => setQuantity(value)} />
-                        <Link to = {'/customer/cart'}
-                            
-                            className="bg-gray-300 text-white px-6 py-3 mt-4 sm:mt-0 sm:ml-5 border transition-colors duration-200 hover:bg-green-500 hover:text-white flex items-center">
+                        <Quantity value={quantity} onChange={setQuantity} /> {/* Sử dụng component Quantity */}
+                        <Link 
+                            to='/customer/cart'
+                            onClick={handleAddToCart}
+                            className="bg-gray-300 text-white px-6 py-3 mt-4 sm:mt-0 sm:ml-5 border transition-colors duration-200 hover:bg-green-500 hover:text-white flex items-center"
+                        >
                             <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
                             Thêm vào giỏ hàng
                         </Link>
@@ -82,7 +87,6 @@ function DetailProduct() {
             <ProductDescription product={product} />
             <hr className="my-10 border-neutral-200" />
             <RelatedProducts />
-            <InfoSection />
         </div>
     );
 }

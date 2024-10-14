@@ -13,7 +13,7 @@ import CustomDesign from './CustomDesign/CustomDesign';
 import { useEffect } from 'react';
 import axios from 'axios'
 
-import InfoSection from './InfoSection/InfoSection';
+
 
 function Home() {
 
@@ -66,7 +66,7 @@ function Home() {
         <ImageGallery/>
       <HotFashion />
       <CustomDesign/>
-  <InfoSection/>
+
     </div>
   );
 }

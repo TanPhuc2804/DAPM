@@ -68,7 +68,7 @@ const Navigation = ({ _id}) => {
               </Link>
 
               {/* Shopping Cart */}
-              <button className="ml-4 flex items-center relative text-gray-800">
+              <Link to ={'/customer/cart'} className="ml-4 flex items-center relative text-gray-800">
                 <FaShoppingCart className="h-5 w-5" />
                 {cartItemCount > 0 && (
                   <span className="absolute top-[-8px] right-[-8px] bg-red-500 text-white text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center">
@@ -76,7 +76,7 @@ const Navigation = ({ _id}) => {
                   </span>
                 )}
                 <span className="ml-1">Giỏ hàng</span>
-              </button>
+              </Link>
             </div>
           </div>
         </div>

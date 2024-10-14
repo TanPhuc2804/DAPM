@@ -5,6 +5,7 @@ import Register from "../pages/auth/Register";
 import ListProduct from "../pages/user/ListProduct";
 import DetailProduct from "../pages/user/DetailProduct/DetailProduct";
 import Cart from "../pages/user/Card/Pagecart";
+import Order from "../pages/user/Order/Order";
 const publicRoutes = [
     { path: '/', component: Home },
     { path: '/profile', component: Profile },
@@ -14,6 +15,7 @@ const publicRoutes = [
     { path: '/product/:id', component: DetailProduct },
     { path: '/product-category/:id', component: ListProduct }, 
     { path: '/customer/cart', component: Cart },
+    { path: '/customer/order', component: Order },
 ];
 
 const privateRoutes = [];

@@ -4,7 +4,7 @@ import Breadcrumb from './Breadcrumb/Breadcrumb';
 import HeroBanner from './HeroBanner/Banner';
 import Sidebar from './sidebar/sidebar';
 import ProductGrid from './ProductGrid/ProductGrid';
-import InfoSection from './InfoSection/InfoSection';
+
 import { useParams } from 'react-router-dom';
 
 function ListProduct() {
