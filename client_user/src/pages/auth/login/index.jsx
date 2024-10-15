@@ -2,6 +2,7 @@ import { useState,useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {AuthContext} from '../../../assets/hooks/auth.context'
+import { openNotification } from '../../../assets/hooks/notification';
 
 // A-> B -> C
 
@@ -30,6 +31,7 @@ function Login() {
                 name: res.data.fullanme
             }
           })
+          openNotification(true,res.data.message,"Login successfull")
           navigate(res.data.redirect)
         }else{
           console.log("DN ko thanh cong")

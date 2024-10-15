@@ -9,6 +9,7 @@ customerRouter.get('/cart',verifyLogin,customerControler.getListCart)
 
 
 customerRouter.post('/cart/update-quantity-cart',verifyLogin,customerControler.updateQuanityCart)
+customerRouter.delete('/cart/delete/:id',verifyLogin,customerControler.deleteCart)
 customerRouter.post('/cart/insert',verifyLogin,customerControler.insertProductToCard)
 customerRouter.post('/change-password/:id',customerControler.changePassword)
 customerRouter.post('/update/:id',verifyLogin,customerControler.updateCustomer)

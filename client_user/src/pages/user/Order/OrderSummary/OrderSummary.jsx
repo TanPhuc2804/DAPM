@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCart } from '../../Card/CartContext/Cartcontext';
-import { Link } from 'react-router-dom';
+import { Link,useLocation } from 'react-router-dom';
 
-function OrderSummary() {
-    const { cartItems } = useCart();
-
+function OrderSummary({infor}) {
+    const [cartItems, setCartItem] = useState([])
+    console.log("[ORDER SUMMARY]",infor)
+    const location  = useLocation()
+    useEffect(()=>{
+        setCartItem(location.state.cartItems)
+    },[])
     const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
     return (
@@ -15,7 +19,7 @@ function OrderSummary() {
             <div className="flex flex-col justify-center items-center pb-6 max-md:max-w-full">
                 {cartItems.length > 0 ? (
                     cartItems.map((item) => (
-                        <div key={item.id} className="flex gap-4 justify-start items-start max-md:max-w-full">
+                        <div key={item.productId} className="flex gap-4 justify-start items-start max-md:max-w-full">
                             <img loading="lazy" src={item.image} alt={item.name} className="object-contain shrink-0 self-stretch my-auto aspect-[0.65] w-[150px]" />
                             <div className="flex flex-col self-stretch my-auto min-w-[240px] w-[20px]">
                                 <div className="text-2xl text-left leading-none text-zinc-900">{item.name}</div>

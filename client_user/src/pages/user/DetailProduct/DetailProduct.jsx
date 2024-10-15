@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCart } from '../Card/CartContext/Cartcontext';
 import axios from 'axios';
@@ -10,6 +10,8 @@ import Breadcrumb from '../ListProduct/Breadcrumb/Breadcrumb';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import Quantity from './Quantity/Quantity';
+import { AuthContext } from '../../../assets/hooks/auth.context';
+import { openNotification } from '../../../assets/hooks/notification';
 
 function DetailProduct() {
     const { id } = useParams();
@@ -18,7 +20,7 @@ function DetailProduct() {
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
     const [selectedSize, setSelectedSize] = useState(''); 
-
+    const {auth} =useContext(AuthContext)
     useEffect(() => {
         axios.get(`http://localhost:3000/products/list-product/${id}`)
             .then(res => {
@@ -33,12 +35,26 @@ function DetailProduct() {
             });
     }, [id]);
 
+    const addCartInDB = (product,quantity,size)=>{
+        axios.post("http://localhost:3000/customer/cart/insert",{product,quantity,size})
+            .then(res =>res.data)
+            .then(data=>{
+                openNotification(true,data.message,"Thêm giỏ hàng thành công")
+            }).catch(err=>console.log(err))
+    }
+
     if (loading) {
         return <div>Loading...</div>;
     }
 
     const handleAddToCart = () => {
-        addToCart({ ...product, quantity, size: selectedSize }); 
+        if(!auth.isAuthenticated){
+            openNotification(false,"Vui lòng đăng nhập","Đăng nhập để mua sắm")
+            return
+        }else{
+            addCartInDB(product,quantity,selectedSize)
+            addToCart({ ...product, quantity, size: selectedSize });    
+        }
     };
 
     return (
@@ -70,7 +86,6 @@ function DetailProduct() {
                     <div className="flex flex-col sm:flex-row items-center mb-12 mx-5 mt-6 w-full">
                         <Quantity value={quantity} onChange={setQuantity} /> {/* Sử dụng component Quantity */}
                         <Link 
-                            to='/customer/cart'
                             onClick={handleAddToCart}
                             className="bg-gray-300 text-white px-6 py-3 mt-4 sm:mt-0 sm:ml-5 border transition-colors duration-200 hover:bg-green-500 hover:text-white flex items-center"
                         >

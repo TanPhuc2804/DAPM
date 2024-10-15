@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Breadcrumb from './Breadcrumb/Breadcrumb';
 import CartItem from './CartItem/CartItem';
 import CartSummary from './CartSummary/CartSummary';
 import { useCart } from './CartContext/Cartcontext';
+import axios from 'axios';
 
 function Cart() {
-    const { cartItems } = useCart(); 
+    const { addToCart, cartItems } = useCart()
+    const [items, setItems] = useState([])
+    useEffect(() => {
+        axios.get("http://localhost:3000/customer/cart")
+            .then(res => res.data)
+            .then(data => {
+                addToCart(data.cart)
+                setItems(data.cart)
+            })
+            .catch(err => console.log(err))
+    }, [])
 
     return (
+
         <>
             <Breadcrumb />
             <section className="self-center mt-11 w-full max-w-[2000px] max-md:mt-10 max-md:max-w-full">
@@ -24,11 +36,14 @@ function Cart() {
                                 <div className="text-neutral-600 w-[78px]">Giá</div>
                                 <div className="w-[94px]">Tổng giá</div>
                             </div>
-                            <div className="flex flex-col self-stretch w-full">
-                                {cartItems.map((item, index) => (
-                                    <CartItem key={index} {...item} />
-                                ))}
-                            </div>
+                            {cartItems.length > -1 &&
+                                <div className="flex flex-col self-stretch w-full">
+                                    {cartItems.map((item, index) => (
+                                        <CartItem key={index} {...item} />
+                                    ))}
+                                </div>
+                            }
+
                             <div className="flex justify-between items-center p-6 text-sm font-bold tracking-normal leading-10 text-sky-400 uppercase">
                                 <Link to="/" className="flex gap-2 items-center px-6 my-auto rounded-sm border-2 border-sky-400">
                                     <img
@@ -43,7 +58,7 @@ function Cart() {
                             <div className="absolute left-0 z-0 max-w-full h-0 bg-gray-200 border border-gray-200 bottom-[68px] min-h-[1px]" />
                         </div>
                     </div>
-                    <CartSummary />
+                    <CartSummary cartItems={cartItems} />
                 </div>
             </section>
         </>

@@ -1,6 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-function OrderForm() {
+function OrderForm({setInfor}) {
+  const [customer,setCustomer] = useState({
+    firstName:"",
+    lastName:"",
+    address:"",
+    email:"",
+    phonenumber:""
+  })
+
+  const handleChange= (e)=>{
+    const {name,value} = e.target
+    setCustomer({
+      ...customer,
+      [name]:value
+    })
+    setInfor(customer)
+  }
+
   return (
     <form className="flex flex-col grow shrink items-start min-w-[240px] w-full max-w-[899px]">
       <div className="flex flex-col self-stretch w-full">
@@ -14,6 +31,9 @@ function OrderForm() {
               <input
                 type="text"
                 id="firstName"
+                name='firstName'
+                value={customer.firstName}
+                onChange={handleChange}
                 placeholder="First name"
                 className="px-4 py-3 mt-2 w-full text-xl leading-none bg-white rounded-sm border border-gray-200 border-solid text-slate-500"
               />
@@ -25,6 +45,9 @@ function OrderForm() {
               <input
                 type="text"
                 id="lastName"
+                name='lastName'
+                value={customer.lastName}
+                onChange={handleChange}
                 placeholder="Last name"
                 className="px-4 py-3 mt-2 w-full text-xl leading-none bg-white rounded-sm border border-gray-200 border-solid text-slate-500"
               />
@@ -36,6 +59,9 @@ function OrderForm() {
             <input
               type="text"
               id="address"
+              name='address'
+              value={customer.address}
+              onChange={handleChange}
               className="mt-2 w-full bg-white rounded-sm border border-gray-200 border-solid min-h-[44px]"
             />
           </div>
@@ -76,13 +102,19 @@ function OrderForm() {
               <input
                 type="email"
                 id="email"
+                name='email'
+                value={customer.email}
+                onChange={handleChange}
                 className="mt-2 w-full bg-white rounded-sm border border-gray-200 border-solid min-h-[44px]"
               />
             </div>
             <div className="flex flex-col min-w-[240px] flex-1">
               <label htmlFor="phone" className="text-2xl leading-none text-zinc-900">Số điện thoại</label>
               <input
+                name='phonenumber'
                 type="tel"
+                value={customer.phonenumber}
+                onChange={handleChange}
                 id="phone"
                 className="mt-2 w-full bg-white rounded-sm border border-gray-200 border-solid min-h-[44px]"
               />

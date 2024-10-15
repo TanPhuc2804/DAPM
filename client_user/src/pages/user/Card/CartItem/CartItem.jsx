@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Quantity from '../../DetailProduct/Quantity/Quantity';
 import { useCart } from '../CartContext/Cartcontext';
+import axios from 'axios';
+import { openNotification } from '../../../../assets/hooks/notification';
 
-function CartItem({ id, name, size, price, quantity, image }) {
+function CartItem({ productId, name, size, price, quantity, image }) {
     const { updateCartItemQuantity, removeFromCart } = useCart();
-
     // cập nhật số lượng sản phẩm
     const handleQuantityChange = (newQuantity) => {
-        updateCartItemQuantity(id, size, newQuantity); 
+        console.log(newQuantity)
+        updateCartItemQuantity(productId,size,newQuantity)
     };
 
     // xóa sản phẩm
     const handleRemoveItem = () => {
-        removeFromCart(id, size); // Gọi hàm xóa với id và size
+       axios.delete(`http://localhost:3000/customer/cart/delete/${productId}`,)
+        .then(res=>res.data)
+        .then(data=>{
+            removeFromCart(productId,size)
+            openNotification(true,data.message,"Delete product in cart successfull !")
+        })
+        .catch(err=>{
+            console.log(err)
+        })
     };
 
     const total = price * quantity; // 

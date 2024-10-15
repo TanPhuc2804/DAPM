@@ -1,12 +1,12 @@
 import React from 'react';
 import { useCart } from '../CartContext/Cartcontext';
 import { Link } from 'react-router-dom';
-function CartSummary() {
-    const { cartItems } = useCart();
-
+function CartSummary({cartItems}) {
     // tổng giá trị của giỏ hàng
-    const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0); // tinh lần lượt từng sản phẩm
-
+    const total = cartItems.length >-1 ? cartItems.reduce((acc, item) => {
+        return acc + item.price * item.quantity
+    }, 0): 0; // tinh lần lượt từng sản phẩm
+    console.log("[Cart Summary]",typeof(cartItems))
     return (
         <div className="flex flex-col ml-5 w-[31%] max-md:ml-0 max-md:w-full">
             <div className="flex overflow-hidden flex-col justify-center items-center pb-6 mx-auto w-full bg-white rounded border border-gray-200 border-solid min-h-[471px] max-md:max-w-full">
