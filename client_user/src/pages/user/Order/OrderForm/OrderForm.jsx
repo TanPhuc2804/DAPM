@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function OrderForm({setInfor}) {
+function OrderForm({setInfor,infor}) {
   const [customer,setCustomer] = useState({
     firstName:"",
     lastName:"",
@@ -11,11 +11,11 @@ function OrderForm({setInfor}) {
 
   const handleChange= (e)=>{
     const {name,value} = e.target
-    setCustomer({
-      ...customer,
+    
+    setInfor({
+      ...infor,
       [name]:value
     })
-    setInfor(customer)
   }
 
   return (
@@ -32,7 +32,7 @@ function OrderForm({setInfor}) {
                 type="text"
                 id="firstName"
                 name='firstName'
-                value={customer.firstName}
+                value={infor.firstName}
                 onChange={handleChange}
                 placeholder="First name"
                 className="px-4 py-3 mt-2 w-full text-xl leading-none bg-white rounded-sm border border-gray-200 border-solid text-slate-500"
@@ -46,7 +46,7 @@ function OrderForm({setInfor}) {
                 type="text"
                 id="lastName"
                 name='lastName'
-                value={customer.lastName}
+                value={infor.lastName}
                 onChange={handleChange}
                 placeholder="Last name"
                 className="px-4 py-3 mt-2 w-full text-xl leading-none bg-white rounded-sm border border-gray-200 border-solid text-slate-500"
@@ -60,7 +60,7 @@ function OrderForm({setInfor}) {
               type="text"
               id="address"
               name='address'
-              value={customer.address}
+              value={infor.address}
               onChange={handleChange}
               className="mt-2 w-full bg-white rounded-sm border border-gray-200 border-solid min-h-[44px]"
             />
@@ -103,7 +103,7 @@ function OrderForm({setInfor}) {
                 type="email"
                 id="email"
                 name='email'
-                value={customer.email}
+                value={infor.email}
                 onChange={handleChange}
                 className="mt-2 w-full bg-white rounded-sm border border-gray-200 border-solid min-h-[44px]"
               />
@@ -113,7 +113,7 @@ function OrderForm({setInfor}) {
               <input
                 name='phonenumber'
                 type="tel"
-                value={customer.phonenumber}
+                value={infor.phonenumber}
                 onChange={handleChange}
                 id="phone"
                 className="mt-2 w-full bg-white rounded-sm border border-gray-200 border-solid min-h-[44px]"

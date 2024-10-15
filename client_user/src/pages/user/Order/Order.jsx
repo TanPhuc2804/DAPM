@@ -8,21 +8,28 @@ import OrderSummary from './OrderSummary/OrderSummary';
 
 function Order() {
 
-  const [infor,setInfor] = useState({})
+  const [infor, setInfor] = useState({
+    firstName: "",
+    lastName: "",
+    address: "",
+    email: "",
+    phonenumber: "",
+    paymentMethod:""
+  })
   return (
     <div>
       <Breadcrumb />
       <div className="flex gap-6 items-start pt-20 pr-6 pl-36 mt-1.5 w-full max-md:px-5 max-md:max-w-full">
-        <div className="flex flex-col grow shrink items-start min-h-[1172px] w-[60%] bg-white p-4">  
+        <div className="flex flex-col grow shrink items-start min-h-[1172px] w-[60%] bg-white p-4">
           <div className=" max-h-[400px]">
-            <OrderForm setInfor={setInfor} />
+            <OrderForm setInfor={setInfor} infor={infor}/>
           </div>
-          <PaymentOptions />
+          <PaymentOptions setInfor={setInfor} />
           <AdditionalInfo />
         </div>
-        
+
         <div className="w-[40%]">
-          <OrderSummary infor={infor}/>
+          <OrderSummary infor={infor} />
         </div>
       </div>
     </div>

@@ -24,10 +24,9 @@ function Login() {
           setAuth({
             isAuthenticated: true,
             user: {
-
               id: res.data.id,
               email: res.data.email,
-              name: res.data.fullname,
+              name: res.data.name,
             },
           });
           navigate(res.data.redirect || '/'); 

@@ -7,11 +7,17 @@ const paymentMethods = [
   { name: 'Amazon Pay', image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/7797b434a156e15cf0a15e8caf606081ffb7e0347c448b208c337c770afcc559?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101' },
 ];
 
-function PaymentOptions() {
+function PaymentOptions({ setInfor }) {
   const [selectedMethod, setSelectedMethod] = useState('');
 
   const handleSelect = (event) => {
-    setSelectedMethod(event.target.value);
+    console.log(event.target.name)
+    setInfor(pre => ({
+      ...pre,
+      [event.target.name]:event.target.value
+    }))
+    console.log("[SELECTED]", selectedMethod)
+
   };
 
   return (
