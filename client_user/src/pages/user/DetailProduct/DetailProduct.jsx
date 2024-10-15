@@ -12,6 +12,7 @@ import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import Quantity from './Quantity/Quantity';
 import { AuthContext } from '../../../assets/hooks/auth.context';
 import { openNotification } from '../../../assets/hooks/notification';
+import { useAuth } from '../../../assets/hooks/auth.context';
 
 function DetailProduct() {
     const { id } = useParams();
@@ -84,7 +85,7 @@ function DetailProduct() {
                     <hr className="mt-3 mb-3 border-t-[1px] border-[#E4E4E4] w-[80%] self-start" />
 
                     <div className="flex flex-col sm:flex-row items-center mb-12 mx-5 mt-6 w-full">
-                        <Quantity value={quantity} onChange={setQuantity} /> {/* Sử dụng component Quantity */}
+                        <Quantity value={quantity} onChange={setQuantity} />
                         <Link 
                             onClick={handleAddToCart}
                             className="bg-gray-300 text-white px-6 py-3 mt-4 sm:mt-0 sm:ml-5 border transition-colors duration-200 hover:bg-green-500 hover:text-white flex items-center"
