@@ -1,9 +1,10 @@
 import React from 'react';
-import ProductCardb from '../../Productcard';
+import ProductCard from '../../ProductCard';
 import { useState,useEffect } from 'react';
 import axios from "axios"
 const HotFashion = () => {
   const[products, setProduct] = useState([])
+  axios.defaults.withCredentials=true
 
   useEffect(()=>{
     axios.get("http://localhost:3000/products/list-product")

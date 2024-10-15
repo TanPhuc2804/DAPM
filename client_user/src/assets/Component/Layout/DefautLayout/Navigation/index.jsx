@@ -2,11 +2,11 @@ import React, { useState,useContext } from 'react'; // Thêm useState
 import { FaSearch, FaShoppingCart, FaBars, FaTimes } from "react-icons/fa"; 
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../../hooks/auth.context';
-const Navigation = () => {
+const Navigation = ({ _id}) => {
   const [cartItemCount, setCartItemCount] = useState(0); 
   const [isMenuOpen, setIsMenuOpen] = useState(false); 
 
-  //context
+
   const {auth,setAuth} = useContext(AuthContext)
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -33,21 +33,20 @@ const Navigation = () => {
             </button>
           </div>
 
-          {/* Navigation Links */}
           <div className={`flex-1 items-baseline justify-center space-x-12 ${isMenuOpen ? "block" : "hidden"} md:flex`}>
-            <a href="/" className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}>
-              Trang chủ
-            </a>
-            <a href="/product/Ao" className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}>
-              Áo
-            </a>
-            <a href="/products" className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}>
-              Quần
-            </a>
-            <a href="/products" className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}>
-              Phụ kiện
-            </a>
-          </div>
+  <Link to="/" className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}>
+    Trang chủ
+  </Link>
+  <Link to={`/product-category/${_id}`} className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}>
+    Áo
+  </Link>
+  <Link to={`/product-category/${_id}`} className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}>
+    Quần
+  </Link>
+  <Link to={`/product-category/${_id}`}className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}>
+    Phụ kiện
+  </Link>
+</div>
 
           {/* Search and Actions */}
           <div className="hidden md:block">
@@ -68,7 +67,7 @@ const Navigation = () => {
               </Link>
 
               {/* Shopping Cart */}
-              <button className="ml-4 flex items-center relative text-gray-800">
+              <Link to ={'/customer/cart'} className="ml-4 flex items-center relative text-gray-800">
                 <FaShoppingCart className="h-5 w-5" />
                 {cartItemCount > 0 && (
                   <span className="absolute top-[-8px] right-[-8px] bg-red-500 text-white text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center">
@@ -76,7 +75,7 @@ const Navigation = () => {
                   </span>
                 )}
                 <span className="ml-1">Giỏ hàng</span>
-              </button>
+              </Link>
             </div>
           </div>
         </div>

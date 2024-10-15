@@ -6,8 +6,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const PORT = process.env.PORT || 3000;
-const allowedOrigins = ["http://localhost:5001","http://localhost:3000"];
+const PORT = 3000;
+const allowedOrigins = ["http://localhost:5001"];
 dotenv.config();
 
 // Import routes
@@ -34,7 +34,8 @@ app.use(cors({
             callback(new Error("Not allowed by CORS"));
         }
     },
-    credentials: true
+    credentials: true,
+    
 }));
 
 // Serve static files

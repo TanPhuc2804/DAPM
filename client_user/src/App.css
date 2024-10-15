@@ -93,26 +93,26 @@
   text-align: center;
 }
 .slick-slider {
-  height: 400px; /* Thay đổi chiều cao tùy theo kích thước bạn muốn */
+  height: 400px; 
 }
 
 .slick-slide {
-  height: 100%; /* Đảm bảo mỗi slide có chiều cao 100% */
+  height: 100%; 
   display: flex;
-  justify-content: center; /* Căn giữa nội dung */
-  align-items: center; /* Căn giữa nội dung */
+  justify-content: center; 
+  align-items: center; 
 }
 
 .product-image {
-  width: 100px; /* Chiều rộng hình ảnh */
-  height: auto; /* Tự động điều chỉnh chiều cao */
+  width: 100px; 
+  height: auto; 
 }
 .product-card {
-  transition: transform 0.3s; /* Hiệu ứng chuyển động */
+  transition: transform 0.3s; 
 }
 
 .product-card:hover {
-  transform: translateY(-5px); /* Nâng sản phẩm lên khi hover */
+  transform: translateY(-5px); 
 }
 nav a {
   transition: font-size 0.3s ease;

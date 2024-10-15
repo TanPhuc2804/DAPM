@@ -117,29 +117,30 @@ const insertProductToCard = async (req, res) => {
     const idCus = req.user._id
     if (!idCus)
         return res.status(401).json({ status: false, message: "Id disappointed !" })
-    const { idProduct, quantity, price } = req.body
-
-    if (!idProduct || !quantity || !price)
+    const { product, quantity,size } = req.body
+    if (!product || !quantity)
         return res.status(403).json({ status: false, message: "Input required !" })
 
+    console.log(product.image[0])
     const cart = {
-        productId: idProduct,
+        productId: product._id,
         quantity: quantity,
-        price: price
+        price: product.price,
+        image:product.image[0],
+        size:size
     }
-
     try {
         const customer = await Customer.findById({
             _id: idCus
         })
-        const product = await Product.findById({ _id: idProduct })
+        const productDB = await Product.findById({ _id: product._id })
         const oldCart = customer.carts
 
-        const index = oldCart.findIndex(product => product.productId == idProduct)
+        const index = oldCart.findIndex(item => item.productId == product._id)
         let newCart = []
         if (index > -1) {
             oldCart[index].quantity += quantity
-            if (oldCart[index].quantity > product.quantity) {
+            if (oldCart[index].quantity > productDB.quantity) {
                 return res.status(400).json({ status: false, message: "Insufficient inventory" })
             }
             newCart = oldCart
@@ -162,7 +163,6 @@ const insertProductToCard = async (req, res) => {
 const updateQuanityCart = async (req, res) => {
     const idCus = req.user._id // id customer
     const { idProduct, quantity } = req.body
-    console.log({ idProduct, quantity })
     if (!idProduct || !quantity) {
         res.status(403).json({ status: false, message: "Input required !" })
     }
@@ -177,18 +177,35 @@ const updateQuanityCart = async (req, res) => {
         const carts = customer.carts
         const index = carts.findIndex(item => item.productId == idProduct)
         if (quantityStore < quantity) {
-            return res.status(400).json({ status: false, message: "Insufficient inventory" })
+            return res.status(400).json({ status: false, message: "Số lượng không đủ" })
+        }
+        if(quantity < 1){
+            return res.status(400).json({ status: false, message: "Số lượng phải lớn hơn 0" })
+
         }
         carts[index].quantity = quantity
         customer.set({
             carts: carts
         })
         await customer.save()
-        return res.status(200).json({ status: true, message: "Increase quantity successful !", carts: carts })
+        return res.status(200).json({ status: true, message: "Thay đổi số lượng thành công !", carts: carts })
     } catch (err) {
         return res.status(500).json({ status: false, message: err.message })
-
     }
+}
+
+const deleteCart = async (req,res)=>{
+    const idProduct = req.params.id 
+    const idCus = req.user._id
+    const customer = await Customer.findById({_id:idCus})
+    const carts = customer.carts
+    const newCarts = carts.filter((item=>(item.productId != idProduct)))
+    customer.set({
+        carts:newCarts
+    })
+    await customer.save()
+
+    return res.json({status:true,message:"Delete successful !"})
 }
 
 module.exports = {
@@ -198,5 +215,6 @@ module.exports = {
     changePassword,
     getListCart,
     insertProductToCard,
-    updateQuanityCart
+    updateQuanityCart,
+    deleteCart
 }
