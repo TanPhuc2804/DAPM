@@ -8,7 +8,6 @@ const Navigation = ({ _id}) => {
 
 
   const {auth,setAuth} = useContext(AuthContext)
-  console.log("[Auth navifation]",auth)
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };

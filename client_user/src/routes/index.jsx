@@ -6,6 +6,8 @@ import ListProduct from "../pages/user/ListProduct";
 import DetailProduct from "../pages/user/DetailProduct/DetailProduct";
 import Cart from "../pages/user/Card/Pagecart";
 import Order from "../pages/user/Order/Order";
+import Cancel from "../pages/checkout/Cancel";
+import Success from "../pages/checkout/Success";
 const publicRoutes = [
     { path: '/', component: Home },
     { path: '/profile', component: Profile },
@@ -16,6 +18,8 @@ const publicRoutes = [
     { path: '/product-category/:id', component: ListProduct }, 
     { path: '/customer/cart', component: Cart },
     { path: '/customer/order', component: Order },
+    { path: '/success/:session_id', component: Success },
+    { path: '/cancel', component: Cancel },
 ];
 
 const privateRoutes = [];

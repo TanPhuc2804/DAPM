@@ -18,7 +18,8 @@ const supplierRoute = require('./scr/route/Supplier.route')
 const customerRouter = require('./scr/route/Customer.route')
 const categoryRouter = require('./scr/route/category.route'); 
 const adminRouter = require('./scr/route/admin.route');
-
+const orderRouter = require("./scr/route/Order.route")
+const checkoutRouter = require("./scr/route/Checkout.route")
 const app = express();
 
 // Middleware setup
@@ -87,3 +88,5 @@ app.use("/supplier", supplierRoute)
 app.use("/customer", customerRouter)
 app.use('/category', categoryRouter);
 app.use('/admin', adminRouter);
+app.use('/order', orderRouter);
+app.use('/checkout', checkoutRouter);
