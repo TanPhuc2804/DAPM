@@ -8,10 +8,10 @@ const paymentMethods = [
 ];
 
 function PaymentOptions() {
-  const [selectedMethod, setSelectedMethod] = useState(null);
+  const [selectedMethod, setSelectedMethod] = useState('');
 
-  const handleSelect = (methodName) => {
-    setSelectedMethod(methodName);
+  const handleSelect = (event) => {
+    setSelectedMethod(event.target.value);
   };
 
   return (
@@ -19,21 +19,23 @@ function PaymentOptions() {
       <h3 className="text-2xl leading-none max-md:max-w-full">Tùy chọn thanh toán</h3>
       <div className="grid grid-cols-4 gap-6 items-start px-6 pt-6 pb-12 mt-5 w-full text-2xl leading-none text-center bg-white border border-gray-200 border-solid min-h-[247px] max-md:px-5">
         {paymentMethods.map((method) => (
-          <div
+          <label
             key={method.name}
             className="flex flex-col justify-center items-center leading-5 min-h-[177px] transition-transform duration-200 hover:scale-105 cursor-pointer"
-            onClick={() => handleSelect(method.name)}
           >
             <div className="flex flex-col justify-center items-center w-40 max-w-full">
               <img loading="lazy" src={method.image} alt={method.name} className="object-contain aspect-square w-[82px]" />
               <div className="mt-2">{method.name}</div>
             </div>
-            <div
-              className={`flex mt-4 w-5 h-5 border border-solid border-neutral-300 min-h-[20px] rounded-full transition-colors duration-200 ${
-                selectedMethod === method.name ? 'bg-green-500' : 'bg-white'
-              }`}
+            <input
+              type="radio"
+              name="paymentMethod"
+              value={method.name}
+              checked={selectedMethod === method.name}
+              onChange={handleSelect}
+              className="mt-4 w-5 h-5"
             />
-          </div>
+          </label>
         ))}
       </div>
     </div>
