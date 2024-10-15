@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../Card/CartContext/Cartcontext';
 import axios from 'axios';
 import DeliveryInfo from './DeliveryInfo/DeliveryInfo';
@@ -10,6 +10,7 @@ import Breadcrumb from '../ListProduct/Breadcrumb/Breadcrumb';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import Quantity from './Quantity/Quantity';
+import { useAuth } from '../../../assets/hooks/auth.context';
 
 function DetailProduct() {
     const { id } = useParams();
@@ -68,7 +69,7 @@ function DetailProduct() {
                     <hr className="mt-3 mb-3 border-t-[1px] border-[#E4E4E4] w-[80%] self-start" />
 
                     <div className="flex flex-col sm:flex-row items-center mb-12 mx-5 mt-6 w-full">
-                        <Quantity value={quantity} onChange={setQuantity} /> {/* Sử dụng component Quantity */}
+                        <Quantity value={quantity} onChange={setQuantity} />
                         <Link 
                             to='/customer/cart'
                             onClick={handleAddToCart}
