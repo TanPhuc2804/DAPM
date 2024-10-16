@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useInfor } from '../../../../assets/hooks/inforOrder.context';
 
 const paymentMethods = [
   { name: 'Thanh toán khi nhận hàng', image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/8c001ac09fd9daed91303d647a3d139c287df1b25dd0afe39b756aaf4642de55?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101' },
@@ -7,17 +8,15 @@ const paymentMethods = [
   { name: 'Amazon Pay', image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/7797b434a156e15cf0a15e8caf606081ffb7e0347c448b208c337c770afcc559?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101' },
 ];
 
-function PaymentOptions({ setInfor }) {
+function PaymentOptions() {
   const [selectedMethod, setSelectedMethod] = useState('');
-
+  const {setInfor} = useInfor()
   const handleSelect = (event) => {
-    console.log(event.target.name)
+    setSelectedMethod(event.target.value)
     setInfor(pre => ({
       ...pre,
       [event.target.name]:event.target.value
     }))
-    console.log("[SELECTED]", selectedMethod)
-
   };
 
   return (

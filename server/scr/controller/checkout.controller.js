@@ -1,89 +1,118 @@
 require("dotenv").config()
 const stripe = require("stripe")(process.env.SECRET_KEY_CHECKOUT)
+const { info } = require("console")
 const Order = require("../models/Order.model")
-const checkoutProcess = async(req,res)=>{
-    const emailCus = req.user.email
+const Product = require("../models/Product.model")
+const Customer = require("../models/Customer.model")
+const checkoutProcess = async (req, res) => {
+    const { infor, cart } = req.body
     const idCus = req.user._id
-    const cart = req.body
-    const line_items = cart?.map((item)=>(
-        {  
-            price_data:{
-                currency:'vnd',
-                product_data:{
-                    name:item.name,
-                    metadata:{
-                        productId:item._id,
-                        size:item.size
+    const inforJson = JSON.stringify(infor);
+    const encodedInforJson = encodeURIComponent(inforJson);
+    const line_items = cart?.map((item) => (
+        {
+            price_data: {
+                currency: 'vnd',
+                product_data: {
+                    name: item.name,
+                    metadata: {
+                        productId: item.productId,
+                        size: item.size
                     },
                 },
-                unit_amount:item.price
+                unit_amount: item.price
             },
-            quantity:item.quantity
+            quantity: item.quantity
         }
     ))
-    try{
+    try {
         const session = await stripe.checkout.sessions.create({
-            line_items:line_items ,
-            client_reference_id:idCus,
-            customer_email:emailCus,
-            shipping_address_collection:{
-                allowed_countries:['VN']
-            },  
-            mode:"payment",
-            success_url:"http://localhost:5001/success/{CHECKOUT_SESSION_ID}",
-            cancel_url:"http://localhost:5001/cancel"
+            line_items: line_items,
+            client_reference_id: idCus,
+            customer_email: infor.email,
+            mode: "payment",
+            success_url: `http://localhost:5001/success/{CHECKOUT_SESSION_ID}?infor=${encodedInforJson}`,
+            cancel_url: "http://localhost:5001/cancel"
         })
-        return res.json({status:false,message:session})
-    }catch(err){
-        return res.json({status:false,message:err.message})
-         
+        return res.json({ status: true, message: session.url })
+    } catch (err) {
+        return res.status(500).json({ status: false, message: err.message })
+
     }
-   
+
 }
-const completeCheckout = async(req,res)=>{
+
+const updateQuantity = async (idP,quantityOrder)=>{
+    const product = await Product.findById({
+        _id:idP
+    })
+    const quantity = product.quantity-quantityOrder
+    product.set({
+        quantity: quantity,
+    })
+    await product.save()
+}
+
+const updateCarts = async (idCus)=>{
+    const customer = await Customer.findById({_id:idCus})
+
+    customer.set({
+        carts:[]
+    })
+    await customer.save()
+}
+
+const completeCheckout = async (req, res) => {
     const idCus = req.user._id
+    const {firstName,lastName,address,email,phonenumber} = req.body
     const session_id = req.params.session_id
-    if(!session_id){
-        return res.status(404).json({status:false,message:"Missing session_id !"})
+    if (!session_id) {
+        return res.status(404).json({ status: false, message: "Missing session_id !" })
     }
-    try{
-        const session = await stripe.checkout.sessions.retrieve(session_id,{ expand: ["line_items.data.price.product"]})
+    try {
+        const session = await stripe.checkout.sessions.retrieve(session_id, { expand: ["line_items.data.price.product"] })
         const stateOrder = "comfirmed"
-        const customer_detail = session.customer_details
         const totalPrice = session.amount_total
-        const address_shipping= customer_detail.address?.line1;
-        const shippingFee =0
-        const paymentMethod ="Chuyển Khoản"
+        const shippingFee = 0
+        const paymentMethod = "Chuyển Khoản"
         const lineItems = await session?.line_items?.data ?? []
-        console.log("[LINEITEMS DETAIL]",lineItems)
-        const orderDetail = lineItems?.map((item,index)=>{
-            return{
+
+        lineItems?.map(async (item)=>{
+           await updateQuantity(item?.price.product?.metadata.productId,item.quantity)
+        })
+        
+        const orderDetail = lineItems?.map((item, index) => {
+            return {
                 _idProduct: item?.price.product?.metadata.productId,
-                name:item.description,
-                quantity:item.quantity,
+                name: item.description,
+                quantity: item.quantity,
                 price: item.price.unit_amount,
                 size: item?.price.product?.metadata.size
             }
         })
-
         const order = new Order({
-            stateOrder:stateOrder,
-            shippingFee:shippingFee,
-            paymentMethod:paymentMethod,
-            totalPrice:totalPrice,
-            idCustomer:idCus,
-            order_details:orderDetail,
-            address_shipping:address_shipping??"",
+            stateOrder: stateOrder,
+            shippingFee: shippingFee,
+            paymentMethod: paymentMethod,
+            totalPrice: totalPrice,
+            idCustomer: idCus,
+            order_details: orderDetail,
+            delivery_detail: {
+                name: firstName+" "+lastName,
+                address_shipping: address ?? "",
+                phone:phonenumber,
+                email:email
+            }
         })
-
         await order.save()
-        return res.json({status:true,message:"Order successful !"})
-    }catch(err){
-        return res.json({status:false,message:err.message})
+        updateCarts(idCus)
+        return res.json({ status: true, message: "Đặt hàng thành công !" })
+    } catch (err) {
+        return res.json({ status: false, message: err.message })
     }
-    
+
 }
-module.exports ={
+module.exports = {
     checkoutProcess,
     completeCheckout
 }

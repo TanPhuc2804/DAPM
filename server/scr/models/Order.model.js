@@ -26,8 +26,19 @@ const orderSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Customer' // Reference to the Customer schema
     },
-    address_shipping:{
-      type: String,
+    delivery_detail:{
+      name:{
+        type:String,
+      },
+      address_shipping:{
+        type:String
+      },
+      phone:{
+        type:String
+      },
+      email:{
+        type:String
+      }
     },
     order_details: [{
       _idProduct: {

@@ -1,18 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from '../../Card/CartContext/Cartcontext';
-import { Link,useLocation } from 'react-router-dom';
-
-function OrderSummary({infor}) {
+import { Link, useLocation,useNavigate} from 'react-router-dom';
+import axios from 'axios';
+import { useInfor } from '../../../../assets/hooks/inforOrder.context';
+import { openNotification } from '../../../../assets/hooks/notification';
+function OrderSummary() {
+    const navigate =useNavigate()
+    const {infor }= useInfor()
     const [cartItems, setCartItem] = useState([])
-    console.log("[ORDER SUMMARY]",infor)
-    const location  = useLocation()
-    useEffect(()=>{
+    const location = useLocation()
+    useEffect(() => {
+        console.log(location.state.cartItems)
         setCartItem(location.state.cartItems)
-    },[])
+    }, [])
     const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const handleCheckout = () => {
+        if (infor.paymentMethod === "Thanh toán khi nhận hàng") {
+            axios.post("http://localhost:3000/order/insert-order", { infor: infor, cart: cartItems })
+                .then(res=>res.data)
+                .then(data=>{
+                    if(data.status){
+                        navigate('/success')
+                    }
+                })
+                .catch(err=>{
+                    openNotification(false,err.response.data.message,"Đặt hàng thất bại !")
+                })
+        } else {
+            axios.post("http://localhost:3000/checkout", { infor: infor, cart: cartItems })
+                .then(res => res.data)
+                .then(data =>{
+                    if(data.status){
+                        window.location.href = data.message
+                    }
+                }
+                )
+                .catch(err => console.log(err))
+        }
 
-    const handleCheckout = ()=>{
-        
     }
 
 
@@ -63,10 +88,10 @@ function OrderSummary({infor}) {
                     </div>
                 </div>
             </div>
-            <Link onClick={handleCheckout} state={{ cartItems }} className="flex gap-3 justify-center items-center px-8 max-w-full text-2xl font-bold tracking-wide text-white uppercase bg-green-900 rounded leading-[56px] w-[376px] max-md:px-5">
+            <button onClick={handleCheckout} className="flex gap-3 justify-center items-center px-8 max-w-full text-2xl font-bold tracking-wide text-white uppercase bg-green-900 rounded leading-[56px] w-[376px] max-md:px-5">
                 <span className="self-stretch my-auto">Đặt hàng</span>
                 <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/74d0a6f01a231e01c69ace0cdebd528f5732141fec6416bc339330bdc548e330?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101" alt="" className="object-contain shrink-0 self-stretch my-auto w-6 aspect-square" />
-            </Link>
+            </button>
         </div>
     );
 }

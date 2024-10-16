@@ -124,6 +124,7 @@ const insertProductToCard = async (req, res) => {
     console.log(product.image[0])
     const cart = {
         productId: product._id,
+        name:product.name,
         quantity: quantity,
         price: product.price,
         image:product.image[0],

@@ -11,13 +11,13 @@ import Success from "../pages/checkout/Success";
 const publicRoutes = [
     { path: '/', component: Home },
     { path: '/profile', component: Profile },
-
     { path: '/auth/login', component: Login, layout: null }, 
     { path: '/auth/register', component: Register, layout: null }, 
     { path: '/product/:id', component: DetailProduct },
     { path: '/product-category/:id', component: ListProduct }, 
     { path: '/customer/cart', component: Cart },
     { path: '/customer/order', component: Order },
+    { path: '/success', component: Success },
     { path: '/success/:session_id', component: Success },
     { path: '/cancel', component: Cancel },
 ];
