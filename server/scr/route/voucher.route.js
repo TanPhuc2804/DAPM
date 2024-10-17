@@ -10,11 +10,11 @@ const {createVoucher,
 } = require('../controller/voucher.controller');
 
 
-voucherRouter.post('create-voucher/',verifyAdmin, createVoucher);        
-voucherRouter.get('get-allvoucher/',getAllVouchers);       
-voucherRouter.get('get-voucher/:id', getVoucherById);    
-voucherRouter.put('upt-voucher/:id', verifyAdmin,updateVoucher);      
-voucherRouter.delete('delete-voucher/:id', verifyAdmin,deleteVoucher);   
+voucherRouter.post('/create-voucher/',verifyAdmin, createVoucher);        
+voucherRouter.get('/get-allvoucher/',getAllVouchers);       
+voucherRouter.get('/get-voucher/:id', getVoucherById);    
+voucherRouter.put('/upt-voucher/:id', verifyAdmin,updateVoucher);      
+voucherRouter.delete('/delete-voucher/:id', verifyAdmin,deleteVoucher);   
 
 voucherRouter.get('/get-vouchcustomer/active', getVouchersForCustomer );
 
