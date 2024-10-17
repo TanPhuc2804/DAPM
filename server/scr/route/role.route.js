@@ -10,10 +10,10 @@ const {
 
 const roleRouter = express.Router();
 
-roleRouter.get('/',verifyAdmin, getListRole);
+roleRouter.get('/get-ListRole/',verifyAdmin, getListRole);
 roleRouter.get('/getRole-name/:name',verifyAdmin, getRole); 
-roleRouter.get('/:id',verifyAdmin, getIdRole);
-roleRouter.put('/:id',verifyAdmin, updateRole);
-roleRouter.delete('/:id', verifyAdmin,deleteRole);
+roleRouter.get('/getIdRole/:id',verifyAdmin, getIdRole);
+roleRouter.put('/updateRole/:id',verifyAdmin, updateRole);
+roleRouter.delete('/deleteRole/:id', verifyAdmin,deleteRole);
 
 module.exports = roleRouter;
