@@ -13,6 +13,19 @@ const getAdmin = async (req, res) => {
     }
 };
 
+
+const getListAdmin = async (req, res) => {
+    try {
+        const admin = await Staff.find({ role: 'Admin' }).select('-password'); // Filter by role 'Admin' and exclude password
+        if (!admin.length) {
+            return res.status(404).json({ status: false, message: 'No admins found' });
+        }
+        res.status(200).json({ status: true, data: admin });
+    } catch (error) {
+        res.status(500).json({ status: false, message: 'Server error', error: error.message });
+    }
+};
+
 // Create Admin
 const createAdmin = async (req, res) => {
     const { fullname, username, email, password, role } = req.body;
@@ -72,5 +85,6 @@ const updateAdmin = async (req, res) => {
 module.exports = {
     getAdmin,
     createAdmin,
-    updateAdmin
+    updateAdmin,
+    getListAdmin
 };

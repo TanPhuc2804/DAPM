@@ -147,6 +147,18 @@ const insertProductToCard = async (req, res) => {
     }
 
 }
+
+const getCustomerVouchers = async (req, res) => {
+    try {
+        const customer = await Customer.findById(req.params.id).populate('vouchers.idVoucher');
+        if (!customer) {
+            return res.status(404).json({ status: false, message: 'Customer not found' });
+        }
+        res.status(200).json({ status: true, vouchers: customer.vouchers });
+    } catch (error) {
+        res.status(500).json({ status: false, message: 'Server error', error: error.message });
+    }
+};
 module.exports = {
     getListCustomer,
     getCustomerByID,
@@ -154,5 +166,6 @@ module.exports = {
     changePassword,
     getListCart,
     insertProductToCard,
+    getCustomerVouchers
 
 }
