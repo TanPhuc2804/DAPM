@@ -11,7 +11,7 @@ const {
 const roleRouter = express.Router();
 
 roleRouter.get('/',verifyAdmin, getListRole);
-roleRouter.get('/name/:name',verifyAdmin, getRole); 
+roleRouter.get('/getRole-name/:name',verifyAdmin, getRole); 
 roleRouter.get('/:id',verifyAdmin, getIdRole);
 roleRouter.put('/:id',verifyAdmin, updateRole);
 roleRouter.delete('/:id', verifyAdmin,deleteRole);
