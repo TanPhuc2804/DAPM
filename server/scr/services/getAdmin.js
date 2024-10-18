@@ -1,25 +1,19 @@
 const Staff = require('../models/Staff.model');
 
-const getAdmin = async () => {
+// Get Admin by ID or All Admins if no ID is provided
+const getAdmin = async (adminId = null) => {
     try {
-        // Find the admin user by email (or username, or role)
-        const admin = await Staff.findOne({ email: "admin@gmail.com" });
-
-        if (!admin) {
-            console.log("Admin not found");
-            return null;  // No admin found
+        if (adminId) {
+            // Find specific admin by ID
+            const admin = await Staff.findById(adminId);
+            return admin;
+        } else {
+            // If no ID, return all admins
+            const admins = await Staff.find({ role: 'admin' }); // Adjust the role or query if necessary
+            return admins;
         }
-
-        // Return admin details (you can filter out sensitive fields like password)
-        return {
-            username: admin.username,
-            email: admin.email,
-            fullname: admin.fullname,
-            role: admin.role
-        };
-    } catch (err) {
-        console.log("Error fetching admin:", err.message);
-        throw new Error("Could not fetch admin");
+    } catch (error) {
+        throw new Error('Error fetching admin(s)');
     }
 };
 
