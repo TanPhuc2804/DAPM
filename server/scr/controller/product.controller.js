@@ -16,7 +16,7 @@ const createProduct = async (req, res) => {
 const getAllProducts = async (req, res) => {
     try {
         const products = await Product.find({}).populate('supplier') // Lấy thông tin nhà cung cấp
-        .select('name productCode price quantity size supplier status updatedAt'); // Chỉ lấy các trường cần thiết
+            .select('name productCode price quantity size supplier status updatedAt'); // Chỉ lấy các trường cần thiết
         res.status(200).json({ status: true, products });
     } catch (error) {
         res.status(500).json({ status: false, message: "Failed to retrieve products", error: error.message });
@@ -27,7 +27,7 @@ const getAllProducts = async (req, res) => {
 const getProductById = async (req, res) => {
     try {
         const product = await Product.findById({
-            _id:req.params.id
+            _id: req.params.id
         })
         if (!product) {
             return res.status(404).json({ status: false, message: "Product not found" });
@@ -43,10 +43,10 @@ const updateProduct = async (req, res) => {
     const id = req.params.id
     const product = req.body
 
-    if(!id)
-        return res.status(403).json({status:false,message:"Id disappear !"})
-    if(!product)
-        return res.status(403).json({status:false,message:"Input required !"})
+    if (!id)
+        return res.status(403).json({ status: false, message: "Id disappear !" })
+    if (!product)
+        return res.status(403).json({ status: false, message: "Input required !" })
 
     try {
         const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
@@ -72,18 +72,19 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-const getProductForCate = async (req,res)=>{
+const getProductForCate = async (req, res) => {
     const idCate = req.params.id
-    if(!idCate || idCate ==="id")
-        return res.status(403).json({status:false, message:"Missing id category"})
-    try{
+    console.log(idCate)
+    if (!idCate || idCate === "id")
+        return res.status(403).json({ status: false, message: "Missing id category" })
+    try {
         const listPro = await Product.find({
-            category:idCate
-        }) 
-        return res.status(200).json({status:true, message:"Get product for category success",product: listPro})
-    }catch(err){
-        return res.status(500).json({status:false, message:err.message})
-        
+            category: idCate
+        })
+        return res.status(200).json({ status: true, message: "Get product for category success", product: listPro })
+    } catch (err) {
+        return res.status(500).json({ status: false, message: err.message })
+
     }
 
 }

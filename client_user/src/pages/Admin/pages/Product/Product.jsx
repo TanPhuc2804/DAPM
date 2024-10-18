@@ -22,14 +22,16 @@ const WrapperProductBackground = styled.div`
     background-color: #FFF0F5;
 `;
 
-const ViewProduct = ({ title, color }) => {
+const ViewProduct = ({ title, color, id }) => {
+
+
 
   return (
     <WrapperProductBackground>
       <WrapperProduct color={color}>
         <div>
           <WrapperProduct1>
-            <Link to="/admin/viewdetailproduct">
+            <Link to={`/admin/viewdetailproduct/${id}?title=${title}`}>
               <p>{title}</p>
             </Link>
           </WrapperProduct1>
@@ -39,27 +41,20 @@ const ViewProduct = ({ title, color }) => {
   );
 };
 const Product = () => {
+  const [categories, setCategories] = useState([])
+  useEffect(() => {
+    axios.get("http://localhost:3000/category/get-categorylist ")
+      .then(res => res.data)
+      .then(data => {
+        setCategories(data.categories)
+      })
+      .catch(err => console.log(err))
+  }, [])
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', padding: '20px', backgroundColor: '#ffffff' }}>
-      <ViewProduct title="Áo" color="red" />
-      <ViewProduct title="Quần" color="green" />
-      <ViewProduct title="Giày" color="yellow" />
-      <ViewProduct title="Phụ kiện" color="cyan" />
-      <ViewProduct title="Áo" color="red" />
-      <ViewProduct title="Quần" color="green" />
-      <ViewProduct title="Giày" color="yellow" />
-      <ViewProduct title="Phụ kiện" color="cyan" />
-      <ViewProduct title="Áo" color="red" />
-      <ViewProduct title="Quần" color="green" />
-      <ViewProduct title="Giày" color="yellow" />
-      <ViewProduct title="Phụ kiện" color="cyan" />
-      <ViewProduct title="Quần" color="green" />
-      <ViewProduct title="Giày" color="yellow" />
-      <ViewProduct title="Phụ kiện" color="cyan" />
-      <ViewProduct title="Áo" color="red" />
-      <ViewProduct title="Quần" color="green" />
-      <ViewProduct title="Giày" color="yellow" />
-      <ViewProduct title="Phụ kiện" color="cyan" />
+      {categories.map((item, index) => (
+        <ViewProduct title={item.name} color="red" id={item._id} />
+      ))}
 
     </div>
   )

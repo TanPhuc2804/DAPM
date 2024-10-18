@@ -66,7 +66,7 @@ const publicRoutes = [
                 isShowHeader: true
             },
             {
-                path: 'viewdetailproduct',
+                path: 'viewdetailproduct/:id',
                 page: ViewDetailProduct,
             },
             {

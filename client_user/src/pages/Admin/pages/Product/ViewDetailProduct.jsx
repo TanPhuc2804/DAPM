@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import axios from 'axios';
 import moment from 'moment';
@@ -46,14 +46,16 @@ const Button = styled.button`
 
 const ViewDetailProduct = () => {
   const [products, setProducts] = useState([]);
-
+  const { id } = useParams()
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const title = queryParams.get('title');
   useEffect(() => {
     // Gọi API để lấy dữ liệu sản phẩm
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/products/list-product ');
-
-        setProducts(response.data.products);
+        const response = await axios.get(`http://localhost:3000/products/list-product-category/${id}`);
+        setProducts(response.data.product);
       } catch (error) {
         console.error("Lay API khong thanh cong", error);
       }
@@ -63,7 +65,7 @@ const ViewDetailProduct = () => {
   }, []);
   return (
     <div>
-      <h1>Áo</h1>
+      <h1>{title}</h1>
       <Table>
         <thead>
           <tr>
@@ -79,16 +81,16 @@ const ViewDetailProduct = () => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product, index) => (
+          {products?.map((product, index) => (
             <tr key={product._id}>
               <Td>{index + 1}</Td>
-              <Td>{product.productCode}</Td>
+              <Td>{product._id}</Td>
               <Td>{product.name}</Td>
               <Td>{product.size}</Td>
               <Td>{product.quantity}</Td>
               <Td>{product.price}</Td>
               <Td>{product.status}</Td>
-              <Td>{product.supplier?.name}</Td>
+              <Td>{product.supplier}</Td>
               <Td>{moment(product.updateAt).format("DD/MM/YYYY")}</Td>
             </tr>
           ))}
