@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 <link href="https://fonts.googleapis.com/css2?family=Rosarivo:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
