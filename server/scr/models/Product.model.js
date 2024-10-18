@@ -5,6 +5,12 @@ const productSchema = new mongoose.Schema({
       required: true,   
       trim: true // Remove leading/trailing whitespaces
     },
+    productCode: {  // Thêm mã sản phẩm
+      type: String,
+      required: true,
+      unique: true,
+      trim: true
+    },
     price: {
       type: Number,
       required: true,
@@ -37,6 +43,10 @@ const productSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Supplier', // Reference to the Supplier schema, if applicable
       required: true
+    },
+    status: {  // Thêm trạng thái sản phẩm
+      type: String,
+      default: 'Còn hàng'
     },
     updatedAt: {
       type: Date,
