@@ -16,7 +16,7 @@ const getAdmin = async (req, res) => {
 
 const getListAdmin = async (req, res) => {
     try {
-        const admin = await Staff.find({ role: 'Admin' }).select('-password'); // Filter by role 'Admin' and exclude password
+        const admin = await Staff.find({role : '66f8e28b66c55d58fcc3c03f'}).select('-password'); // Filter by role 'Admin' and exclude password
         if (!admin.length) {
             return res.status(404).json({ status: false, message: 'No admins found' });
         }
