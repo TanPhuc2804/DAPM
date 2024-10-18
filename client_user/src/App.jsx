@@ -11,9 +11,7 @@ import { CartProvider } from './pages/user/Card/CartContext/Cartcontext';
 function App() {
   const { auth, setAuth } = useContext(AuthContext);
   const [count, setCount] = useState(0);
-
   axios.defaults.withCredentials = true;
-
   useEffect(() => {
     axios.get("http://localhost:3000/auth/verify ")
       .then(res => {
@@ -25,31 +23,48 @@ function App() {
             email: res.data.user.email,
             name: res.data.user.fullname
           }
-        });
+        })
       })
-      .catch(err => console.log(err));
-  }, []);
-
-  console.log(auth);
+      .catch(err => console.log(err))
+  }, [])
+  console.log(auth)
   return (
     <Router>
-      <CartProvider> 
-        <div className="App bg-white">
-          <Routes>
-            {publicRoutes.map((route, index) => {
-              const Layout = route.layout === null ? Fragment : DefaultLayout;
+      <div className="App bg-white">
+        <Routes>
+          {publicRoutes.map((route, index) => {
+            if (route.isAdmin) {
               const Page = route.component;
               return (
-                <Route key={index}
+                <Route
+                  key={index}
                   path={route.path}
-                  element={<Layout><Page /></Layout>} />
-              );
-            })}
-          </Routes>
-        </div>
-      </CartProvider>
+                  element={<route.component />}
+                >
+                  {route.children && route.children.map((child, index) => (
+                    <Route
+                      key={index}
+                      path={child.path}
+                      element={<child.page />}
+                    />
+                  ))}
+
+                </Route>
+              )
+            }
+
+            const Layout = route.layout === null ? Fragment : DefaultLayout;
+            const Page = route.component;
+            return (
+              <Route key={index}
+                path={route.path}
+                element={<Layout><Page /></Layout>} />
+            );
+          })}
+        </Routes>
+      </div>
     </Router>
-  );
+  )
 }
 
 export default App;
