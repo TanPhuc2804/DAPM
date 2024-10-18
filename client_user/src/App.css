@@ -117,3 +117,15 @@
 nav a {
   transition: font-size 0.3s ease;
 }
+
+.product-slide {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slick-slide {
+  min-height: 300px; 
+}

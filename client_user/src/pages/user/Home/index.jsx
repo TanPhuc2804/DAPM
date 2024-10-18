@@ -9,8 +9,12 @@ import BestSelling from './BestSelling/bestselling';
 import HotFashion from './HotFasion/hotfashion';
 import ImageGallery from './ImageGallery/ImageGallery';
 import CustomDesign from './CustomDesign/CustomDesign';
+
 import { useEffect } from 'react';
 import axios from 'axios'
+
+import InfoSection from './InfoSection/InfoSection';
+
 function Home() {
 
   useEffect(()=>{
@@ -62,7 +66,7 @@ function Home() {
         <ImageGallery/>
       <HotFashion />
       <CustomDesign/>
-  
+  <InfoSection/>
     </div>
   );
 }
