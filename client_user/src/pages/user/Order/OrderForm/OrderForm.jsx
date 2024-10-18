@@ -1,17 +1,10 @@
 import React, { useState } from 'react';
+import { useInfor } from '../../../../assets/hooks/inforOrder.context';
 
-function OrderForm({setInfor,infor}) {
-  const [customer,setCustomer] = useState({
-    firstName:"",
-    lastName:"",
-    address:"",
-    email:"",
-    phonenumber:""
-  })
-
+function OrderForm() {
+  const {infor,setInfor} = useInfor()
   const handleChange= (e)=>{
     const {name,value} = e.target
-    
     setInfor({
       ...infor,
       [name]:value

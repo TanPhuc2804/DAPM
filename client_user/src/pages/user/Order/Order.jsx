@@ -5,31 +5,23 @@ import OrderForm from './OrderForm/OrderForm';
 import PaymentOptions from './paymentMethods/paymentMethods';
 import AdditionalInfo from './AdditionalInfo/AdditionalInfo';
 import OrderSummary from './OrderSummary/OrderSummary';
-
+import { useInfor } from '../../../assets/hooks/inforOrder.context';
 function Order() {
-
-  const [infor, setInfor] = useState({
-    firstName: "",
-    lastName: "",
-    address: "",
-    email: "",
-    phonenumber: "",
-    paymentMethod:""
-  })
+  
   return (
     <div>
       <Breadcrumb />
       <div className="flex gap-6 items-start pt-20 pr-6 pl-36 mt-1.5 w-full max-md:px-5 max-md:max-w-full">
         <div className="flex flex-col grow shrink items-start min-h-[1172px] w-[60%] bg-white p-4">
           <div className=" max-h-[400px]">
-            <OrderForm setInfor={setInfor} infor={infor}/>
+            <OrderForm/>
           </div>
-          <PaymentOptions setInfor={setInfor} />
+          <PaymentOptions  />
           <AdditionalInfo />
         </div>
 
         <div className="w-[40%]">
-          <OrderSummary infor={infor} />
+          <OrderSummary/>
         </div>
       </div>
     </div>

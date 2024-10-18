@@ -1,29 +1,53 @@
 const Order = require("../models/Order.model")
+const Product = require("../models/Product.model")
+const Customer = require("../models/Customer.model")
+const updateCarts = async (idCus)=>{
+    const customer = await Customer.findById({_id:idCus})
+    customer.set({
+        carts:[]
+    })
+    await customer.save()
+}
+
+const updateQuantity = async (idP,quantityOrder)=>{
+    const product = await Product.findById({
+        _id:idP
+    })
+    const quantity = product.quantity-quantityOrder
+    product.set({
+        quantity: quantity,
+    })
+    await product.save()
+}
 
 const insertOrder = async (req,res)=>{
     const idCus = req.user._id
-    console.log(idCus)
     const stateOrder = 'waiting'
-    const {shippingFee,totalPrice,paymentMethod,order_details,vouchers} = req.body
-    let method= paymentMethod.trim()
-    if(!shippingFee||!totalPrice||!paymentMethod||!order_details)
-        return res.status(403).json({status:false,message:"Missing information of order"})
-    if(method !== "Thanh toán bằng tiền mặt"){
-        return res.status(200).json({status:true,message:"Thanh toán onl"})
-    }
-
+    const { infor, cart } = req.body
+    let method= "Thanh toán bằng tiền mặt"
+    totalPrice = cart.reduce((acc,item)=>acc+item.price*item.quantity,0)
+    cart.map(async (item)=>{
+        await updateQuantity(item.productId,item.quantity)
+    })
     try{
         const order = new Order({
             stateOrder:stateOrder,
-            shippingFee:shippingFee,
+            shippingFee:0,
             paymentMethod:method,
             totalPrice:totalPrice,
             idCustomer:idCus,
-            order_details:order_details,
-            vouchers:vouchers ?? []
+            order_details:cart,
+            delivery_detail: {
+                name: infor.firstName+" "+infor.lastName,
+                address_shipping: infor.address ?? "",
+                phone:infor.phonenumber,
+                email:infor.email
+            },
+            vouchers:[]
         })
 
         await order.save()
+        updateCarts(idCus)
         return res.status(200).json({status:true,message:"Order successfully !"})
     }catch(err){
         return res.status(500).json({status:false,message:err.message})
