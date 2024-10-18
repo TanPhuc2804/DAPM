@@ -50,6 +50,10 @@ const login = async (req, res) => {
             return res.status(400).json({ status: false, message: "Wrong password !" })
         }
 
+        if(customer.role==="block"){
+            return res.status(400).json({status:false,message:"Người dùng đã bị khóa"})
+        }
+
         let access_token = await generalAccessToken({
             _id: customer._id,
             fullname: customer.fullname,

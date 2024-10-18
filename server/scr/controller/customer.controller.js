@@ -208,6 +208,30 @@ const deleteCart = async (req,res)=>{
     return res.json({status:true,message:"Delete successful !"})
 }
 
+const blockCustomer = async(req,res)=>{
+    const idCus = req.params.id
+    if(!idCus)
+        res.status(403).json({ status: false, message: "Bị mất dữ liệu !" })
+    const role = "block"
+    const customer = await Customer.findById({_id:idCus})
+    customer.set({
+        role:role
+    })
+    await customer.save()
+    return res.json({status:true, message:"Khóa người dùng thành công"})
+}
+const unblockCustomer = async(req,res)=>{
+    const idCus = req.params.id
+    if(!idCus)
+        res.status(403).json({ status: false, message: "Bị mất dữ liệu !" })
+    const role = "Customer"
+    const customer = await Customer.findById({_id:idCus})
+    customer.set({
+        role:role
+    })
+    await customer.save()
+    return res.json({status:true, message:"Gỡ khóa người dùng thành công"})
+}
 module.exports = {
     getListCustomer,
     getCustomerByID,
@@ -216,5 +240,7 @@ module.exports = {
     getListCart,
     insertProductToCard,
     updateQuanityCart,
-    deleteCart
+    deleteCart,
+    blockCustomer,
+    unblockCustomer
 }

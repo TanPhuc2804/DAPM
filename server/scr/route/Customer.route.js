@@ -7,6 +7,8 @@ customerRouter.get('/list-customer',verifyAdmin,customerControler.getListCustome
 customerRouter.get('/list-customer/:id',customerControler.getCustomerByID)
 customerRouter.get('/cart',verifyLogin,customerControler.getListCart)
 
+customerRouter.get("/list-customer/block/:id",verifyAdmin,customerControler.blockCustomer)
+customerRouter.get("/list-customer/unblock/:id",verifyAdmin,customerControler.unblockCustomer)
 
 customerRouter.post('/cart/update-quantity-cart',verifyLogin,customerControler.updateQuanityCart)
 customerRouter.delete('/cart/delete/:id',verifyLogin,customerControler.deleteCart)
