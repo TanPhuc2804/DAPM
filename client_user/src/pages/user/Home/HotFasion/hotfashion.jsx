@@ -1,5 +1,5 @@
 import React from 'react';
-import ProductCard from '../../ProductCard';
+import ProductCard from '../../ProductCard/index';
 import { useState,useEffect } from 'react';
 import axios from "axios"
 const HotFashion = () => {
@@ -24,7 +24,7 @@ const HotFashion = () => {
         <div className="flex flex-wrap gap-6  max-md:flex-col">
           {products.map((product, index) => (
             <div key={index} className="flex flex-col w-[32%] max-md:ml-0 my-12 max-md:w-full">
-              <ProductCardb {...product} />
+              <ProductCard {...product} />
             </div>
           ))}
         </div>
