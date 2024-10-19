@@ -52,7 +52,7 @@ function Login() {
             Bạn chưa có tài khoản?{' '}
             <span 
               className="text-orange-500 underline cursor-pointer"
-              onClick={() => navigate('/register')} // Điều hướng tới trang đăng ký
+              onClick={() => navigate('/auth/register')} // Điều hướng tới trang đăng ký
             >
               Tạo tài khoản
             </span>

@@ -2,14 +2,59 @@ import React, { useState } from 'react';
 import { useInfor } from '../../../../assets/hooks/inforOrder.context';
 
 function OrderForm() {
-  const {infor,setInfor} = useInfor()
-  const handleChange= (e)=>{
-    const {name,value} = e.target
+  const { infor, setInfor } = useInfor();
+  const [errors, setErrors] = useState({
+    email: '',
+    phonenumber: '',
+  });
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhoneNumber = (phone) => {
+    const phoneRegex = /^[0-9]{10}$/; // Số điện thoại phải có 10 chữ số
+    return phoneRegex.test(phone);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
     setInfor({
       ...infor,
-      [name]:value
-    })
-  }
+      [name]: value,
+    });
+
+    // Kiểm tra email
+    if (name === 'email') {
+      if (!validateEmail(value)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          email: 'Email không hợp lệ. Email phải có định dạng hợp lệ như example@domain.com.',
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          email: '',
+        }));
+      }
+    }
+
+    // Kiểm tra số điện thoại
+    if (name === 'phonenumber') {
+      if (!validatePhoneNumber(value)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          phonenumber: 'Số điện thoại không hợp lệ. Số điện thoại phải có 10 chữ số.',
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          phonenumber: '',
+        }));
+      }
+    }
+  };
 
   return (
     <form className="flex flex-col grow shrink items-start min-w-[240px] w-full max-w-[899px]">
@@ -24,7 +69,7 @@ function OrderForm() {
               <input
                 type="text"
                 id="firstName"
-                name='firstName'
+                name="firstName"
                 value={infor.firstName}
                 onChange={handleChange}
                 placeholder="First name"
@@ -38,7 +83,7 @@ function OrderForm() {
               <input
                 type="text"
                 id="lastName"
-                name='lastName'
+                name="lastName"
                 value={infor.lastName}
                 onChange={handleChange}
                 placeholder="Last name"
@@ -52,10 +97,10 @@ function OrderForm() {
             <input
               type="text"
               id="address"
-              name='address'
+              name="address"
               value={infor.address}
               onChange={handleChange}
-              className="mt-2 w-full bg-white rounded-sm border border-gray-200 border-solid min-h-[44px]"
+              className="pl-4 mt-2 w-full bg-white rounded-sm border border-gray-200 border-solid min-h-[44px]"
             />
           </div>
 
@@ -95,22 +140,28 @@ function OrderForm() {
               <input
                 type="email"
                 id="email"
-                name='email'
+                name="email"
                 value={infor.email}
                 onChange={handleChange}
-                className="mt-2 w-full bg-white rounded-sm border border-gray-200 border-solid min-h-[44px]"
+                className="pl-4 mt-2 w-full bg-white rounded-sm border border-gray-200 border-solid min-h-[44px]"
               />
+              {errors.email && (
+                <span className="text-red-500 mt-1">{errors.email}</span>
+              )}
             </div>
             <div className="flex flex-col min-w-[240px] flex-1">
               <label htmlFor="phone" className="text-2xl leading-none text-zinc-900">Số điện thoại</label>
               <input
-                name='phonenumber'
+                name="phonenumber"
                 type="tel"
                 value={infor.phonenumber}
                 onChange={handleChange}
                 id="phone"
-                className="mt-2 w-full bg-white rounded-sm border border-gray-200 border-solid min-h-[44px]"
+                className="pl-4 mt-2 w-full bg-white rounded-sm border border-gray-200 border-solid min-h-[44px]"
               />
+              {errors.phonenumber && (
+                <span className="text-red-500 mt-1">{errors.phonenumber}</span>
+              )}
             </div>
           </div>
         </div>
