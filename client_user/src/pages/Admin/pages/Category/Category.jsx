@@ -29,7 +29,7 @@ const CategoryItem = ({ name, color, onClick, isSelected }) => (
 const AddCategory = ({ onAdd, onCancelAdd }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [newCategory, setNewCategory] = useState('');
-
+  
   const handleAddClick = () => {
     if (isAdding && newCategory) {
       onAdd(newCategory);

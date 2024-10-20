@@ -12,7 +12,7 @@ function InfoSection() {
                   <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/0bfb33ad30e1261c0b5900c432780319caa1bbf14b628aecb0e37b20945b346f?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101" className="object-contain shrink-0 aspect-square w-[68px]" alt="" />
                   <div className="flex-auto my-auto">THANH TOÁN & GIAO HÀNG</div>
                 </div>
-                <div className="flex gap-3.5 tracking-normal">
+                <div className="flex gap-2.5  tracking-normal">
                   <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/565c6d49c264bc7ea31c9491b52c7043ba000a513b9c35aece9e1470f0d80cb1?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101" className="object-contain shrink-0 aspect-square w-[68px]" alt="" />
                   <div className="my-auto basis-auto">GIỜ MỞ CỬA</div>
                 </div>

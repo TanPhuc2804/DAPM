@@ -1,17 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import dayjs from 'dayjs'
+import { Spin, Pagination, Modal, Select } from 'antd';
+import { openNotification } from '../../../../assets/hooks/notification';
+import ModalOrder from '../../components/ModalDetailOrder/ModalOrder';
+import { fetchData, selectData, updateOrderState, updateTemp } from '../../redux/select/selectOrder';
+
 // Định dạng bảng
 const Table = styled.table`
   border-collapse: collapse;
   width: 100%;
+   &:hover {
+    cursor: pointer;
+  }
 `;
 
 const TableRow = styled.tr`
-  background-color: ${props => (props.isSelected ? '#c0c0c0' : '#ffffff')};
-  &:hover {
-    background-color: ${props => (props.isSelected ? '#c0c0c0' : '#e0e0e0')};
-  }
+  
 `;
 
 const TableHeader = styled.th`
@@ -38,97 +46,232 @@ const Button = styled.button`
     opacity: 0.8;
   }
 `;
-
-// Dữ liệu giả để hiển thị
-const initialOrders = [
-  { id: 1, name: 'Nguyễn Tùng Dương', phone: '0986 450 694', address: '81 Gia Lai', code: 'A01', quantity: 2, total: '110.000', date: '25/9/2024', status: 'Chưa xác nhận' },
-  { id: 2, name: 'Nguyễn Gia Tính', phone: '0986 422 345', address: '59 Sài Gòn', code: 'A02', quantity: 1, total: '15.000.000', date: '24/09/2024', status: 'Đã xác nhận' },
-  { id: 3, name: 'Biện Ngọc Sơn', phone: '0987 644 567', address: '79 Khánh Hòa', code: 'A03', quantity: 3, total: '780.000', date: '30/09/2024', status: 'Chưa xác nhận' }
-];
-
 const Order = () => {
-  const [orders, setOrders] = useState(initialOrders);
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [openChangeState, setOpenChangeState] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [statusChange, setStatusChange] = useState(false);
+  //const [currentOrders,setCurrentOrders] = useState([])
+
+  const dispatch = useDispatch()
+  const [orderState, setOrderState] = useState({});
+  const orderMain = useSelector((state) => state.orders.orders)
+  const orders = useSelector((state) => state.orders.temporder)
+  const selectedOrder = useSelector((state) => state.orders.selectedRow);
+  //tinh toan page
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const currentOrders = orders?.slice(startIndex, endIndex)
+  const hanldeChangeState = (stateObject) => {
+    axios.post(`http://localhost:3000/order/change-state/${stateObject.idOrder}`, { stateOrder: stateObject.state })
+      .then(res => res.data)
+      .then(data => {
+        dispatch(updateOrderState({ id: data.order._id, stateOrder: data.order.stateOrder }))
+        openNotification(true, "Thay đổi trạng thái thành công ", "")
+      })
+      .catch(err => {
+        openNotification(false, "Thay đổi trạng thái thất bại ", err.response?.data?.message ?? err)
+      })
+    setOpenChangeState(false)
+  }
+
+  const handleMenuClick = (key) => {
+    // Gọi hàm để cập nhật trạng thái với key đã chọn
+    setOpenChangeState(key);
+  };
+
+  const items = [
+    {
+      value: "defauld",
+      label: "Mặc định",
+    },
+    {
+      value: "waiting",
+      label: "Chờ xác nhận",
+    },
+    {
+      value: "comfirmed",
+      label: "Đã xác nhận",
+    },
+    {
+      value: "shipping",
+      label: "Đang giao hàng",
+    },
+    {
+      value: "delivered",
+      label: "Giao hàng thành công",
+    },
+    {
+      value: "success",
+      label: "Thành công",
+    },
+    {
+      value: "paymented",
+      label: "Thanh toán thành công",
+    },
+
+  ];
+
+  const dropdownItems = items.map(item => ({
+    key: item.key,
+    label: (
+      <a onClick={() => handleMenuClick(item.key)}>
+        {item.label}
+      </a>
+    ),
+  }));
+
+  const getStateOrder = (state) => {
+    switch (state) {
+      case "waiting":
+        return 'Chờ xác nhận'
+      case "comfirmed":
+        return 'Đã xác nhận'
+      case "cancelled":
+        return 'Đã hủy'
+      case "shipping":
+        return 'Đang giao hàng'
+      case "delivered":
+        return "Giao hàng thành công"
+      case "success":
+        return 'Đơn hàng thành công'
+      case "paymented":
+        return 'Thanh toán thành công'
+      default:
+        return 'Lỗi'
+    }
+  }
+  useLayoutEffect(() => {
+    axios.get("http://localhost:3000/order/all-order")
+      .then(res => res.data)
+      .then(data => {
+        dispatch(fetchData(data.order))
+        dispatch(updateTemp(data.order))
+
+      })
+      .catch(err => {
+        openNotification(false, "Lấy dữ liệu thất bạt", err.response.data.message)
+      })
+  }, [])
+
+  // thay doi page
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
 
   // Xử lý khi nhấp chọn một hàng
   const handleRowClick = (order) => {
-    setSelectedOrder(order.id);
+    dispatch(selectData(order))
+    setOpen(true)
   };
 
   // Xử lý xóa đơn hàng
-  const handleDelete = () => {
-    if (selectedOrder != null) {
-      setOrders(orders.filter(order => order.id !== selectedOrder));
-      setSelectedOrder(null); // Bỏ chọn sau khi xóa
-    }
+  const closeModal = () => {
+    setOpen(false)
   };
 
-  // Xử lý cập nhật đơn hàng
-  const handleUpdate = () => {
-    if (selectedOrder != null) {
-      alert(`Cập nhật đơn hàng ${selectedOrder}`);
-    }
-  };
 
-  // Xử lý bỏ chọn khi nhấp ra ngoài bảng và nút
-  const handleOutsideClick = (e) => {
-    // Kiểm tra xem nơi nhấp có phải là bảng hoặc nút không
-    if (e.target.tagName !== 'TD' && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'TH' && e.target.tagName !== 'SELECT') {
-      setSelectedOrder(null);
+  const hanldeFilterOrder = (value) => {
+    if (value == "defauld") {
+      console.log("defauld")
+      dispatch(updateTemp(orderMain))
+
+    } else {
+      axios.post("http://localhost:3000/order/list-order-for-state", { stateOrder: value })
+        .then(res => res.data)
+        .then(data => {
+          if (data.status) {
+            dispatch(updateTemp(data.order))
+          }
+        })
+        .catch(err => {
+          openNotification(false, "Lọc đơn hàng theo trạng thái thất bại", err.response.data.message)
+        })
     }
-  };
+
+  }
+
+  const handleChange = (value, id) => {
+    const stateChange = value
+    setOpenChangeState(true)
+    setOrderState({
+      state: stateChange,
+      idOrder: id
+    })
+  }
 
   return (
-    <div onClick={handleOutsideClick}>
-      <h2 style={{ fontWeight: 'bold' }}>Đơn Hàng</h2>
-      <Table>
+    <div>
+      <h2 style={{ fontWeight: 'bold' }} className='text-[30px] mb-[10px]'>Đơn Hàng</h2>
+
+      <Select className='ml-[1005px] mb-[10px] w-[210px]' options={items} onChange={hanldeFilterOrder} defaultValue={"Chọn trạng thái đơn hàng"} />
+
+      {currentOrders.length > 0 ? <Table>
         <thead>
           <tr>
             <TableHeader>STT</TableHeader>
             <TableHeader>Họ Tên KH</TableHeader>
             <TableHeader>SDT</TableHeader>
-            <TableHeader>Địa chỉ</TableHeader>
-            <TableHeader>Mã SP</TableHeader>
-            <TableHeader>SL</TableHeader>
+            <TableHeader>Địa chỉ giao hàng</TableHeader>
+            <TableHeader>Số lượng SP</TableHeader>
             <TableHeader>Tổng tiền</TableHeader>
             <TableHeader>Ngày lập</TableHeader>
             <TableHeader>Trạng thái</TableHeader>
           </tr>
         </thead>
+
+
         <tbody>
-          {orders.map((order, index) => (
-            <TableRow 
-              key={order.id} 
-              isSelected={selectedOrder === order.id}
-              onClick={() => handleRowClick(order)}
-            >
-              <TableCell>{index + 1}</TableCell>
-              <TableCell>{order.name}</TableCell>
-              <TableCell>{order.phone}</TableCell>
-              <TableCell>{order.address}</TableCell>
-              <TableCell>{order.code}</TableCell>
-              <TableCell>{order.quantity}</TableCell>
-              <TableCell>{order.total}</TableCell>
-              <TableCell>{order.date}</TableCell>
-              <TableCell>
-                <select defaultValue={order.status}>
-                  <option value="Chưa xác nhận">Chưa xác nhận</option>
-                  <option value="Đã xác nhận">Đã xác nhận</option>
-                </select>
-              </TableCell>
-            </TableRow>
-          ))}
+          {currentOrders.map((order, index) => {
+
+            return (
+              <TableRow
+                key={order._id}
+              >
+                <TableCell onClick={() => handleRowClick(order)} >{index + 1}</TableCell>
+                <TableCell onClick={() => handleRowClick(order)}>{order.idCustomer.fullname}</TableCell>
+                <TableCell onClick={() => handleRowClick(order)}>{order.delivery_detail?.phone ?? "NULL"}</TableCell>
+                <TableCell onClick={() => handleRowClick(order)}>{order.delivery_detail.
+                  address_shipping
+                }</TableCell>
+                <TableCell onClick={() => handleRowClick(order)}>{order.order_details.length}</TableCell>
+                <TableCell onClick={() => handleRowClick(order)}>{order.
+                  totalPrice
+                }</TableCell>
+                <TableCell onClick={() => handleRowClick(order)}>{dayjs(order.updatedAt).format('DD/MM/YYYY')
+                }</TableCell>
+                <TableCell>
+                  <Select
+                    className='w-[200px]'
+                    onChange={(value) => handleChange(value, order._id)}
+                    value={order.stateOrder}
+                    options={items}
+                  />
+                </TableCell>
+              </TableRow >
+            )
+          })
+          }
         </tbody>
       </Table>
-      
-      {/* Các nút Thêm, Xóa và Cập nhật */}
-      <div style={{ marginTop: '10px' }}>
-        <Button color="red" onClick={handleDelete}>Xóa</Button>
-        <Button color="yellow" onClick={handleUpdate}>Sửa</Button>
-        <Link to="/admin/addorder">
-        <Button color="green">THÊM</Button>
-        </Link>
+        :
+        <Spin></Spin>
+      }
+      <div className='my-[10px] mb-[20px] right-0'>
+        <Pagination align="end" defaultCurrent={1} total={orders.length} onChange={handlePageChange}></Pagination>
       </div>
+      <ModalOrder open={open} closeModal={closeModal} order={selectedOrder}></ModalOrder>
+      <Modal
+        title="Bạn có muốn thay đổi không ?"
+        open={openChangeState}
+        onOk={() => hanldeChangeState(orderState)}
+        onCancel={() => { setOpenChangeState(false) }}
+        cancelText="Trở lại"
+      >
+        <b>Bạn có muốn thay đổi trạng thái đơn hàng là: {getStateOrder(orderState.state)}</b>
+      </Modal>
     </div>
   );
 };

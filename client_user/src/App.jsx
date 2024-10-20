@@ -5,19 +5,17 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { publicRoutes } from './routes';
 import { DefaultLayout } from './assets/Component/Layout';
 import { Fragment } from 'react';
-import { AuthContext } from './assets/hooks/auth.context'
+import { AuthContext } from './assets/hooks/auth.context';
+import { CartProvider } from './pages/user/Card/CartContext/cartcontext';
 
 function App() {
-
-  const { auth, setAuth } = useContext(AuthContext)
-  const [count, setCount] = useState(0)
-
-  axios.defaults.withCredentials = true
-
+  const { auth, setAuth } = useContext(AuthContext);
+  const [count, setCount] = useState(0);
+  axios.defaults.withCredentials = true;
   useEffect(() => {
     axios.get("http://localhost:3000/auth/verify ")
       .then(res => {
-        console.log(res)
+        console.log(res);
         setAuth({
           isAuthenticated: true,
           user: {
@@ -32,6 +30,8 @@ function App() {
   console.log(auth)
   return (
     <Router>
+      <CartProvider>
+
       <div className="App bg-white">
         <Routes>
           {publicRoutes.map((route, index) => {
@@ -65,8 +65,10 @@ function App() {
           })}
         </Routes>
       </div>
+              
+      </CartProvider>
     </Router>
   )
 }
 
-export default App
+export default App;

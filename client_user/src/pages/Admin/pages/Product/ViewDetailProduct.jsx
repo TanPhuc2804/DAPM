@@ -1,7 +1,8 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useParams, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
-
+import axios from 'axios';
+import moment from 'moment';
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
@@ -44,60 +45,71 @@ const Button = styled.button`
 `;
 
 const ViewDetailProduct = () => {
-    const products = [
-        { id: 'A01', name: 'Áo Ba Lô', size: 'L', quantity: 100, price: '55.000', status: 'Sản phẩm cũ', supplier: 'Balenciaga', date: '10/10/2023' },
-        { id: 'A02', name: 'Áo khoác da cá sấu', size: 'XXL', quantity: 15, price: '15.000.000', status: 'Sản phẩm mới', supplier: 'Gucci', date: '24/09/2024' },
-        { id: 'A03', name: 'Áo thun', size: 'M', quantity: 30, price: '260.000', status: 'Sản phẩm mới', supplier: 'Chanel', date: '30/09/2024' },
-        { id: 'A04', name: 'Áo Hoodie', size: 'XXL', quantity: 20, price: '560.000', status: 'Sản phẩm mới', supplier: 'Dior', date: '26/08/2024' },
-        { id: 'A05', name: 'Áo chống nắng', size: 'XXL', quantity: 50, price: '499.000', status: 'Sản phẩm mới', supplier: 'Burberry', date: '26/08/2022' },
-      ];
+  const [products, setProducts] = useState([]);
+  const { id } = useParams()
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const title = queryParams.get('title');
+  useEffect(() => {
+    // Gọi API để lấy dữ liệu sản phẩm
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/products/list-product-category/${id}`);
+        setProducts(response.data.product);
+      } catch (error) {
+        console.error("Lay API khong thanh cong", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
   return (
     <div>
-    <h1>Áo</h1>
-    <Table>
-      <thead>
-        <tr>
-          <ThTd>STT</ThTd>
-          <ThTd>Mã SP</ThTd>
-          <ThTd>Tên SP</ThTd>
-          <ThTd>SIZE</ThTd>
-          <ThTd>Số lượng</ThTd>
-          <ThTd>Đơn Giá</ThTd>
-          <ThTd>Trạng Thái</ThTd>
-          <ThTd>Nhà Cung cấp</ThTd>
-          <ThTd>Ngày nhập</ThTd>
-        </tr>
-      </thead>
-      <tbody>
-        {products.map((product, index) => (
-          <tr key={product.id}>
-            <Td>{index + 1}</Td>
-            <Td>{product.id}</Td>
-            <Td>{product.name}</Td>
-            <Td>{product.size}</Td>
-            <Td>{product.quantity}</Td>
-            <Td>{product.price}</Td>
-            <Td>{product.status}</Td>
-            <Td>{product.supplier}</Td>
-            <Td>{product.date}</Td>
+      <h1>{title}</h1>
+      <Table>
+        <thead>
+          <tr>
+            <ThTd>STT</ThTd>
+            <ThTd>Mã SP</ThTd>
+            <ThTd>Tên SP</ThTd>
+            <ThTd>SIZE</ThTd>
+            <ThTd>Số lượng</ThTd>
+            <ThTd>Đơn Giá</ThTd>
+            <ThTd>Trạng Thái</ThTd>
+            <ThTd>Nhà Cung cấp</ThTd>
+            <ThTd>Ngày nhập</ThTd>
           </tr>
-        ))}
-      </tbody>
-    </Table>
-    
-    <ButtonGroup>
-      <Link to="/delete-product">
-        <Button style={{backgroundColor:"red", color:"black",borderRadius:"10px"}}>Xóa</Button>
-      </Link>
-       <Link to="/admin/updateproduct">
-        <Button style={{backgroundColor:"yellow", color:"black",borderRadius:"10px"}}>Sửa</Button>
-      </Link>
-      <Link to="/admin/addproduct">
-        <Button style={{backgroundColor:"green", color:"black",borderRadius:"10px"}}>Thêm</Button>
-      </Link>
-    </ButtonGroup>
-  </div>
-  )
-}
+        </thead>
+        <tbody>
+          {products?.map((product, index) => (
+            <tr key={product._id}>
+              <Td>{index + 1}</Td>
+              <Td>{product._id}</Td>
+              <Td>{product.name}</Td>
+              <Td>{product.size}</Td>
+              <Td>{product.quantity}</Td>
+              <Td>{product.price}</Td>
+              <Td>{product.status}</Td>
+              <Td>{product.supplier}</Td>
+              <Td>{moment(product.updateAt).format("DD/MM/YYYY")}</Td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
 
-export default ViewDetailProduct
+      <ButtonGroup>
+        <Link to="/delete-product">
+          <Button style={{ backgroundColor: "red", color: "black", borderRadius: "10px" }}>Xóa</Button>
+        </Link>
+        <Link to="/admin/updateproduct">
+          <Button style={{ backgroundColor: "yellow", color: "black", borderRadius: "10px" }}>Sửa</Button>
+        </Link>
+        <Link to="/admin/addproduct">
+          <Button style={{ backgroundColor: "green", color: "black", borderRadius: "10px" }}>Thêm</Button>
+        </Link>
+      </ButtonGroup>
+    </div>
+  );
+};
+
+export default ViewDetailProduct;

@@ -27,7 +27,6 @@ const voucherSchema = new mongoose.Schema({
     },
     code:{
         type:String,
-        unique:true
     },
     id_staff:{
         type: mongoose.Schema.Types.ObjectId,

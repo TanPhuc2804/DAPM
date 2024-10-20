@@ -1,10 +1,9 @@
 const mongoose = require('mongoose')
 const orderSchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     stateOrder: {
       type: String,
       required: true,
-      enum: ['waiting', 'comfirmed', 'shipping', 'delivered', 'success','cancelled'] // Possible order states
+      enum: ['waiting', 'comfirmed', 'shipping', 'delivered', 'success','cancelled',"paymented"] // Possible order states
     },
     shippingFee: {
       type: Number,
@@ -26,6 +25,20 @@ const orderSchema = new mongoose.Schema({
     idCustomer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Customer' // Reference to the Customer schema
+    },
+    delivery_detail:{
+      name:{
+        type:String,
+      },
+      address_shipping:{
+        type:String
+      },
+      phone:{
+        type:String
+      },
+      email:{
+        type:String
+      }
     },
     order_details: [{
       _idProduct: {
@@ -51,20 +64,20 @@ const orderSchema = new mongoose.Schema({
       size: {
         type: String,
         trim: true
+      }
+    }],
+    vouchers: [{
+      _idVoucher: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Voucher' // Reference to the Voucher schema
       },
-      vouchers: [{
-        _idVoucher: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Voucher' // Reference to the Voucher schema
-        },
-        discount: {
-          type: Number,
-        },
-        code: {
-          type: String,
-          unique: true // Ensure unique voucher code within the order
-        }
-      }]
+      discount: {
+        type: Number,
+      },
+      code: {
+        type: String,
+        // Ensure unique voucher code within the order
+      }
     }]
   },{timestamps: true});
 const Order = mongoose.model("Order",orderSchema)
