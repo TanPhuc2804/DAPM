@@ -7,7 +7,7 @@ const OrderController = require("../controller/order.controller")
 orderRouter.all("*",verifyLogin)
 orderRouter.get("/all-order",verifyAdmin,OrderController.getListOrder)
 orderRouter.get("/list-order",OrderController.getListOrderOfCus)
-orderRouter.get("/list-order-for-state",OrderController.getOrderForState)
+orderRouter.post("/list-order-for-state",OrderController.getOrderForState)
 orderRouter.post("/insert-order",OrderController.insertOrder)
 orderRouter.post("/change-state/:id",verifyAdmin,OrderController.updateState)
 module.exports = orderRouter

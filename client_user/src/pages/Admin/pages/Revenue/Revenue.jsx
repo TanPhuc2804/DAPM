@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
-
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
+import { openNotification } from '../../../../assets/hooks/notification';
+import { formatCurrency } from '../../../../assets/Function/formatCurrency'
+import { fetchData,updateTemp } from '../../redux/select/selectOrder';
+import { Spin } from 'antd';
 // Styled components cho bố cục và các thành phần giao diện
 const Container = styled.div`
   padding: 20px;
@@ -101,6 +108,76 @@ const StyledHr = styled.hr`
   width: 100%;
 `;
 const Revenue = () => {
+
+  dayjs.extend(isBetween);
+  const dispatch = useDispatch()
+  const [daySearch, setDaySearch] = useState({
+    startDay: "",
+    endDay: ""
+  })
+  useEffect(() => {
+    axios.get("http://localhost:3000/order/all-order")
+      .then(res => res.data)
+      .then(data => {
+        dispatch(fetchData(data.order))
+        dispatch(updateTemp(data.order))
+      })
+      .catch(err => {
+        openNotification(false, "Lấy dữ liệu thất bạt", err.response.data.message)
+      })
+  }, [])
+  // xử lý dữ liệu
+  const orders =useSelector(state => state.orders.orders)
+  let tempOrder =  useSelector(state => state.orders.temporder)
+  let productOrder = tempOrder.map(item => item.order_details).flat()
+  let products = Object.values(productOrder.reduce((acc, current) => {
+    const { _idProduct } = current
+    if (acc[_idProduct]) {
+      acc[_idProduct].quantity += current.quantity;
+    } else {
+      acc[_idProduct] = { ...current };
+    }
+    return acc
+  }, {}))
+
+  //tính tổng tiền
+  const totalPrice = useMemo(() => {
+    const result = products.reduce((total, current) => {
+      return total + (current.price * current.quantity)
+    }, 0)
+
+    return result
+  }, [products])
+
+  const hanldeSearch = (e) => {
+    const startDate = dayjs(String(daySearch.startDay), "DD/MM/YYYY");
+    const endDate = dayjs(String(daySearch.endDay), "DD/MM/YYYY");
+    if(endDate.isBefore(startDate)){
+      openNotification(false,"Ngày bắt đầu phải lớn hơn ngày kết thúc","")
+      return
+    }
+    tempOrder = orders.filter(order => {
+      const orderDate = dayjs(String(order.createdAt));
+     
+      return orderDate.isBetween(startDate, endDate, null, '[]')
+    })
+    if(tempOrder.length>0){
+      dispatch(updateTemp(tempOrder))
+    }else{
+      dispatch(updateTemp(tempOrder))
+      openNotification(false,"Không có đơn hàng nào vào"+daySearch.startDay+" - "+daySearch.endDay,"")
+    }
+  }
+
+  const hanldeChange = (e) => {
+    const { name, value } = e.target
+    setDaySearch(pre => ({
+      ...pre,
+      [name]: dayjs(value).format("DD/MM/YYYY")
+    }))
+
+  }
+
   return (
     <Container>
       <Header>Báo cáo doanh thu</Header>
@@ -117,61 +194,45 @@ const Revenue = () => {
           <option>Báo cáo theo tháng</option>
         </Select>
         <Label>Ngày bắt đầu</Label>
-        <Input type="date" />
+        <Input type="date" name='startDay' onChange={hanldeChange} />
         <Label>Ngày kết thúc</Label>
-        <Input type="date" />
-        <SearchButton>Tìm kiếm</SearchButton>
+        <Input type="date" name='endDay' onChange={hanldeChange} />
+        <SearchButton onClick={hanldeSearch}>Tìm kiếm</SearchButton>
       </FilterSection>
       <StyledHr />
       <StatsContainer>
         <StatItem>
-          <p>6.897.999</p>
           <p>Doanh thu</p>
-        </StatItem>
-        <StatItem>
-          <p>4.200.890</p>
-          <p>Tổng vốn</p>
-        </StatItem>
-        <StatItem>
-          <p>0</p>
-          <p>Bị trả</p>
-        </StatItem>
-        <StatItem>
-          <p>2.697.109</p>
-          <p>Lợi nhuận</p>
+          <p>{formatCurrency(totalPrice)}</p>
         </StatItem>
       </StatsContainer>
       <StyledHr />
-      <Table>
-        <thead>
-          <tr>
-            <TableHeader>STT</TableHeader>
-            <TableHeader>Tên sản phẩm</TableHeader>
-            <TableHeader>Số lượng</TableHeader>
-            <TableHeader>Doanh thu</TableHeader>
-            <TableHeader>Vốn</TableHeader>
-            <TableHeader>Lợi nhuận</TableHeader>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <TableData>01</TableData>
-            <TableData>Áo ba lỗ</TableData>
-            <TableData>86</TableData>
-            <TableData>4.730.000</TableData>
-            <TableData>3.870.000</TableData>
-            <TableData>860.000</TableData>
-          </tr>
-          <tr>
-            <TableData>02</TableData>
-            <TableData>Áo Hoodie</TableData>
-            <TableData>4</TableData>
-            <TableData>2.167.999</TableData>
-            <TableData>330.890</TableData>
-            <TableData>1.837.109</TableData>
-          </tr>
-        </tbody>
-      </Table>
+      {products.length > 0 ?
+        <Table>
+          <thead>
+            <tr>
+              <TableHeader>STT</TableHeader>
+              <TableHeader>Tên sản phẩm</TableHeader>
+              <TableHeader>Giá tiền</TableHeader>
+              <TableHeader>Số lượng</TableHeader>
+              <TableHeader>Doanh thu</TableHeader>
+            </tr>
+          </thead>
+          <tbody>
+            {products?.map((item, index) => (
+              <tr key={item._idProduct}>
+                <TableData>{index + 1}</TableData>
+                <TableData>{item.name}</TableData>
+                <TableData>{formatCurrency(item.price)}</TableData>
+                <TableData>{item.quantity}</TableData>
+                <TableData>{formatCurrency(item.quantity * item.price)}</TableData>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        : <Spin></Spin>
+      }
+
     </Container>
   );
 };

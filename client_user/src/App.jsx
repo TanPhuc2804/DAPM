@@ -6,7 +6,7 @@ import { publicRoutes } from './routes';
 import { DefaultLayout } from './assets/Component/Layout';
 import { Fragment } from 'react';
 import { AuthContext } from './assets/hooks/auth.context';
-import { CartProvider } from './pages/user/Card/CartContext/Cartcontext';
+import { CartProvider } from './pages/user/Card/CartContext/cartcontext';
 
 function App() {
   const { auth, setAuth } = useContext(AuthContext);
@@ -30,6 +30,8 @@ function App() {
   console.log(auth)
   return (
     <Router>
+      <CartProvider>
+
       <div className="App bg-white">
         <Routes>
           {publicRoutes.map((route, index) => {
@@ -63,6 +65,8 @@ function App() {
           })}
         </Routes>
       </div>
+              
+      </CartProvider>
     </Router>
   )
 }

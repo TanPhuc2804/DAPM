@@ -11,6 +11,7 @@ import Success from "../pages/checkout/Success";
 import Admin from "../pages/Admin/pages";
 import Product from "../pages/Admin/pages/Product/Product";
 import Category from "../pages/Admin/pages/Category/Category";
+import OrderCus  from "../pages/user/Order/Order.jsx";
 import Revenue from "../pages/Admin/pages/Revenue/Revenue";
 import Staff from "../pages/Admin/pages/Staff/Staff";
 import Supplier from "../pages/Admin/pages/Supplier/Supplier";
@@ -30,7 +31,7 @@ const publicRoutes = [
     { path: '/product/:id', component: DetailProduct },
     { path: '/product-category/:id', component: ListProduct }, 
     { path: '/customer/cart', component: Cart },
-    { path: '/customer/order', component: Order },
+    { path: '/customer/order', component: OrderCus },
     { path: '/success', component: Success },
     { path: '/success/:session_id', component: Success },
     { path: '/cancel', component: Cancel },

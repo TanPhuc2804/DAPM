@@ -1,6 +1,6 @@
 import React, { useEffect, useState,useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useCart } from '../Card/CartContext/Cartcontext';
+import { useCart } from '../Card/CartContext/cartcontext';
 import axios from 'axios';
 import DeliveryInfo from './DeliveryInfo/DeliveryInfo';
 import ProductDescription from './ProductDescription/ProductDescription';
