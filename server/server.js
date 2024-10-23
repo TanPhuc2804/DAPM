@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const PORT = 3000;
 const allowedOrigins = ["http://localhost:5001"];
+const cloudinary = require('cloudinary').v2;
 dotenv.config();
 
 // Import routes
@@ -18,8 +19,9 @@ const supplierRoute = require('./scr/route/Supplier.route')
 const customerRouter = require('./scr/route/Customer.route')
 const categoryRouter = require('./scr/route/category.route'); 
 const adminRouter = require('./scr/route/admin.route');
-const orderRouter = require("./scr/route/Order.route")
-const checkoutRouter = require("./scr/route/Checkout.route")
+const orderRouter = require("./scr/route/Order.route");
+const checkoutRouter = require("./scr/route/Checkout.route");
+const voucherRouter = require("./scr/route/voucher.route");
 const app = express();
 
 // Middleware setup
@@ -79,7 +81,13 @@ mongoose.connect(process.env.StringUrlMongo)
         console.log("Database connected successfully");
     })
     .catch((err) => console.log("Database connection error: ", err));
-
+//Set up cloundinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+  });
+//
 
 // Route setup
 app.use("/auth", authRouter);
@@ -90,3 +98,4 @@ app.use('/category', categoryRouter);
 app.use('/admin', adminRouter);
 app.use('/order', orderRouter);
 app.use('/checkout', checkoutRouter);
+app.use('/Voucher',voucherRouter);

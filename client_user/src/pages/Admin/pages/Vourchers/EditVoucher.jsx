@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Bold, Weight } from "lucide-react";
+import axios from "axios";
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -100,15 +101,43 @@ const EditVoucher = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Logic để lấy thông tin voucher dựa vào id (maVoucher)
-    // và cập nhật vào state nếu có dữ liệu
+    const fetchVoucher = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/Voucher/get-voucher/${id}`);
+        const voucher = response.data.voucher;
+        setTenVoucher(voucher.nameVoucher);
+        setGiaTri(voucher.discount);
+        setSoLuong(voucher.quantity);
+        setNgayBatDau(new Date(voucher.createdAt).toISOString().split('T')[0]);
+        setNgayKetThuc(new Date(voucher.expiryDate).toISOString().split('T')[0]);
+      } catch (error) {
+        console.error("Failed to fetch voucher", error);
+      }
+    };
+  
+    if (id) {
+      fetchVoucher();
+    }
   }, [id]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Thực hiện logic cập nhật voucher
-    alert("Đã cập nhật voucher thành công");
-    navigate('/amdin/vouchers');
+    try {
+      const updatedVoucher = {
+        nameVoucher: tenVoucher,
+        discount: giaTri,
+        quantity: soLuong,
+        createdAt: ngayBatDau,
+        expiryDate: ngayKetThuc
+      };
+      
+      await axios.put(`http://localhost:3000/Voucher/upt-voucher/${id}`, updatedVoucher);
+      alert("Cập nhật voucher thành công");
+      navigate('/admin/vouchers');
+    } catch (error) {
+      console.error("Cập nhật voucher thất bại", error);
+      alert("Cập nhật voucher thất bại");
+    }
   };
 
   return (
@@ -143,9 +172,8 @@ const EditVoucher = () => {
           <Link to="/admin/vouchers"> {/* Đường link cho nút Back */}
             <Button className="back">Back</Button>
           </Link>
-          <Link to="/admin/vouchers"> {/* Đường link cho nút Cập nhật */}
-            <Button className="update">Update</Button>
-          </Link>
+           {/* Đường link cho nút Cập nhật */}
+            <Button className="update" onClick={handleSubmit}>Update</Button>
         </ButtonContainer>
     </Form>
     </Container>

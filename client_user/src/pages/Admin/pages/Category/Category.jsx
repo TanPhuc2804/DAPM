@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 // Thành phần cho từng danh mục
-const CategoryItem = ({ name, color, onClick, isSelected }) => (
+const CategoryItem = ({ name, onClick, isSelected }) => (
   <div 
     onClick={(e) => { 
       e.stopPropagation(); // Ngăn sự kiện lan ra ngoài khi nhấn vào danh mục
@@ -16,7 +16,7 @@ const CategoryItem = ({ name, color, onClick, isSelected }) => (
       backgroundColor: '#f0f0f0', 
       margin: '10px', 
       borderRadius: '10px', 
-      borderLeft: `5px solid ${color}`, 
+      borderLeft: '5px solid blue', 
       cursor: 'pointer',
       boxShadow: isSelected ? 'inset 0 0 0 1000px rgba(0, 0, 0, 0.1)' : 'none' // Hiệu ứng màu sẫm khi chọn
     }}
@@ -68,6 +68,7 @@ const AddCategory = ({ onAdd, onCancelAdd }) => {
             placeholder="Nhập tên danh mục" 
             style={{ border: 'none', outline: 'none', width: '80px' }}
           />
+          <button onClick={handleCancel} style={{marginRight: '10px', backgroundColor:'#FF3399',marginLeft: '10px'}}> Hủy </button>
           <button onClick={handleAddClick} style={{ marginLeft: '10px', backgroundColor: '#D8F3DC' }}>Thêm</button>
         </>
       ) : (
@@ -81,37 +82,78 @@ const AddCategory = ({ onAdd, onCancelAdd }) => {
 
 // Thành phần chính chứa danh sách danh mục
 const Category = () => {
-  const [categories, setCategories] = useState([
-    { name: 'Áo', color: '#ff0000' },
-    { name: 'Quần', color: '#00ff00' },
-    { name: 'Giày', color: '#ffff00' },
-    { name: 'Phụ kiện', color: '#00ccff' },
-  ]);
+  const [categories, setCategories] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [isAddingCategory, setIsAddingCategory] = useState(false);
-
-  const handleAddCategory = (name) => {
-    setCategories([...categories, { name, color: '#ff00ff' }]);
-    setIsAddingCategory(false);
+  useEffect(() => {
+    axios.get("http://localhost:3000/category/get-categorylist")
+    .then(res => res.data)
+    .then(data => {
+       setCategories(data.categories)
+    })
+    .catch(err => console.log(err))
+  },[])
+ 
+  const handleAddCategory = async (name) => {
+    try {
+      const res = await axios.post("http://localhost:3000/category/create-category", { name });
+      if (res.data.status) {
+        // Thêm danh mục mới vào danh sách sau khi API thành công
+        setCategories([...categories, res.data.category]);
+        setIsAddingCategory(false);
+      } else {
+        alert("Thêm danh mục thất bại: " + res.data.message);
+      }
+    } catch (error) {
+      console.error("Lỗi khi thêm danh mục: ", error);
+    }
   };
+  
 
-  const handleDeleteCategory = () => {
+  const handleDeleteCategory = async () => {
     if (window.confirm('Bạn có chắc chắn muốn xóa danh mục này không?')) {
-      setCategories(categories.filter((_, i) => i !== selectedIndex));
-      setSelectedIndex(null);
+      try {
+        const categoryId = categories[selectedIndex]._id;
+        const res = await axios.delete(`http://localhost:3000/category/delete-category/${categoryId}`);
+        if (res.data.status) {
+          // Xóa danh mục khỏi danh sách trong giao diện
+          setCategories(categories.filter((_, i) => i !== selectedIndex));
+          setSelectedIndex(null);
+          alert("Xóa danh mục thành công");
+        } else {
+          alert("Xóa danh mục thất bại: " + res.data.message);
+        }
+      } catch (error) {
+        console.error("Lỗi khi xóa danh mục: ", error);
+        alert("Có lỗi xảy ra khi xóa danh mục.");
+      }
     }
   };
 
-  const handleEditCategory = () => {
-    const newName = prompt("Nhập tên mới cho danh mục:", categories[selectedIndex].name);
-    if (newName) {
-      const updatedCategories = categories.map((category, i) =>
-        i === selectedIndex ? { ...category, name: newName } : category
-      );
-      setCategories(updatedCategories);
+  const handleEditCategory = async () => {
+  const newName = prompt("Nhập tên mới cho danh mục:", categories[selectedIndex].name);
+  if (newName) {
+    try {
+      const categoryId = categories[selectedIndex]._id;
+      const res = await axios.put(`http://localhost:3000/category/update-category/${categoryId}`, { name: newName });
+      if (res.data.status) {
+        // Cập nhật danh mục trong danh sách
+        const updatedCategories = categories.map((category, i) =>
+          i === selectedIndex ? { ...category, name: newName } : category
+        );
+        setCategories(updatedCategories);
+        alert("Cập nhật danh mục thành công");
+      } else {
+        alert("Cập nhật danh mục thất bại: " + res.data.message);
+      }
+    } catch (error) {
+      console.error("Lỗi khi cập nhật danh mục: ", error);
+      alert("Có lỗi xảy ra khi cập nhật danh mục.");
     }
-    setSelectedIndex(null);
-  };
+  }
+  setSelectedIndex(null);
+};
+
 
   const handleCategoryClick = (index) => {
     setSelectedIndex(index);
@@ -135,7 +177,6 @@ const Category = () => {
           <CategoryItem 
             key={index} 
             name={category.name} 
-            color={category.color} 
             onClick={() => handleCategoryClick(index)} 
             isSelected={index === selectedIndex} 
           />

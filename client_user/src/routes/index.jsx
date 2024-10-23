@@ -11,7 +11,7 @@ import Success from "../pages/checkout/Success";
 import Admin from "../pages/Admin/pages";
 import Product from "../pages/Admin/pages/Product/Product";
 import Category from "../pages/Admin/pages/Category/Category";
-import Order from "../pages/Admin/pages/Order/Order";
+import OrderAdmin from "../pages/Admin/pages/Order/Order";
 import Revenue from "../pages/Admin/pages/Revenue/Revenue";
 import Staff from "../pages/Admin/pages/Staff/Staff";
 import Supplier from "../pages/Admin/pages/Supplier/Supplier";
@@ -48,7 +48,7 @@ const publicRoutes = [
             },
             {
                 path: 'order',
-                page: Order,
+                page: OrderAdmin,
             },
             {
                 path: 'revenue',
@@ -84,7 +84,7 @@ const publicRoutes = [
                 page: ViewDetailProduct,
             },
             {
-                path: 'editvoucher',
+                path: 'editvoucher/:id',
                 page: EditVoucher,
             },
             {

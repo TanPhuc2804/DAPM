@@ -46,7 +46,7 @@ const initialOrders = [
   { id: 3, name: 'Biện Ngọc Sơn', phone: '0987 644 567', address: '79 Khánh Hòa', code: 'A03', quantity: 3, total: '780.000', date: '30/09/2024', status: 'Chưa xác nhận' }
 ];
 
-const Order = () => {
+const OrderAdmin = () => {
   const [orders, setOrders] = useState(initialOrders);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
@@ -133,4 +133,4 @@ const Order = () => {
   );
 };
 
-export default Order
+export default OrderAdmin

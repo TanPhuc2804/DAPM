@@ -5,12 +5,6 @@ const productSchema = new mongoose.Schema({
       required: true,   
       trim: true // Remove leading/trailing whitespaces
     },
-    productCode: {  // Thêm mã sản phẩm
-      type: String,
-      required: true,
-      unique: true,
-      trim: true
-    },
     price: {
       type: Number,
       required: true,

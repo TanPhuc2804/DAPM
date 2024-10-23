@@ -1,7 +1,8 @@
 
 const Product = require('../models/Product.model');
-const Category = require('../models/Category.model')
-// Create a new product
+const Category = require('../models/Category.model');
+const cloudinary = require('cloudinary').v2;
+//Create a new product
 const createProduct = async (req, res) => {
     try {
         const product = new Product(req.body);
@@ -11,7 +12,7 @@ const createProduct = async (req, res) => {
         res.status(400).json({ status: false, message: "Failed to create product", error: error.message });
     }
 };
-
+  
 // Get all products
 const getAllProducts = async (req, res) => {
     try {
