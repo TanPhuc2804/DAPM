@@ -6,7 +6,7 @@ import PaymentOptions from './paymentMethods/paymentMethods';
 import AdditionalInfo from './AdditionalInfo/AdditionalInfo';
 import OrderSummary from './OrderSummary/OrderSummary';
 import { useInfor } from '../../../assets/hooks/inforOrder.context';
-function Order() {
+function OrderCus() {
   
   return (
     <div>
@@ -28,4 +28,4 @@ function Order() {
   );
 }
 
-export default Order;
+export default OrderCus;

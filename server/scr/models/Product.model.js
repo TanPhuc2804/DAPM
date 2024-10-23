@@ -38,6 +38,10 @@ const productSchema = new mongoose.Schema({
       ref: 'Supplier', // Reference to the Supplier schema, if applicable
       required: true
     },
+    status: {  // Thêm trạng thái sản phẩm
+      type: String,
+      default: 'Còn hàng'
+    },
     updatedAt: {
       type: Date,
     },

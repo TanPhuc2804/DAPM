@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
 const ProductCard = ({ _id,image, name, price, originalPrice, discount, description }) => {
+  console.log(image)
   return (
     <div className="flex flex-col w-full rounded-1xl max-md:max-w-full overflow-hidden group max-w-[380px] mx-4 my-2 transition-all duration-300 hover:shadow-lg hover:border hover:border-black"> {/* Thêm hiệu ứng hover */}
       <div className="flex flex-col items-center px-1 pt-2 pb-4 w-full bg-white rounded-2xl">
