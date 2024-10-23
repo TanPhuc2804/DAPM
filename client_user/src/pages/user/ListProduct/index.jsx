@@ -16,12 +16,8 @@ function ListProduct() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await axios.get(`http://localhost:3000/products/list-product-category/${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${yourAuthToken}`, // Add your token here
-                    }
-                });
-
+                const res = await axios.get(`http://localhost:3000/products/list-product-category/${id}`);
+                    
                 if (res.data.status) {
                     setProducts(res.data.products);
                     setCategoryName(res.data.categoryName); 
