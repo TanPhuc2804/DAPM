@@ -1,7 +1,6 @@
 
 const Product = require('../models/Product.model');
 const Category = require('../models/Category.model');
-const cloudinary = require('cloudinary').v2;
 //Create a new product
 const createProduct = async (req, res) => {
     try {

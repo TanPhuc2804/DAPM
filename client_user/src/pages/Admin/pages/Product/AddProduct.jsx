@@ -146,7 +146,7 @@ const AddProduct = () => {
 }, []);
 
 const handleImageUpload = (e) => {
-  setImages(e.target.files);
+  
 };
 
   const handleInputChange = (e) => {

@@ -8,7 +8,6 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const PORT = 3000;
 const allowedOrigins = ["http://localhost:5001"];
-const cloudinary = require('cloudinary').v2;
 dotenv.config();
 
 // Import routes
@@ -82,11 +81,6 @@ mongoose.connect(process.env.StringUrlMongo)
     })
     .catch((err) => console.log("Database connection error: ", err));
 //Set up cloundinary
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-  });
 //
 
 // Route setup
