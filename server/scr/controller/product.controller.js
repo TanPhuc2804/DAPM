@@ -1,7 +1,7 @@
 
 const Product = require('../models/Product.model');
-const Category = require('../models/Category.model')
-// Create a new product
+const Category = require('../models/Category.model');
+//Create a new product
 const createProduct = async (req, res) => {
     try {
         const product = new Product(req.body);
@@ -11,11 +11,12 @@ const createProduct = async (req, res) => {
         res.status(400).json({ status: false, message: "Failed to create product", error: error.message });
     }
 };
-
+  
 // Get all products
 const getAllProducts = async (req, res) => {
     try {
-        const products = await Product.find({})
+        const products = await Product.find({}).populate('supplier') // Lấy thông tin nhà cung cấp
+            .select('name productCode price quantity size supplier status updatedAt image'); // Chỉ lấy các trường cần thiết
         res.status(200).json({ status: true, products });
     } catch (error) {
         res.status(500).json({ status: false, message: "Failed to retrieve products", error: error.message });

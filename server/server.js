@@ -18,8 +18,9 @@ const supplierRoute = require('./scr/route/Supplier.route')
 const customerRouter = require('./scr/route/Customer.route')
 const categoryRouter = require('./scr/route/category.route'); 
 const adminRouter = require('./scr/route/admin.route');
-const orderRouter = require("./scr/route/Order.route")
-const checkoutRouter = require("./scr/route/Checkout.route")
+const orderRouter = require("./scr/route/Order.route");
+const checkoutRouter = require("./scr/route/Checkout.route");
+const voucherRouter = require("./scr/route/voucher.route");
 const app = express();
 
 // Middleware setup
@@ -79,7 +80,8 @@ mongoose.connect(process.env.StringUrlMongo)
         console.log("Database connected successfully");
     })
     .catch((err) => console.log("Database connection error: ", err));
-
+//Set up cloundinary
+//
 
 // Route setup
 app.use("/auth", authRouter);
@@ -90,3 +92,4 @@ app.use('/category', categoryRouter);
 app.use('/admin', adminRouter);
 app.use('/order', orderRouter);
 app.use('/checkout', checkoutRouter);
+app.use('/Voucher',voucherRouter);

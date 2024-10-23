@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import axios from 'axios'; // Thêm axios để gửi yêu cầu HTTP
+
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -21,13 +23,6 @@ const Form = styled.div`
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 `;
 
-/* Styling cho ảnh hiển thị */
-const Image = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
-
 const InputField = styled.div`
   display: flex;
   align-items: center;
@@ -35,12 +30,12 @@ const InputField = styled.div`
   width: 100%;
 
   & > label {
-    flex: 0.3; /* Chiếm 30% không gian */
+    flex: 0.3;
     margin-right: 10px;
   }
 
   & > input {
-    flex: 0.7; /* Chiếm 70% không gian */
+    flex: 0.7;
   }
 `;
 
@@ -79,8 +74,8 @@ const Button = styled.button`
     background-color: green;
   }
 `;
+
 const AddVoucher = () => {
-  const [maVoucher, setMaVoucher] = useState("");
   const [tenVoucher, setTenVoucher] = useState("");
   const [giaTri, setGiaTri] = useState("");
   const [soLuong, setSoLuong] = useState(1);
@@ -88,91 +83,102 @@ const AddVoucher = () => {
   const [ngayKetThuc, setNgayKetThuc] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Giả lập logic thêm voucher thành công
-    alert("Thêm thành công");
-    navigate("/admin/vouchers");
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Ngăn chặn việc reload trang khi form được submit
+  console.log("Form submitted"); // Thêm log để kiểm tra
 
-  const handleBack = () => {
-    navigate("/");
+    // Dữ liệu gửi lên server
+    const voucherData = {
+      nameVoucher: tenVoucher,
+      discount: giaTri,
+      quantity: soLuong,
+      createdAt: ngayBatDau,
+      expiryDate: ngayKetThuc,
+      status: "active",  // Hoặc tùy theo logic của bạn
+    };
+
+    try {
+      // Gửi yêu cầu POST để tạo voucher mới
+      const response = await axios.post("http://localhost:3000/Voucher/create-voucher/", voucherData, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}` // Thêm xác thực nếu cần
+        }
+      });
+      console.log(response);
+      if (response.data.status) {
+        alert("Thêm voucher thành công!");
+        navigate("/admin/vouchers");
+      } else {
+        alert("Thêm voucher thất bại!");
+      }
+    } catch (error) {
+      console.error("Lỗi khi thêm voucher:", error);
+      alert("Đã xảy ra lỗi khi thêm voucher.");
+    }
   };
 
   return (
     <Container>
-         <Form onSubmit={handleSubmit}>
-      <h2 style={{fontWeight: 'bold'}}>Thêm Voucher</h2>
-      <InputField  >
-        <Label>Mã Voucher:</Label>
-        <Input
-          type="text"
-          value={maVoucher}
-          onChange={(e) => setMaVoucher(e.target.value)}
-          required
-          style={{ marginBottom: "10px" }}
-        />
+      <Form >
+        <h2 style={{ fontWeight: 'bold' }}>Thêm Voucher</h2>
+        <InputField>
+          <Label>Tên Voucher:</Label>
+          <Input
+            type="text"
+            value={tenVoucher}
+            onChange={(e) => setTenVoucher(e.target.value)}
+            required
+            style={{ marginBottom: "10px" }}
+          />
         </InputField>
-        <InputField  >
-        <Label>Tên Voucher:</Label>
-        <Input
-          type="text"
-          value={tenVoucher}
-          onChange={(e) => setTenVoucher(e.target.value)}
-          required
-          style={{ marginBottom: "10px" }}
-        />
-         </InputField>
-         <InputField  >
-        <Label>Giá trị:</Label>
-        <Input
-          type="text"
-          value={giaTri}
-          onChange={(e) => setGiaTri(e.target.value)}
-          required
-          style={{ marginBottom: "10px" }}
-        />
+        <InputField>
+          <Label>Giá trị:</Label>
+          <Input
+            type="text"
+            value={giaTri}
+            onChange={(e) => setGiaTri(e.target.value)}
+            required
+            style={{ marginBottom: "10px" }}
+          />
         </InputField>
-        <InputField  >
-        <Label>Số lượng:</Label>
-        <Input
-          type="number"
-          min={1}
-          value={soLuong}
-          onChange={(e) => setSoLuong(e.target.value)}
-          required
-          style={{ marginBottom: "10px" }}
-        />
+        <InputField>
+          <Label>Số lượng:</Label>
+          <Input
+            type="number"
+            min={1}
+            value={soLuong}
+            onChange={(e) => setSoLuong(e.target.value)}
+            required
+            style={{ marginBottom: "10px" }}
+          />
         </InputField>
-        <InputField  >
-        <Label>Ngày bắt đầu:</Label>
-        <Input
-          type="date"
-          value={ngayBatDau}
-          onChange={(e) => setNgayBatDau(e.target.value)}
-          required
-          style={{ marginBottom: "10px" }}
-        />
-       </InputField>
-       <InputField  >
-        <Label>Ngày kết thúc:</Label>
-        <Input
-          type="date"
-          value={ngayKetThuc}
-          onChange={(e) => setNgayKetThuc(e.target.value)}
-          required
-          style={{ marginBottom: "10px" }}
-        />
+        <InputField>
+          <Label>Ngày bắt đầu:</Label>
+          <Input
+            type="date"
+            value={ngayBatDau}
+            onChange={(e) => setNgayBatDau(e.target.value)}
+            required
+            style={{ marginBottom: "10px" }}
+          />
+        </InputField>
+        <InputField>
+          <Label>Ngày kết thúc:</Label>
+          <Input
+            type="date"
+            value={ngayKetThuc}
+            onChange={(e) => setNgayKetThuc(e.target.value)}
+            required
+            style={{ marginBottom: "10px" }}
+          />
         </InputField>
         <ButtonContainer>
-        <Link to="/admin/vouchers">
-        <Button className="back">Back</Button>
+          <Link to="/admin/vouchers">
+            <Button className="back">Back</Button>
           </Link>
-          <Link to="/admin/vouchers"> {/* Đường link cho nút Thêm */}
-            <Button className="add">THÊM</Button>
-          </Link>
-          </ButtonContainer>
-    </Form>
+          <Button className="add" onClick={handleSubmit}>THÊM</Button>
+        </ButtonContainer>
+      </Form>
     </Container>
   );
 };

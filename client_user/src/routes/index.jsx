@@ -48,7 +48,7 @@ const publicRoutes = [
             },
             {
                 path: 'order',
-                page: Order,
+                page: OrderAdmin,
             },
             {
                 path: 'revenue',
@@ -84,7 +84,7 @@ const publicRoutes = [
                 page: ViewDetailProduct,
             },
             {
-                path: 'editvoucher',
+                path: 'editvoucher/:id',
                 page: EditVoucher,
             },
             {

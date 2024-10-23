@@ -160,7 +160,6 @@ const Order = () => {
     setCurrentPage(page);
   };
 
-
   // Xử lý khi nhấp chọn một hàng
   const handleRowClick = (order) => {
     dispatch(selectData(order))
@@ -276,4 +275,4 @@ const Order = () => {
   );
 };
 
-export default Order
+export default OrderAdmin

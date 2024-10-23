@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+import { message } from 'antd';
 
-// Các Styled Components như bạn đã tạo...
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -52,8 +52,8 @@ const InputField = styled.div`
     margin-right: 10px;
   }
 
-  & > input {
-    flex: 0.7;
+   & > input, & > select {
+    flex: 0.7; /* Chiếm 70% không gian */
   }
 `;
 
@@ -92,62 +92,106 @@ const Button = styled.button`
     background-color: green;
   }
 `;
+const Select = styled.select`
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+`;
 
 const AddProduct = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
   const [productData, setProductData] = useState({
     name: '',
-    productCode: '',
-    price: '',
-    quantity: '',
+    price: 0,
+    quantity: 0,
     description: '',
     size: '',
     category: '',
     supplier: '',
-    status: 'Còn hàng',
-    updatedAt: '',
-    image: []
+    status: 'còn hàng',
+    images: []
   });
 
   const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
+  const [images, setImages] = useState([]);
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedImage(URL.createObjectURL(file));
-      setProductData({ ...productData, image: [file] });
+  // useEffect(() => {
+  //   // Lấy danh sách categories từ server
+  //   axios.get("http://localhost:3000/category/get-categorylist")
+  //     .then(res => setCategories(res.data.categories))
+  //     .catch(err => console.log(err));
+
+  //   // Lấy danh sách suppliers từ server
+  //   axios.get("http://localhost:3000/supplier/list-supplier")
+  //     .then(res => setSupplier(res.data.suppliers))
+  //     .catch(err => console.log(err));
+  // }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [categoriesRes, suppliersRes] = await Promise.all([
+          axios.get('http://localhost:3000/category/get-categorylist'),
+          axios.get('http://localhost:3000/supplier/list-supplier')
+        ]);
+        setCategories(categoriesRes.data.categories);
+        setSuppliers(suppliersRes.data.suppliers);
+      } catch (error) {
+        message.error('Failed to load categories or suppliers');
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleImageUpload = async (e) => {
+    e.stopPropagation()
+    const upload_preset = "uploat_data"
+    const formData = new FormData()
+    const files = e.target.files
+    for (let i of files) {
+      formData.append("file", i)
+      formData.append('upload_preset', upload_preset)
+
+      const responseImage = await fetch("https://api.cloudinary.com/v1_1/da5mlszld/image/upload", {
+        method: "POST",
+        body: formData
+      })
+      const objectImage = await responseImage.json()
+      setImages(pre => [
+        ...pre,
+        objectImage.url
+      ])
+      console.log(objectImage)
     }
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setProductData({ ...productData, [name]: value });
+    setProductData({ ...productData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    const formData = {
+      ...productData,
+      image:images
+    }
     try {
-      const formData = new FormData();
-      for (let key in productData) {
-        formData.append(key, productData[key]);
-      }
-      if (selectedImage) {
-        formData.append('image', selectedImage);
-      }
-
-      await axios.post('/api/products', formData);
-      alert('Thêm sản phẩm thành công!');
-      navigate('/admin/viewdetailproduct');
+      await axios.post('http://localhost:3000/products/create-product', formData);
+      message.success('Product added successfully');
+      navigate("/admin")
     } catch (error) {
-      console.error('Failed to add product', error);
-      alert('Thêm sản phẩm thất bại!');
+      message.error('Failed to add product');
     }
   };
+  const handleDelete = async (item) => {
+    setImages(pre => pre.filter(image => image !== item))
+  }
 
   return (
     <Container>
-       <ImageContainer onClick={() => document.getElementById('fileInput').click()}>
+      {/* <ImageContainer onClick={() => document.getElementById('fileInput').click()}>
           {selectedImage ? (
             <Image src={selectedImage} alt="Product" />
           ) : (
@@ -160,7 +204,26 @@ const AddProduct = () => {
           style={{ display: 'none' }}
           onChange={handleImageChange}
           accept="image/*"
-        />
+        /> */}
+      <div className='h-auto'>
+        <input type="file" multiple onChange={handleImageUpload} />
+        <div className='flex max-w-[300px] flex-wrap'>
+          {images?.map(item => (
+            <div key={item} className="relative w-[150px] h-[150px] p-[5px]">
+              <Image src={item} className='object-cover rounded-md' />
+              <button
+                className="absolute top-2 right-2 bg-red-500 text-center items-center text-white rounded-full p-1 w-[20px] h-[20px] flex  justify-center"
+                onClick={() => handleDelete(item)}
+              >
+                x
+              </button>
+            </div>
+          ))}
+        </div>
+
+      </div>
+
+
       <Form onSubmit={handleSubmit}>
         <h1>Thêm Sản Phẩm</h1>
 
@@ -175,19 +238,6 @@ const AddProduct = () => {
             required
           />
         </InputField>
-
-        <InputField>
-          <Label>Mã sản phẩm:</Label>
-          <Input
-            type="text"
-            name="productCode"
-            value={productData.productCode}
-            onChange={handleInputChange}
-            placeholder="Nhập mã sản phẩm"
-            required
-          />
-        </InputField>
-
         <InputField>
           <Label>Đơn giá:</Label>
           <Input
@@ -195,7 +245,7 @@ const AddProduct = () => {
             name="price"
             value={productData.price}
             onChange={handleInputChange}
-            placeholder="Nhập đơn giá"
+            placeholder="Nhập giá sản phẩm"
             required
           />
         </InputField>
@@ -237,26 +287,32 @@ const AddProduct = () => {
 
         <InputField>
           <Label>Danh mục:</Label>
-          <Input
-            type="text"
+          <Select
             name="category"
             value={productData.category}
             onChange={handleInputChange}
-            placeholder="Nhập danh mục"
             required
-          />
+          >
+            <option value="">Chọn danh mục</option>
+            {categories.map((category) => (
+              <option key={category._id} value={category._id}>{category.name}</option>
+            ))}
+          </Select>
         </InputField>
 
         <InputField>
           <Label>Nhà cung cấp:</Label>
-          <Input
-            type="text"
+          <Select
             name="supplier"
             value={productData.supplier}
             onChange={handleInputChange}
-            placeholder="Nhập nhà cung cấp"
             required
-          />
+          >
+            <option value="">Chọn nhà cung cấp</option>
+            {suppliers.map((supplier) => (
+              <option key={supplier._id} value={supplier._id}>{supplier.companyName}</option>
+            ))}
+          </Select>
         </InputField>
 
         <InputField>
@@ -275,10 +331,11 @@ const AddProduct = () => {
           <Input
             type="date"
             name="updatedAt"
-            value={productData.updatedAt}
-            onChange={handleInputChange}
+            value={new Date().toISOString().substring(0, 10)} // Tự động là ngày hiện tại
+            disabled // Vô hiệu hóa input
           />
         </InputField>
+
         <ButtonContainer>
           <Link to="/admin/viewdetailproduct">
             <Button className="back">Back</Button>

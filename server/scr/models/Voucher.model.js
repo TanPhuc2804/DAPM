@@ -2,41 +2,33 @@ const mongoose = require('mongoose')
 
 const voucherSchema = new mongoose.Schema({
     nameVoucher: {
-      type: String,
-      required: true,   
+        type: String,
+        required: true,
     },
     discount: {
-        type:Number,
-        required:true,
+        type: Number,
+        required: true,
     },
-    date_start:{
-        type:Date,
-        require:true
+    createdAt: {
+        type: Date,
+        require: true
     },
-    date_end:{
-        type:Date,
-        require:true
+    expiryDate: {
+        type: Date,
+        require: true
     },
-    status:{
-        type:String,
-        require:true
+    status: {
+        type: String,
+        require: true
     },
-    quantity:{
-        type:Number,
-        require:true
+    quantity: {
+        type: Number,
+        require: true
     },
-    code:{
-        type:String,
-    },
-    id_staff:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:"Staff",
-        required:true
+    code: {
+        type: String,
     }
-  },{timestamps:true});
+}, {timestamps: true});
 
-
-const Category = mongoose.model('Voucher',voucherSchema)
-
-module.exports = Category
-  
+const Voucher = mongoose.model('Voucher', voucherSchema)
+module.exports = Voucher
