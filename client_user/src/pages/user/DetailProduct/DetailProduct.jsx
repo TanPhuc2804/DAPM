@@ -66,7 +66,7 @@ function DetailProduct() {
                     <img 
                         src={product.image} 
                         alt={product.name} 
-                        className="w-full h-auto mb-5 object-contain max-h-[400px]" 
+                        className="w-full h-auto mb-5 object-contain max-h-[600px]" 
                     />
                 </div>
 

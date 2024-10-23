@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Breadcrumb from './Breadcrumb/Breadcrumb';
 import CartItem from './CartItem/CartItem';
 import CartSummary from './CartSummary/CartSummary';
-import { useCart } from './CartContext/Cartcontext';
+import { useCart } from './CartContext/cartcontext';
 import axios from 'axios';
 
 function Cart() {
