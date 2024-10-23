@@ -1,9 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
-import  counterReducer  from './slides/counterSlide'
-
+import orderReducer from './select/selectOrder'
 
 export const store = configureStore({
   reducer: {
-    counter : counterReducer
+    orders:orderReducer
   },
 })
