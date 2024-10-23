@@ -5,7 +5,7 @@ import Register from "../pages/auth/Register";
 import ListProduct from "../pages/user/ListProduct";
 import DetailProduct from "../pages/user/DetailProduct/DetailProduct";
 import Cart from "../pages/user/Card/Pagecart";
-import Order from "../pages/Admin/pages/Order/Order.jsx";
+import OrderAdmin from "../pages/Admin/pages/Order/Order.jsx";
 import Cancel from "../pages/checkout/Cancel";
 import Success from "../pages/checkout/Success";
 import Admin from "../pages/Admin/pages";

@@ -46,7 +46,7 @@ const Button = styled.button`
     opacity: 0.8;
   }
 `;
-const Order = () => {
+const OrderAdmin = () => {
   const [openChangeState, setOpenChangeState] = useState(false)
   const [open, setOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1);
