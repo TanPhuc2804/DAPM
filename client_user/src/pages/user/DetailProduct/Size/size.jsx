@@ -41,7 +41,7 @@ const Size = ({ selectedSize, setSelectedSize }) => {
                 Hướng dẫn chọn size
             </div>
             <div className="mt-3.5 text-xl text-gray-400 text-left">Chọn size</div>
-            <div className="flex gap-5 mt-3.5 max-w-full text-xl text-black whitespace-nowrap w-[334px]">
+            <div className="grid grid-cols-5 gap-5 mt-3.5 max-w-full text-xl text-black">
                 {sizes.map((size) => (
                     <div key={size} className="flex-1">
                         <button 

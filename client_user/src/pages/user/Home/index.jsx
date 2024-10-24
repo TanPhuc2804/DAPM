@@ -52,7 +52,7 @@ function Home() {
 
       
       <BestSelling />
-        <ImageGallery/>
+      <ImageGallery/>
       <HotFashion />
       <CustomDesign/>
 

@@ -109,3 +109,16 @@ button:focus-visible {
 .slick-slide {
   min-height: 300px; 
 }
+
+.relative {
+  position: relative; /* Đặt phần tử cha có vị trí tương đối */
+}
+
+.absolute {
+  position: absolute;  /* Đặt bảng kết quả hiển thị theo vị trí tuyệt đối */
+  z-index: 999;        /* Đảm bảo bảng kết quả nằm phía trên các phần tử khác */
+  top: 100%;           /* Đặt vị trí ngay dưới thanh tìm kiếm */
+  left: 0;
+  right: 0;
+}
+
