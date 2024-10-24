@@ -8,13 +8,14 @@ const AccountSettings = () => {
     username: '',
     fullname: '',
     email: '',
-    phone: '',
+    numberphone: '',
     gender: '',
     address: '',
     birthday: '',
   });
 
   useEffect(() => {
+    // lấy từ DB về
     if (auth.isAuthenticated) {
       setUserInfo({
         username: auth.user.name || '',
@@ -41,7 +42,7 @@ const AccountSettings = () => {
     console.log("User Info:", userInfo);
   
     try {
-      const response = await axios.post(`http://localhost:3000/customer/update/${customerId}`, );
+      const response = await axios.post(`http://localhost:3000/customer/update/${customerId}`,userInfo );
       console.log('Cập nhật thành công:', response.data);
 
     } catch (error) {
