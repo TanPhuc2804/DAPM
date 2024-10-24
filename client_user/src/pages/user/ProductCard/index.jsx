@@ -15,7 +15,7 @@ const ProductCard = ({ _id,image, name, price, originalPrice, discount, descript
           {discount && (
             <div className="absolute top-9 left-10 px-3.5 py-2 mb-0 bg-yellow-400">{discount}</div>
           )}
-          <Link to={`/product/${_id}`} className="absolute bottom-8 left-1/2 transform -translate-x-1/2 px-8 py-3 bg-gray-400 text-white font-rosarivo rounded transition duration-300 opacity-0 group-hover:opacity-100 hover:bg-[#FF5C00]">
+          <Link to={`/product/${_id}`} className=" px-8 py-3 bg-gray-400 text-white font-rosarivo rounded transition duration-300 opacity-0 group-hover:opacity-100 hover:bg-[#FF5C00]">
             MUA NGAY
           </Link>
         </div>

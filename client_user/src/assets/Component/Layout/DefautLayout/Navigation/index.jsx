@@ -12,6 +12,7 @@ const Navigation = () => {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  // Lấy danh sách danh mục sản phẩm
   useEffect(() => {
     axios.get('http://localhost:3000/category/get-categorylist')
       .then(res => {
@@ -23,6 +24,23 @@ const Navigation = () => {
         console.log(err);
       });
   }, []);
+
+  // Lấy số lượng sản phẩm trong giỏ hàng
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      axios.get('http://localhost:3000/cart/get-cart-item-count', { 
+        headers: { Authorization: `Bearer ${auth.token}` }
+      })
+      .then(res => {
+        if (res.data.status) {
+          setCartItemCount(res.data.count);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    }
+  }, [auth.isAuthenticated]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -72,12 +90,18 @@ const Navigation = () => {
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
               {/* Search Bar */}
-              <SearchComponent /> {/* Thêm SearchComponent vào đây */}
+              <SearchComponent />
 
               {/* Login Button */}
-              <Link to={"/auth/login"} className="ml-4 px-3 py-2 rounded-md text-sm font-medium text-white bg-green-500 hover:bg-green-600">
-                {auth.isAuthenticated ? auth.user.name : "Đăng nhập"}
-              </Link>
+              {auth.isAuthenticated ? (
+                <Link to="/auth/profile" className="ml-4 px-3 py-2 rounded-md text-sm font-medium text-white bg-green-500 hover:bg-green-600">
+                  {auth.user.name}
+                </Link>
+              ) : (
+                <Link to={"/auth/login"} className="ml-4 px-3 py-2 rounded-md text-sm font-medium text-white bg-green-500 hover:bg-green-600">
+                  Đăng nhập
+                </Link>
+              )}
 
               {/* Shopping Cart */}
               <Link to={'/customer/cart'} className="ml-4 flex items-center relative text-gray-800">
@@ -92,7 +116,7 @@ const Navigation = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Responsive Menu for Mobile */}
         <div className={`md:hidden ${isMenuOpen ? "block" : "hidden"}`}>
           <div className="flex flex-col items-center space-y-2">

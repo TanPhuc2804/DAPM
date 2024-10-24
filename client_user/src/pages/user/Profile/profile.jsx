@@ -1,11 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import AccountSettings from './AccountSettings/AccountSettings';
 import ChangePasswordForm from './ChangePasswordForm/ChangePasswordForm';
+import { AuthContext } from '../../../assets/hooks/auth.context';
 
 const Profile = () => {
   const [activeSection, setActiveSection] = useState('account'); 
+  const navigate = useNavigate(); 
+  const { setAuth } = useContext(AuthContext);
+
   const handleSectionChange = (section) => {
     setActiveSection(section);
+  };
+
+  const handleLogout = () => {
+    setAuth({ 
+      isAuthenticated: false,
+      user: {
+        id: '',
+        name: '',
+        email: ''
+      }
+    });
+    navigate('/'); 
   };
 
   return (
@@ -15,11 +32,10 @@ const Profile = () => {
           <nav className="flex flex-col grow items-start px-14 pt-10 pb-80 mt-4 w-full text-2xl leading-none text-black bg-white max-md:px-5 max-md:pb-24 max-md:mt-10">
             <a href="#" onClick={() => handleSectionChange('account')} className="px-5 py-3 bg-white">Thông tin tài khoản</a>
             <a href="#" onClick={() => handleSectionChange('password')} className="px-5 pt-2.5 pb-1 mt-10 bg-white">Thay đổi mật khẩu</a>
-            <a href="#" className="px-5 pt-2.5 pb-1 mt-10 max-w-full bg-white w-[235px] max-md:pr-5">Đăng xuất</a>
+            <a href="#" onClick={handleLogout} className="px-5 pt-2.5 pb-1 mt-10 max-w-full bg-white w-[235px] max-md:pr-5">Đăng xuất</a>
           </nav>
         </aside>
 
-        {/* Render form theo điều kiện */}
         {activeSection === 'account' && <AccountSettings />} 
         {activeSection === 'password' && <ChangePasswordForm />}
       </div>
