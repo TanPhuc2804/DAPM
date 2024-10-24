@@ -5,7 +5,7 @@ import { AuthContext } from '../../../assets/hooks/auth.context';
 
 function Register() {
   const [username, setUsername] = useState('');
-  const [name, setName] = useState('');
+  const [fullname, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -24,7 +24,7 @@ function Register() {
     }
 
     axios
-  .post("http://localhost:3000/auth/registerCus", { username, name, password, email })
+  .post("http://localhost:3000/auth/registerCus", { username, fullname, password, email })
   .then((res) => {
     if (res.data.status) {
       setAuth({
@@ -69,7 +69,7 @@ function Register() {
               <label className="block text-sm text-left font-medium">Họ và tên</label>
               <input
                 type="text"
-                value={name}
+                value={fullname}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full h-12 px-4 border rounded-lg"
                 placeholder="Nhập"
