@@ -64,7 +64,7 @@ function DetailProduct() {
             <div className="flex flex-col lg:flex-row gap-10 mt-10">
                 <div className="flex flex-col items-center lg:w-1/2">
                     <img 
-                        src={product.image} 
+                        src={product.image[0]} 
                         alt={product.name} 
                         className="w-full h-auto mb-5 object-contain max-h-[600px]" 
                     />
