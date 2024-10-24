@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
 
@@ -36,43 +37,31 @@ const Button = styled.button`
   }
 `;
 const Vourchers = () => {
-  const [vouchers, setVouchers] = useState([
-    {
-      maVoucher: "VC01",
-      tenVoucher: "Miễn phí vận chuyển",
-      giaTri: "Miễn phí vận chuyển",
-      soLuong: 100,
-      ngayBatDau: "25/09/2024",
-      ngayKetThuc: "25/12/2024",
-    },
-    {
-      maVoucher: "VC02",
-      tenVoucher: "Ưu đãi tháng 9",
-      giaTri: "200k",
-      soLuong: 50,
-      ngayBatDau: "01/09/2024",
-      ngayKetThuc: "30/09/2024",
-    },
-    {
-      maVoucher: "VC03",
-      tenVoucher: "Giảm 20%",
-      giaTri: "20%",
-      soLuong: 300,
-      ngayBatDau: "12/08/2024",
-      ngayKetThuc: "12/12/2024",
-    },
-    {
-      maVoucher: "VC04",
-      tenVoucher: "Giảm 10K",
-      giaTri: "10k",
-      soLuong: 10000,
-      ngayBatDau: "12/08/2024",
-      ngayKetThuc: "12/12/2024",
-    },
-  ]);
-
-  const handleDelete = (maVoucher) => {
-    setVouchers(vouchers.filter((voucher) => voucher.maVoucher !== maVoucher));
+  const [vouchers, setVouchers] = useState([]);
+  //lấy danh sách voucher
+  useEffect(() =>{
+    const fetchvouchers = async() => {
+      try{
+        const response = await axios.get("http://localhost:3000/Voucher/get-allvoucher/");
+        console.log(response);
+        setVouchers(response.data.vouchers);
+      } catch(error){
+        console.error("Lay Voucher that bai", error);
+      }
+    };
+    fetchvouchers();
+  },[]);
+   // Xóa voucher
+   const handleDelete = async (id) => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa voucher này không?')) {
+    try {
+      await axios.delete(`http://localhost:3000/Voucher/delete-voucher/${id}`);
+      setVouchers(vouchers.filter((voucher) => voucher._id !== id));
+      console.log("Xóa thành công");
+    } catch (error) {
+      console.error("Xóa thất bại", error);
+    }
+  }
   };
   return (
     <div>
@@ -92,17 +81,17 @@ const Vourchers = () => {
         <tbody>
           {vouchers.map((voucher) => (
             <tr key={voucher.maVoucher}>
-              <TableCell>{voucher.maVoucher}</TableCell>
-              <TableCell>{voucher.tenVoucher}</TableCell>
-              <TableCell>{voucher.giaTri}</TableCell>
-              <TableCell>{voucher.soLuong}</TableCell>
-              <TableCell>{voucher.ngayBatDau}</TableCell>
-              <TableCell>{voucher.ngayKetThuc}</TableCell>
+              <TableCell>{voucher._id}</TableCell>
+              <TableCell>{voucher.nameVoucher}</TableCell>
+              <TableCell>{voucher.discount}</TableCell>
+              <TableCell>{voucher.quantity}</TableCell>
+              <TableCell>{new Date(voucher.createdAt).toLocaleDateString('vi-VN')}</TableCell>
+              <TableCell>{new Date(voucher.expiryDate).toLocaleDateString('vi-VN')}</TableCell>
               <TableCell>
-                <Link to={`/admin/editvoucher`}>
+                <Link to={`/admin/editvoucher/${voucher._id}`}>
                   <Button className='update'>Sửa</Button>
                 </Link>
-                <Button className='delete' onClick={() => handleDelete(voucher.maVoucher)}>Xóa</Button>
+                <Button className='delete' onClick={() => handleDelete(voucher._id)}>Xóa</Button>
               </TableCell>
             </tr>
           ))}

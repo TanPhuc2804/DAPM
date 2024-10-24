@@ -13,19 +13,18 @@ const WrapperProduct = styled.div`
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     font-size: 16px;
+    color: black;
 `;
 const WrapperProduct1 = styled.p`
     margin: 0;
     font-weight: bold;
+    color: black;
 `;
 const WrapperProductBackground = styled.div`
     background-color: #FFF0F5;
 `;
 
 const ViewProduct = ({ title, color, id }) => {
-
-
-
   return (
     <WrapperProductBackground>
       <WrapperProduct color={color}>
@@ -53,7 +52,7 @@ const Product = () => {
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', padding: '20px', backgroundColor: '#ffffff' }}>
       {categories.map((item, index) => (
-        <ViewProduct title={item.name} color="red" id={item._id} />
+        <ViewProduct title={item.name} color="blue" id={item._id} />
       ))}
 
     </div>

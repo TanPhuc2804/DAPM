@@ -46,7 +46,7 @@ const Button = styled.button`
     opacity: 0.8;
   }
 `;
-const Order = () => {
+const OrderAdmin = () => {
   const [openChangeState, setOpenChangeState] = useState(false)
   const [open, setOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1);
@@ -159,7 +159,6 @@ const Order = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
 
   // Xử lý khi nhấp chọn một hàng
   const handleRowClick = (order) => {
@@ -276,4 +275,4 @@ const Order = () => {
   );
 };
 
-export default Order
+export default OrderAdmin
