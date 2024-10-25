@@ -22,6 +22,7 @@ const adminRouter = require('./scr/route/admin.route');
 const orderRouter = require("./scr/route/Order.route");
 const checkoutRouter = require("./scr/route/Checkout.route");
 const voucherRouter = require("./scr/route/voucher.route");
+const staffRouter = require("./scr/route/Staff.route")
 const app = express();
 
 // Middleware setup
@@ -92,10 +93,11 @@ cloudinary.config({
 // Route setup
 app.use("/auth", authRouter);
 app.use("/products", router);  // Example product routes
-app.use("/supplier", supplierRoute)
-app.use("/customer", customerRouter)
+app.use("/supplier", supplierRoute);
+app.use("/customer", customerRouter);
 app.use('/category', categoryRouter);
 app.use('/admin', adminRouter);
 app.use('/order', orderRouter);
 app.use('/checkout', checkoutRouter);
 app.use('/Voucher',voucherRouter);
+app.use('/staff',staffRouter);

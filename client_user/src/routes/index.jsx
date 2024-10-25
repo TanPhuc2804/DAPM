@@ -23,6 +23,8 @@ import ViewDetailProduct from "../pages/Admin/pages/Product/ViewDetailProduct";
 import EditVoucher from "../pages/Admin/pages/Vourchers/EditVoucher";
 import AddVoucher from "../pages/Admin/pages/Vourchers/AddVoucher";
 import AddOrder from "../pages/Admin/pages/Order/addOrder";
+import AddStaff from "../pages/Admin/pages/Staff/AddStaff";
+import EditStaff from "../pages/Admin/pages/Staff/EditStaff";
 const publicRoutes = [
      { path: '/', component: Home },
     { path: '/profile', component: Profile },
@@ -94,6 +96,14 @@ const publicRoutes = [
             {
                 path: 'addorder',
                 page: AddOrder,
+            },
+            {
+                path: 'addstaff',
+                page: AddStaff,
+            },
+            {
+                path: 'editstaff',
+                page: EditStaff,
             },
         ]
     }
