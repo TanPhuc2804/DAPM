@@ -29,6 +29,17 @@ const insertOrder = async (req,res)=>{
     cart.map(async (item)=>{
         await updateQuantity(item.productId,item.quantity)
     })
+    
+    const orderDetail = cart.map((item) => {
+        return {
+            _idProduct: item.productId,
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price,
+            size: item.size
+        }
+    })
+
     try{
         const order = new Order({
             stateOrder:stateOrder,
@@ -36,7 +47,7 @@ const insertOrder = async (req,res)=>{
             paymentMethod:method,
             totalPrice:totalPrice,
             idCustomer:idCus,
-            order_details:cart,
+            order_details:orderDetail,
             delivery_detail: {
                 name: infor.firstName+" "+infor.lastName,
                 address_shipping: infor.address ?? "",
@@ -50,13 +61,14 @@ const insertOrder = async (req,res)=>{
         updateCarts(idCus)
         return res.status(200).json({status:true,message:"Order successfully !"})
     }catch(err){
+        console.log(err.message)
         return res.status(500).json({status:false,message:err.message})
     }
 }
 
 const getListOrder = async (req,res)=>{
     try{
-        const listOder = await Order.find({})
+        const listOder = await Order.find({}).populate('idCustomer')
         return res.status(200).json({status:true,message:"Order successfully !",order:listOder})
     }catch(err){
         return res.status(500).json({status:false,message:err.message})
@@ -99,6 +111,22 @@ const updateState = async (req,res)=>{
 }
 
 const getOrderForState = async (req,res) =>{
+    const {stateOrder} = req.body 
+    if(!stateOrder)
+        return res.status(403).json({status:false,message:"Missing state of order"})
+
+    try{
+        const order = await Order.find({
+            stateOrder:stateOrder
+        })
+        return res.status(200).json({status:true,message:"Change state successfully !",order:order})
+
+    }catch(err){
+        return res.status(500).json({status:false,message:err.message})
+    }
+}
+
+const getOrderForStateCus = async (req,res) =>{
     const idCus = req.user._id
     const {stateOrder} = req.body 
     if(!stateOrder)
@@ -120,5 +148,6 @@ const getOrderForState = async (req,res) =>{
     getListOrder,
     getListOrderOfCus,
     updateState,
-    getOrderForState
+    getOrderForState,
+    getOrderForStateCus
  }

@@ -2,18 +2,18 @@ import React from 'react'
 import SideBar from '../components/SideBar/SideBar'
 import { Outlet } from 'react-router-dom'
 import HeaderComponent from '../components/HeaderComponents/HeaderComponents'
-import './index.css'
+import './style.css'
 function Admin() {
     return (
         <div>
-            <header className="header">
+            <header className="header-cus">
                 <HeaderComponent />
             </header>
-            <div className="main">
-                <aside className="sidebar">
+            <div className="main-cus">
+                <aside className="sidebar-cus">
                     <SideBar />
                 </aside>
-                <div className="content">
+                <div className="content-cus">
                 <Outlet />
                 </div>
 

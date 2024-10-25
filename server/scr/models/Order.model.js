@@ -3,7 +3,7 @@ const orderSchema = new mongoose.Schema({
     stateOrder: {
       type: String,
       required: true,
-      enum: ['waiting', 'comfirmed', 'shipping', 'delivered', 'success','cancelled'] // Possible order states
+      enum: ['waiting', 'comfirmed', 'shipping', 'delivered', 'success','cancelled',"paymented"] // Possible order states
     },
     shippingFee: {
       type: Number,
