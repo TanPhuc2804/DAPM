@@ -11,7 +11,7 @@ customerRouter.get("/list-customer/block/:id",verifyAdmin,customerControler.bloc
 customerRouter.get("/list-customer/unblock/:id",verifyAdmin,customerControler.unblockCustomer)
 
 customerRouter.post('/cart/update-quantity-cart',verifyLogin,customerControler.updateQuanityCart)
-customerRouter.delete('/cart/delete/:id',verifyLogin,customerControler.deleteCart)
+customerRouter.put('/cart/delete/:id',verifyLogin,customerControler.deleteCart)
 customerRouter.post('/cart/insert',verifyLogin,customerControler.insertProductToCard)
 customerRouter.post('/change-password/:id',customerControler.changePassword)
 customerRouter.post('/update/:id',verifyLogin,customerControler.updateCustomer)

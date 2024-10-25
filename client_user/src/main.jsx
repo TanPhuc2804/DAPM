@@ -10,9 +10,9 @@ createRoot(document.getElementById('root')).render(
   <AuthWrapper>
     <InforOrderWapper>
     <Provider store={store}> 
-      <StrictMode>
+      {/* <StrictMode> */}
         <App />
-      </StrictMode>
+      {/* </StrictMode> */}
       </Provider>
     </InforOrderWapper>
   </AuthWrapper>

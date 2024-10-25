@@ -1,12 +1,13 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import AccountSettings from './AccountSettings/AccountSettings';
 import ChangePasswordForm from './ChangePasswordForm/ChangePasswordForm';
 import { AuthContext } from '../../../assets/hooks/auth.context';
+import axios from 'axios';
 
 const Profile = () => {
-  const [activeSection, setActiveSection] = useState('account'); 
-  const navigate = useNavigate(); 
+  const [activeSection, setActiveSection] = useState('account');
+  const navigate = useNavigate();
   const { setAuth } = useContext(AuthContext);
 
   const handleSectionChange = (section) => {
@@ -14,15 +15,21 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
-    setAuth({ 
-      isAuthenticated: false,
-      user: {
-        id: '',
-        name: '',
-        email: ''
-      }
-    });
-    navigate('/'); 
+    axios.get("http://localhost:3000/auth/logout")
+      .then(res => res.data)
+      .then(data => {
+        setAuth({
+          isAuthenticated: false,
+          user: {
+            id: '',
+            name: '',
+            email: ''
+          }
+        });
+      })
+      .catch(err => console.log(err))
+
+    navigate('/');
   };
 
   return (
@@ -36,7 +43,7 @@ const Profile = () => {
           </nav>
         </aside>
 
-        {activeSection === 'account' && <AccountSettings />} 
+        {activeSection === 'account' && <AccountSettings />}
         {activeSection === 'password' && <ChangePasswordForm />}
       </div>
     </div>

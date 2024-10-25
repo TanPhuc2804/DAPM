@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCart } from '../CartContext/Cartcontext';
+import { useCart } from '../CartContext/cartcontext';
 import { Link } from 'react-router-dom';
 function CartSummary({cartItems}) {
     // tổng giá trị của giỏ hàng

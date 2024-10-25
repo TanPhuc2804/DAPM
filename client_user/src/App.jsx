@@ -15,7 +15,6 @@ function App() {
   useEffect(() => {
     axios.get("http://localhost:3000/auth/verify ")
       .then(res => {
-        console.log(res);
         setAuth({
           isAuthenticated: true,
           user: {
@@ -25,9 +24,17 @@ function App() {
           }
         })
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        setAuth({
+          isAuthenticated: false,
+          user: {
+            id:"",
+            email:"",
+            name:""
+          }
+        })
+      })
   }, [])
-  console.log(auth)
   return (
     <Router>
       <CartProvider>

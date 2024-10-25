@@ -16,7 +16,7 @@ const createProduct = async (req, res) => {
 const getAllProducts = async (req, res) => {
     try {
         const products = await Product.find({}).populate('supplier') // Lấy thông tin nhà cung cấp
-            .select('name productCode price quantity size supplier status updatedAt image'); // Chỉ lấy các trường cần thiết
+            ; // Chỉ lấy các trường cần thiết
         res.status(200).json({ status: true, products });
     } catch (error) {
         res.status(500).json({ status: false, message: "Failed to retrieve products", error: error.message });

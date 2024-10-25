@@ -7,14 +7,14 @@ const ProductCard = ({ _id,image, name, price, originalPrice, discount, descript
         <div className="flex relative flex-col items-center self-stretch px-2 pt-3 text-2xl font-extralight leading-none text-black whitespace-nowrap bg-blend-darken min-h-[400px] pb-4 max-md:pr-5 max-md:pb-16">
           <img
             loading="lazy"
-            src={image[0]}
+            src={image}
             alt={name}
             className="object-cover w-full h-full transition duration-300 group-hover:opacity-75"
           />
           {discount && (
             <div className="absolute top-9 left-10 px-3.5 py-2 mb-0 bg-yellow-400">{discount}</div>
           )}
-          <Link to={`/product/${_id}`} className=" px-8 py-3 bg-gray-400 text-white font-rosarivo rounded transition duration-300 opacity-0 group-hover:opacity-100 hover:bg-[#FF5C00]">
+          <Link to={`/product/${_id}`} className="absolute bottom-8 left-1/2 transform -translate-x-1/2 px-8 py-3 bg-gray-400 text-white font-rosarivo rounded transition duration-300 opacity-0 group-hover:opacity-100 hover:bg-[#FF5C00]">
             MUA NGAY
           </Link>
         </div>
