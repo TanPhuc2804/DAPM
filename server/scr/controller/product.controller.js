@@ -1,5 +1,7 @@
+
 const Product = require('../models/Product.model');
-const Category = require('../models/Category.model')
+const Category = require('../models/Category.model');
+const Order = require('../models/Order.model');
 // Create a new product
 const createProduct = async (req, res) => {
     try {
@@ -25,7 +27,7 @@ const getAllProducts = async (req, res) => {
 const getProductById = async (req, res) => {
     try {
         const product = await Product.findById({
-            _id:req.params.id
+            _id: req.params.id
         })
         if (!product) {
             return res.status(404).json({ status: false, message: "Product not found" });
@@ -41,10 +43,10 @@ const updateProduct = async (req, res) => {
     const id = req.params.id
     const product = req.body
 
-    if(!id)
-        return res.status(403).json({status:false,message:"Id disappear !"})
-    if(!product)
-        return res.status(403).json({status:false,message:"Input required !"})
+    if (!id)
+        return res.status(403).json({ status: false, message: "Id disappear !" })
+    if (!product)
+        return res.status(403).json({ status: false, message: "Input required !" })
 
     try {
         const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
@@ -60,28 +62,39 @@ const updateProduct = async (req, res) => {
 // Delete a product by ID
 const deleteProduct = async (req, res) => {
     try {
-        const product = await Product.findByIdAndDelete(req.params.id);
+        const productId = req.params.id;
+
+        const existingOrder = await Order.findOne({ "order_details._idProduct": productId });
+        if (existingOrder) {
+            return res.status(400).json({ 
+                status: false, 
+                message: "Product cannot be deleted because it is associated with an existing order." 
+            });
+        }
+
+        const product = await Product.findByIdAndDelete(productId);
         if (!product) {
             return res.status(404).json({ status: false, message: "Product not found" });
         }
+
         res.status(200).json({ status: true, message: "Product deleted successfully" });
     } catch (error) {
         res.status(500).json({ status: false, message: "Failed to delete product", error: error.message });
     }
 };
-
-const getProductForCate = async (req,res)=>{
+const getProductForCate = async (req, res) => {
     const idCate = req.params.id
-    if(!idCate || idCate ==="id")
-        return res.status(403).json({status:false, message:"Missing id category"})
-    try{
+    console.log(idCate)
+    if (!idCate || idCate === "id")
+        return res.status(403).json({ status: false, message: "Missing id category" })
+    try {
         const listPro = await Product.find({
-            category:idCate
-        }) 
-        return res.status(200).json({status:true, message:"Get product for category success",product: listPro})
-    }catch(err){
-        return res.status(500).json({status:false, message:err.message})
-        
+            category: idCate
+        })
+        return res.status(200).json({ status: true, message: "Get product for category success", product: listPro })
+    } catch (err) {
+        return res.status(500).json({ status: false, message: err.message })
+
     }
 
 }
@@ -94,3 +107,4 @@ module.exports = {
     deleteProduct,
     getProductForCate
 };
+
