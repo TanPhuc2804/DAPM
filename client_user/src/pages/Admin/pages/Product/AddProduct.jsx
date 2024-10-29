@@ -3,7 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import { message } from 'antd';
-
+import { openNotification } from '../../../../assets/hooks/notification';
+import ModaSize from "./ModalSize"
+import { useSelector, useDispatch } from 'react-redux';
+import { selectedProduct } from '../../redux/Product/productSlice';
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -100,34 +103,23 @@ const Select = styled.select`
 `;
 
 const AddProduct = () => {
+  const dispatch = useDispatch()
+  const selectProduct = useSelector(state => state.product.selectProduct)
   const [productData, setProductData] = useState({
-    name: '',
-    price: 0,
-    quantity: 0,
-    description: '',
-    size: '',
-    category: '',
-    supplier: '',
+    name: selectProduct.name ?? '',
+    price: selectProduct.price ?? 0,
+    description: selectProduct.description ?? '',
+    productSizes: [],
+    category: selectProduct.category?._id ?? '',
+    supplier: selectProduct.supplier?._id ?? '',
     status: 'còn hàng',
-    images: []
   });
-
+  const [visible, setVisible] = useState(false)
   const navigate = useNavigate();
-  const [categories, setCategories] = useState([]);
+  const [productSizes, setSizes] = useState(selectProduct.productSizes ?? [])
+  const [categories, setCategories] = useState(selectProduct.productSizes ?? []);
   const [suppliers, setSuppliers] = useState([]);
-  const [images, setImages] = useState([]);
-
-  // useEffect(() => {
-  //   // Lấy danh sách categories từ server
-  //   axios.get("http://localhost:3000/category/get-categorylist")
-  //     .then(res => setCategories(res.data.categories))
-  //     .catch(err => console.log(err));
-
-  //   // Lấy danh sách suppliers từ server
-  //   axios.get("http://localhost:3000/supplier/list-supplier")
-  //     .then(res => setSupplier(res.data.suppliers))
-  //     .catch(err => console.log(err));
-  // }, []);
+  const [images, setImages] = useState(selectProduct.image ?? []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -171,40 +163,43 @@ const AddProduct = () => {
     setProductData({ ...productData, [e.target.name]: e.target.value });
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
       ...productData,
-      image:images
+      image: images,
+      productSizes: productSizes
     }
-    try {
-      await axios.post('http://localhost:3000/products/create-product', formData);
-      message.success('Product added successfully');
-      navigate("/admin")
-    } catch (error) {
-      message.error('Failed to add product');
+    if (selectProduct._id) {
+      axios.post(`http://localhost:3000/products/update-product/${selectProduct._id}`, formData)
+        .then(res => res.data)
+        .then(data => {
+          openNotification(true, 'Cập sản phẩm thành công', "");
+          navigate("/admin")
+        })
+        .catch(err => {
+          openNotification(false, 'Cập nhật sản phẩm không thành công', "");
+
+        })
+    } else {
+      try {
+        await axios.post('http://localhost:3000/products/create-product', formData);
+        openNotification(true, 'Thêm sản phẩm thành công', "");
+        navigate("/admin")
+      } catch (error) {
+        openNotification(false, 'Thêm sản phẩm không thành công', "");
+      }
     }
+
   };
   const handleDelete = async (item) => {
     setImages(pre => pre.filter(image => image !== item))
   }
 
+
   return (
     <Container>
-      {/* <ImageContainer onClick={() => document.getElementById('fileInput').click()}>
-          {selectedImage ? (
-            <Image src={selectedImage} alt="Product" />
-          ) : (
-            <p>Nhấn để chọn ảnh</p>
-          )}
-        </ImageContainer>
-        <input
-          type="file"
-          id="fileInput"
-          style={{ display: 'none' }}
-          onChange={handleImageChange}
-          accept="image/*"
-        /> */}
       <div className='h-auto'>
         <input type="file" multiple onChange={handleImageUpload} />
         <div className='flex max-w-[300px] flex-wrap'>
@@ -225,7 +220,7 @@ const AddProduct = () => {
 
 
       <Form onSubmit={handleSubmit}>
-        <h1>Thêm Sản Phẩm</h1>
+        <h1>{selectProduct.name ? "Cập nhật sản phẩm" : "Thêm Sản Phẩm"}</h1>
 
         <InputField>
           <Label>Tên sản phẩm:</Label>
@@ -251,18 +246,6 @@ const AddProduct = () => {
         </InputField>
 
         <InputField>
-          <Label>Số lượng:</Label>
-          <Input
-            type="number"
-            name="quantity"
-            value={productData.quantity}
-            onChange={handleInputChange}
-            placeholder="Nhập số lượng"
-            required
-          />
-        </InputField>
-
-        <InputField>
           <Label>Mô tả:</Label>
           <Input
             type="text"
@@ -276,13 +259,14 @@ const AddProduct = () => {
 
         <InputField>
           <Label>Size:</Label>
-          <Input
-            type="text"
-            name="size"
-            value={productData.size}
-            onChange={handleInputChange}
-            placeholder="Nhập kích cỡ"
-          />
+          <Link className='flex-[0.7] w-full'>
+            <button
+              className='w-[100%]  h-[49px] bg-white border-[#ccc] text-black font-medium'
+              value={productData.size}
+              onClick={() => setVisible(true)}
+            >Nhập size</button>
+          </Link>
+
         </InputField>
 
         <InputField>
@@ -337,12 +321,19 @@ const AddProduct = () => {
         </InputField>
 
         <ButtonContainer>
-          <Link to="/admin/viewdetailproduct">
-            <Button className="back">Back</Button>
+          <Link to="/admin" >
+            <Button className="back" onClick={() => dispatch(selectedProduct({}))}>Back</Button>
           </Link>
           <Button type="submit" className="add">THÊM</Button>
         </ButtonContainer>
       </Form>
+      <ModaSize
+        visible={visible}
+        close={() => setVisible(false)}
+        setSizes={setSizes}
+        productSizes={productSizes}
+        idPro={selectProduct._id}
+      ></ModaSize>
     </Container>
   );
 };

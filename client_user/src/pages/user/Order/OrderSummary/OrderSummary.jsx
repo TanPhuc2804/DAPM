@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useCart } from '../../Card/CartContext/Cartcontext';
+import { useCart } from '../../Card/CartContext/cartcontext';
 import { Link, useLocation,useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { useInfor } from '../../../../assets/hooks/inforOrder.context';
@@ -48,8 +48,8 @@ function OrderSummary() {
             </div>
             <div className="flex flex-col justify-center items-center pb-6 max-md:max-w-full">
                 {cartItems.length > 0 ? (
-                    cartItems.map((item) => (
-                        <div key={item.productId} className="flex gap-4 justify-start items-start max-md:max-w-full">
+                    cartItems.map((item,index) => (
+                        <div key={index} className="flex gap-4 justify-start items-start max-md:max-w-full">
                             <img loading="lazy" src={item.image} alt={item.name} className="object-contain shrink-0 self-stretch my-auto aspect-[0.65] w-[150px]" />
                             <div className="flex flex-col self-stretch my-auto min-w-[240px] w-[20px]">
                                 <div className="text-2xl text-left leading-none text-zinc-900">{item.name}</div>
@@ -58,7 +58,7 @@ function OrderSummary() {
                                         <div className="text-lg leading-none text-gray-500">{item.quantity} x</div>
                                         <div className="text-xl font-semibold leading-none text-zinc-900">{item.price} đ</div>
                                     </div>
-                                    <div className="mt-1.5 text-xl font-semibold leading-none text-black">Size: {item.size}</div>
+                                    <div className="mt-1.5 text-xl font-semibold leading-none text-black">Size: {item.size.size}</div>
                                 </div>
                             </div>
                         </div>

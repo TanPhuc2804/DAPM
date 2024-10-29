@@ -19,7 +19,7 @@ function Login() {
             .post('http://localhost:3000/auth/login', { username, password })
             .then((res) => {
                 if (res.data.status) {
-                    console.log(res.data)
+                  
                     const userData = {
                         isAuthenticated: true,
                         user: {

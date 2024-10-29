@@ -3,9 +3,7 @@ import { useInfor } from '../../../../assets/hooks/inforOrder.context';
 
 const paymentMethods = [
   { name: 'Thanh toán khi nhận hàng', image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/8c001ac09fd9daed91303d647a3d139c287df1b25dd0afe39b756aaf4642de55?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101' },
-  { name: 'Momo', image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d1a3fea8bea24d96d7df3b2ed7d2669273932cc8af473f68812441727044f9cc?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101' },
-  { name: 'Paypal', image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/61d9315ba922990ac212cdf7da42cb3af1974de2d783e3c88592473cc5e10e4a?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101' },
-  { name: 'Amazon Pay', image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/7797b434a156e15cf0a15e8caf606081ffb7e0347c448b208c337c770afcc559?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101' },
+  { name: 'Thanh toán bằng Stripe', image: 'https://tse2.mm.bing.net/th?id=OIP.7w5wVVFd9_K68l_g4XHQcAHaEK&pid=Api&P=0&h=180' },
 ];
 
 function PaymentOptions() {

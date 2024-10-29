@@ -17,7 +17,7 @@ const checkoutProcess = async (req, res) => {
                     name: item.name,
                     metadata: {
                         productId: item.productId,
-                        size: item.size
+                        size: item.size.size
                     },
                 },
                 unit_amount: item.price
@@ -42,20 +42,20 @@ const checkoutProcess = async (req, res) => {
 
 }
 
-const updateQuantity = async (idP,quantityOrder)=>{
-    const product = await Product.findById({
-        _id:idP
-    })
-    const quantity = product.quantity-quantityOrder
-    product.set({
-        quantity: quantity,
-    })
-    await product.save()
-}
+const updateQuantity = async (idP, quantity,size) => {
+    try{
+        await Product.updateOne(
+            {_id:idP,"productSizes.size":size},
+            { $inc: { "productSizes.$.quantity": -quantity} }
+        )
 
+    }catch(err){
+        console.log(err)
+    }
+}
 const updateCarts = async (idCus)=>{
     const customer = await Customer.findById({_id:idCus})
-
+    console.log(idCus)
     customer.set({
         carts:[]
     })
@@ -71,16 +71,15 @@ const completeCheckout = async (req, res) => {
     }
     try {
         const session = await stripe.checkout.sessions.retrieve(session_id, { expand: ["line_items.data.price.product"] })
-        const stateOrder = "comfirmed"
+        const stateOrder = "paymented"
         const totalPrice = session.amount_total
         const shippingFee = 0
         const paymentMethod = "Chuyển Khoản"
         const lineItems = await session?.line_items?.data ?? []
 
         lineItems?.map(async (item)=>{
-           await updateQuantity(item?.price.product?.metadata.productId,item.quantity)
+           await updateQuantity(item?.price.product?.metadata.productId, item.quantity, item?.price.product?.metadata.size)
         })
-        
         const orderDetail = lineItems?.map((item, index) => {
             return {
                 _idProduct: item?.price.product?.metadata.productId,
