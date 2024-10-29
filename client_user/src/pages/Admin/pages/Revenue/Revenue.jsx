@@ -174,12 +174,16 @@ const Revenue = () => {
       openNotification(false, "Ngày bắt đầu phải lớn hơn ngày kết thúc", "")
       return
     }
+
     tempOrder = orders.filter(order => {
       const orderDate = dayjs(String(order.createdAt));
-
+      if (startDate.isSame(endDate, 'day')) {
+        return orderDate.isSame(startDate, 'day');
+      }
       return orderDate.isBetween(startDate, endDate, null, '[]')
     })
 
+    // search product for category 
     if (cate != "Defauld") {
       const getCateProduct = []
       tempOrder.forEach(order => {
@@ -224,7 +228,7 @@ const Revenue = () => {
     setCate(value)
   }
 
-  const handleRefresh = ()=>{
+  const handleRefresh = () => {
     setDaySearch({
       startDay: "",
       endDay: ""

@@ -4,13 +4,26 @@ const { info } = require("console")
 const Order = require("../models/Order.model")
 const Product = require("../models/Product.model")
 const Customer = require("../models/Customer.model")
+const Voucher = require("../models/Voucher.model")
 const checkoutProcess = async (req, res) => {
-    const { infor, cart } = req.body
+    let { infor, cart, voucher } = req.body
+    const totalAmount = cart.reduce((total, item) => total + (item.price * item.quantity), 0)
+    const discountPercentage = voucher?.discount ??0
+    const discountAmount = (totalAmount * discountPercentage) / 100
     const idCus = req.user._id
+    if(voucher.discount){
+        infor = {
+            ...infor,
+            voucher:voucher
+        }
+        console.log(infor)
+    }
     const inforJson = JSON.stringify(infor);
     const encodedInforJson = encodeURIComponent(inforJson);
-    const line_items = cart?.map((item) => (
-        {
+    const line_items = cart?.map((item) => {
+        const itemTotal = item.price * item.quantity; // Tính tổng cho sản phẩm
+        const itemDiscount = ((itemTotal / totalAmount) * discountAmount) / item.quantity;
+        return {
             price_data: {
                 currency: 'vnd',
                 product_data: {
@@ -20,52 +33,53 @@ const checkoutProcess = async (req, res) => {
                         size: item.size.size
                     },
                 },
-                unit_amount: item.price
+                unit_amount:itemDiscount ===0 ? item.price :  item.price - itemDiscount 
             },
             quantity: item.quantity
         }
-    ))
-    try {
-        const session = await stripe.checkout.sessions.create({
-            line_items: line_items,
-            client_reference_id: idCus,
-            customer_email: infor.email,
-            mode: "payment",
-            success_url: `http://localhost:5001/success/{CHECKOUT_SESSION_ID}?infor=${encodedInforJson}`,
-            cancel_url: "http://localhost:5001/cancel"
-        })
-        return res.json({ status: true, message: session.url })
-    } catch (err) {
-        return res.status(500).json({ status: false, message: err.message })
-
-    }
+    })
+try {
+    const session = await stripe.checkout.sessions.create({
+        line_items: line_items,
+        client_reference_id: idCus,
+        customer_email: infor.email,
+        mode: "payment",
+        success_url: `http://localhost:5001/success/{CHECKOUT_SESSION_ID}?infor=${encodedInforJson}`,
+        cancel_url: "http://localhost:5001/cancel"
+    })
+    return res.json({ status: true, message: session.url })
+} catch (err) {
+    return res.status(500).json({ status: false, message: err.message })
 
 }
 
-const updateQuantity = async (idP, quantity,size) => {
-    try{
+}
+
+const updateQuantity = async (idP, quantity, size) => {
+    try {
         await Product.updateOne(
-            {_id:idP,"productSizes.size":size},
-            { $inc: { "productSizes.$.quantity": -quantity} }
+            { _id: idP, "productSizes.size": size },
+            { $inc: { "productSizes.$.quantity": -quantity } }
         )
 
-    }catch(err){
+    } catch (err) {
         console.log(err)
     }
 }
-const updateCarts = async (idCus)=>{
-    const customer = await Customer.findById({_id:idCus})
+const updateCarts = async (idCus) => {
+    const customer = await Customer.findById({ _id: idCus })
     console.log(idCus)
     customer.set({
-        carts:[]
+        carts: []
     })
     await customer.save()
 }
 
 const completeCheckout = async (req, res) => {
     const idCus = req.user._id
-    const {firstName,lastName,address,email,phonenumber} = req.body
+    const { firstName, lastName, address, email, phonenumber,voucher } = req.body
     const session_id = req.params.session_id
+    console.log({ firstName, lastName, address, email, phonenumber,voucher } )
     if (!session_id) {
         return res.status(404).json({ status: false, message: "Missing session_id !" })
     }
@@ -77,8 +91,8 @@ const completeCheckout = async (req, res) => {
         const paymentMethod = "Chuyển Khoản"
         const lineItems = await session?.line_items?.data ?? []
 
-        lineItems?.map(async (item)=>{
-           await updateQuantity(item?.price.product?.metadata.productId, item.quantity, item?.price.product?.metadata.size)
+        lineItems?.map(async (item) => {
+            await updateQuantity(item?.price.product?.metadata.productId, item.quantity, item?.price.product?.metadata.size)
         })
         const orderDetail = lineItems?.map((item, index) => {
             return {
@@ -89,6 +103,17 @@ const completeCheckout = async (req, res) => {
                 size: item?.price.product?.metadata.size
             }
         })
+
+        if(voucher?.discount >0){
+          
+            const voucherDB = await Voucher.findById({_id:voucher._id})
+            const quantity = voucher.quantity
+            voucherDB.set({
+                 quantity: quantity-1
+            })
+            await voucherDB.save()
+         }
+
         const order = new Order({
             stateOrder: stateOrder,
             shippingFee: shippingFee,
@@ -97,11 +122,15 @@ const completeCheckout = async (req, res) => {
             idCustomer: idCus,
             order_details: orderDetail,
             delivery_detail: {
-                name: firstName+" "+lastName,
+                name: firstName + " " + lastName,
                 address_shipping: address ?? "",
-                phone:phonenumber,
-                email:email
-            }
+                phone: phonenumber,
+                email: email
+            },
+            vouchers:voucher ? [{
+                _idVoucher:voucher._id ?? "",
+                discount:voucher.discount ?? ""
+            }] : []
         })
         await order.save()
         updateCarts(idCus)

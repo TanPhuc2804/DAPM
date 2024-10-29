@@ -5,7 +5,6 @@ import axios from 'axios';
 import { openNotification } from '../../../../assets/hooks/notification';
 function ModalSize({ visible, close, setSizes, productSizes, idPro }) {
     const [fields, setFields] = useState([]);
-    console.log(idPro)
     const handleAddField = () => {
         setFields([...fields, { size: '', quantity: '' }]);
     };
@@ -28,11 +27,15 @@ function ModalSize({ visible, close, setSizes, productSizes, idPro }) {
 
     const handleInputChange = (index, event) => {
         const { name, value } = event.target;
-        const newFields = [...fields];
-        newFields[index][name] = value;
-        setFields(newFields);
+        // Tạo một bản sao của fields và cập nhật giá trị
+        const newFields = fields.map((field, i) => {
+            if (i === index) {
+                return { ...field, [name]: value }; // Cập nhật thuộc tính
+            }
+            return field; // Giữ nguyên các trường khác
+        });
+        setFields(newFields); // Cập nhật trạng thái
     };
-
     useEffect(() => {
         if (productSizes) {
             setFields(productSizes);
@@ -50,7 +53,7 @@ function ModalSize({ visible, close, setSizes, productSizes, idPro }) {
                     setSizes(fields)
                     close()
                 }}
-                okText="Xác nhận thêm"
+                okText="Xác nhận "
                 cancelText="Trở lại"
             >
                 <Form>

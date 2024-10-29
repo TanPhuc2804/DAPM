@@ -324,7 +324,7 @@ const AddProduct = () => {
           <Link to="/admin" >
             <Button className="back" onClick={() => dispatch(selectedProduct({}))}>Back</Button>
           </Link>
-          <Button type="submit" className="add">THÊM</Button>
+          <Button type="submit" className="add">{selectProduct.name ? "Cập nhật sản phẩm" : "Thêm Sản Phẩm"}</Button>
         </ButtonContainer>
       </Form>
       <ModaSize

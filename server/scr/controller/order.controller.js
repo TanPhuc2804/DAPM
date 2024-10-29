@@ -1,6 +1,7 @@
 const Order = require("../models/Order.model")
 const Product = require("../models/Product.model")
 const Customer = require("../models/Customer.model")
+const Voucher = require("../models/Voucher.model")
 const updateCarts = async (idCus) => {
     
     try{
@@ -31,7 +32,7 @@ const updateQuantity = async (idP, cart) => {
 const insertOrder = async (req, res) => {
     const idCus = req.user._id
     const stateOrder = 'waiting'
-    const { infor, cart } = req.body
+    const { infor, cart, voucher } = req.body
     if(!idCus){
         return res.status(401).json({message:"Không có quyền "})
     }
@@ -45,6 +46,16 @@ const insertOrder = async (req, res) => {
     cart.map(async (item) => {
         await updateQuantity(item.productId,item)
     })
+
+    if(voucher.discount >0){
+       totalPrice= totalPrice - totalPrice*(voucher.discount/100 )
+       const voucherDB = await Voucher.findById({_id:voucher._id})
+       const quantity = voucher.quantity
+       voucherDB.set({
+            quantity: quantity-1
+       })
+       await voucherDB.save()
+    }
     const orderDetail = cart.map((item) => {
         return {
             _idProduct: item.productId,
@@ -69,7 +80,10 @@ const insertOrder = async (req, res) => {
                 phone: infor.phonenumber,
                 email: infor.email
             },
-            vouchers: []
+            vouchers: voucher.discount ? [{
+                _idVoucher:voucher._id ?? "",
+                discount:voucher.discount ?? ""
+            }] : []
         })
         
         await order.save()
