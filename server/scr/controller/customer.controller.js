@@ -23,8 +23,8 @@ const getCustomerByID = async (req, res) => {
 
 const updateCustomer = async (req, res) => {
     const id = req.params.id
-    const { username, fullname, email, numberphone, nation, area, district } = req.body
-    if (!username || !fullname || !email || !numberphone || !nation || !area || !district) {
+    const { username, fullname, email, numberphone, address, gender,birthday } = req.body
+    if (!username || !fullname || !email || !numberphone || !address || !gender || !birthday) {
         return res.status(403).json({ status: false, message: "Input required !" })
     }
 
@@ -36,25 +36,27 @@ const updateCustomer = async (req, res) => {
             return res.status(401).json({ status: false, message: "Customer not found !" })
         }
 
-        const dataAddress = customer.address
-        let newAddress = ""
-        if (dataAddress !== undefined) {
-            let address = dataAddress.split(',')
-            if (address.length > -1) {
-                newAddress = address[0] + `, Q${district}, ${area}`
-            } else {
-                newAddress = `,Q${district}, ${area}`
-            }
-        } else {
-            newAddress = `Q${district}, ${area}`
-        }
+        // const dataAddress = customer.address
+        // let newAddress = ""
+        // if (dataAddress !== undefined) {
+        //     let address = dataAddress.split(',')
+        //     if (address.length > -1) {
+        //         newAddress = address[0] + `, Q${district}, ${area}`
+        //     } else {
+        //         newAddress = `,Q${district}, ${area}`
+        //     }
+        // } else {
+        //     newAddress = `Q${district}, ${area}`
+        // }
 
         customer.set({
             username: username,
             fullname: fullname,
             email: email,
             numberphone: numberphone,
-            address: newAddress
+            address: address,
+            gender: gender,
+            birthday: birthday,
         })
 
         customer.save()

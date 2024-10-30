@@ -85,8 +85,52 @@ const AddVoucher = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Ngăn chặn việc reload trang khi form được submit
-  console.log("Form submitted"); // Thêm log để kiểm tra
+    console.log("Form submitted"); // Thêm log để kiểm tra
 
+  // Kiểm tra các trường không được để trống
+  if (!tenVoucher.trim()) {
+    alert("Vui lòng nhập Tên Voucher!");
+    return;
+  }
+  if (!giaTri.trim()) {
+    alert("Vui lòng nhập Giá trị Voucher!");
+    return;
+  }
+  if (!soLuong) {
+    alert("Vui lòng nhập Số lượng!");
+    return;
+  }
+  if (!ngayBatDau.trim()) {
+    alert("Vui lòng chọn Ngày bắt đầu!");
+    return;
+  }
+  if (!ngayKetThuc.trim()) {
+    alert("Vui lòng chọn Ngày kết thúc!");
+    return;
+  }
+
+      // Kiểm tra nếu giá trị nhỏ hơn hoặc bằng 0 và nhỏ hơn 100%
+  if (isNaN(giaTri) || Number(giaTri) <= 0 || Number(giaTri) >= 100) {
+    alert("Giá trị phải là số, lớn hơn 0 và nhỏ hơn 100%");
+    return; // Ngăn chặn việc tiếp tục xử lý khi giá trị không hợp lệ
+  }
+   // Kiểm tra ràng buộc cho ngày bắt đầu và ngày kết thúc
+   const startDate = new Date(ngayBatDau);
+   const endDate = new Date(ngayKetThuc);
+   const today = new Date();
+   today.setHours(0, 0, 0, 0); // Đặt giờ phút giây về 0 để chỉ so sánh ngày
+ 
+   // Kiểm tra ngày bắt đầu không nhỏ hơn ngày kết thúc
+   if (startDate > endDate) {
+     alert("Ngày bắt đầu không được lớn hơn ngày kết thúc!");
+     return;
+   }
+ 
+   // Kiểm tra ngày bắt đầu phải là ngày hiện tại hoặc ngày tương lai
+   if (startDate < today) {
+     alert("Ngày bắt đầu phải là ngày hiện tại hoặc một ngày trong tương lai!");
+     return;
+   }
     // Dữ liệu gửi lên server
     const voucherData = {
       nameVoucher: tenVoucher,
@@ -132,7 +176,7 @@ const AddVoucher = () => {
           />
         </InputField>
         <InputField>
-          <Label>Giá trị:</Label>
+          <Label>Giá trị (%):</Label>
           <Input
             type="text"
             value={giaTri}

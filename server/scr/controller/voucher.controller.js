@@ -37,7 +37,7 @@ const getAllVouchers = async (req, res) => {
 
 // Update a voucher by ID
 const updateVoucher = async (req, res) => {
-    const { code, discount, expiryDate, isActive } = req.body;
+    const { nameVoucher,quantity,createdAt, discount, expiryDate, isActive } = req.body;
 
     try {
         const voucher = await Voucher.findById(req.params.id);
@@ -46,9 +46,11 @@ const updateVoucher = async (req, res) => {
         }
 
         // Update voucher fields
-        voucher.code = code || voucher.code;
+        voucher.nameVoucher = nameVoucher || voucher.nameVoucher;
         voucher.discount = discount || voucher.discount;
         voucher.expiryDate = expiryDate || voucher.expiryDate;
+        voucher.quantity = quantity || voucher.quantity;
+        voucher.createdAt = createdAt || voucher.createdAt;
         voucher.isActive = isActive !== undefined ? isActive : voucher.isActive;
 
         await voucher.save();

@@ -41,15 +41,7 @@ const staffSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Role' // Assuming you have a Role schema defined
   },
-  staffcode: {
-    type: String,
-    required: true
-  },
   cccd: {
-    type: String,
-    required: true
-  },
-  chucvu: {
     type: String,
     required: true
   },

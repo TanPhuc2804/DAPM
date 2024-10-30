@@ -122,6 +122,45 @@ const EditVoucher = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+     // Kiểm tra các trường không được để trống
+  if (!tenVoucher.trim()) {
+    alert("Vui lòng nhập Tên Voucher!");
+    return;
+  }
+  if (!giaTri.trim()) {
+    alert("Vui lòng nhập Giá trị Voucher!");
+    return;
+  }
+  if (!soLuong) {
+    alert("Vui lòng nhập Số lượng!");
+    return;
+  }
+  if (!ngayBatDau.trim()) {
+    alert("Vui lòng chọn Ngày bắt đầu!");
+    return;
+  }
+  if (!ngayKetThuc.trim()) {
+    alert("Vui lòng chọn Ngày kết thúc!");
+    return;
+  }
+
+     // Kiểm tra nếu giá trị nhỏ hơn hoặc bằng 0 và nhỏ hơn 100%
+  if (isNaN(giaTri) || Number(giaTri) <= 0 || Number(giaTri) >= 100) {
+    alert("Giá trị phải là số, lớn hơn 0 và nhỏ hơn 100%");
+    return; // Ngăn chặn việc tiếp tục xử lý khi giá trị không hợp lệ
+  }
+   // Kiểm tra ràng buộc cho ngày bắt đầu và ngày kết thúc
+   const startDate = new Date(ngayBatDau);
+   const endDate = new Date(ngayKetThuc);
+   const today = new Date();
+   today.setHours(0, 0, 0, 0); // Đặt giờ phút giây về 0 để chỉ so sánh ngày
+ 
+   // Kiểm tra ngày bắt đầu không nhỏ hơn ngày kết thúc
+   if (startDate > endDate) {
+     alert("Ngày bắt đầu không được lớn hơn ngày kết thúc!");
+     return;
+   }
+
     try {
       const updatedVoucher = {
         nameVoucher: tenVoucher,
@@ -142,7 +181,7 @@ const EditVoucher = () => {
 
   return (
     <Container>
-      <Form onSubmit={handleSubmit}>
+      <Form >
       <h2 style={{ fontWeight: 'bold' }}>Sửa Voucher</h2>
         <InputField>
         <Label>Mã Voucher:</Label>
@@ -153,7 +192,7 @@ const EditVoucher = () => {
         <Input type="text" value={tenVoucher} onChange={(e) => setTenVoucher(e.target.value)} />
         </InputField>
         <InputField>
-        <Label>Giá trị:</Label>
+        <Label>Giá trị (%):</Label>
         <Input type="text" value={giaTri} onChange={(e) => setGiaTri(e.target.value)} />
         </InputField>
         <InputField>

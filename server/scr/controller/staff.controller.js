@@ -37,7 +37,7 @@ const getAllStaff = async (req, res) => {
 };
 //Update a Staff by ID
 const updateStaff = async (req, res) => {
-    const { staffcode, fullname, cccd, birthday, gender, numberphone, email, chucvu, address, ngaylamviec, isActive } = req.body;
+    const { staffcode, fullname, cccd, birthday, gender, numberphone, email, role, address, ngaylamviec, isActive } = req.body;
 
     try {
         const staff = await Staff.findById(req.params.id);
@@ -53,7 +53,7 @@ const updateStaff = async (req, res) => {
         staff.gender = gender || staff.gender;
         staff.numberphone = numberphone || staff.numberphone;
         staff.email = email || staff.email;
-        staff.chucvu = chucvu || staff.chucvu;
+        staff.chucvu = role || staff.role;
         staff.address = address || staff.address;
         staff.ngaylamviec = ngaylamviec || staff.ngaylamviec;
         staff.isActive = isActive !== undefined ? isActive : staff.isActive;

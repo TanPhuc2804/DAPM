@@ -1,5 +1,6 @@
 
 const Product = require('../models/Product.model');
+const Order = require('../models/Order.model');
 const Category = require('../models/Category.model');
 //Create a new product
 const createProduct = async (req, res) => {
@@ -11,7 +12,7 @@ const createProduct = async (req, res) => {
         res.status(400).json({ status: false, message: "Failed to create product", error: error.message });
     }
 };
-  
+
 // Get all products
 const getAllProducts = async (req, res) => {
     try {
@@ -63,6 +64,15 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
         const product = await Product.findByIdAndDelete(req.params.id);
+        const countOrder = await Order.findOne({
+            order_details: {
+                _idProduct: req.params.id
+            }
+        })
+
+        if (countOrder > 0) {
+            return res.status(404).json({ status: false, message: "Không xóa được sản phẩm vì đã có trong đơn hàng khác !" });
+        }
         if (!product) {
             return res.status(404).json({ status: false, message: "Product not found" });
         }

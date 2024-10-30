@@ -25,6 +25,10 @@ import AddVoucher from "../pages/Admin/pages/Vourchers/AddVoucher";
 import AddOrder from "../pages/Admin/pages/Order/addOrder";
 import AddStaff from "../pages/Admin/pages/Staff/AddStaff";
 import EditStaff from "../pages/Admin/pages/Staff/EditStaff";
+import EditSupplier from "../pages/Admin/pages/Supplier/EditSupplier.jsx";
+import AddSupplier from "../pages/Admin/pages/Supplier/AddSupplier.jsx";
+import Customer from "../pages/Admin/pages/Customer/Customer.jsx";
+import EditCustomer from "../pages/Admin/pages/Customer/EditCustomer.jsx";
 const publicRoutes = [
      { path: '/', component: Home },
     { path: '/profile', component: Profile },
@@ -102,8 +106,24 @@ const publicRoutes = [
                 page: AddStaff,
             },
             {
-                path: 'editstaff',
+                path: 'editstaff/:id',
                 page: EditStaff,
+            },
+            {
+                path: 'editsupplier/:id',
+                page: EditSupplier,
+            },
+            {
+                path: 'addsupplier',
+                page: AddSupplier,
+            },
+            {
+                path:'customer',
+                page: Customer,
+            },
+            {
+                path:'editcustomer/:id',
+                page: EditCustomer,
             },
         ]
     }

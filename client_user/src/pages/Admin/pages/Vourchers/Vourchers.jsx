@@ -80,7 +80,7 @@ const Vourchers = () => {
         </thead>
         <tbody>
           {vouchers.map((voucher) => (
-            <tr key={voucher.maVoucher}>
+            <tr>
               <TableCell>{voucher._id}</TableCell>
               <TableCell>{voucher.nameVoucher}</TableCell>
               <TableCell>{voucher.discount}</TableCell>

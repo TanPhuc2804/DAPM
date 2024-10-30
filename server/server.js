@@ -22,6 +22,7 @@ const orderRouter = require("./scr/route/Order.route");
 const checkoutRouter = require("./scr/route/Checkout.route");
 const voucherRouter = require("./scr/route/voucher.route");
 const staffRouter = require("./scr/route/Staff.route")
+const RoleRouter = require("./scr/route/role.route");
 const app = express();
 
 // Middleware setup
@@ -95,3 +96,4 @@ app.use('/order', orderRouter);
 app.use('/checkout', checkoutRouter);
 app.use('/Voucher',voucherRouter);
 app.use('/staff',staffRouter);
+app.use('/role',RoleRouter);
