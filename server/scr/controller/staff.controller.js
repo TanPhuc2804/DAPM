@@ -1,11 +1,16 @@
 const { message } = require('antd');
 const Staff = require('../models/Staff.model');
-
+const bcrypt = require('bcrypt')
 //create a new staff
 const createStaff = async (req, res) => {
     try {
-        const staff = new Staff(req.body);
-        console.log(staff)
+        const password = await bcrypt.hash(req.body.password, 10)
+        const staffInput = {
+            ...req.body,
+            password:password
+        }
+        const staff = new Staff(staffInput);
+
         await staff.save();
         res.status(201).json({ status: true, message: "Staff created succesfully!", staff });
     } catch (error) {

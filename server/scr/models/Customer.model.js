@@ -72,7 +72,6 @@ const customerSchema = new mongoose.Schema({
       },
       image: {
         type: String,
-        required: true
       },
       size: {
         type: String,

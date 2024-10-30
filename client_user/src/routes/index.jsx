@@ -29,6 +29,7 @@ import EditSupplier from "../pages/Admin/pages/Supplier/EditSupplier.jsx";
 import AddSupplier from "../pages/Admin/pages/Supplier/AddSupplier.jsx";
 import Customer from "../pages/Admin/pages/Customer/Customer.jsx";
 import EditCustomer from "../pages/Admin/pages/Customer/EditCustomer.jsx";
+import InfoAdmin from "../pages/Admin/components/InforAdmin/InfoAdmin.jsx";
 const publicRoutes = [
      { path: '/', component: Home },
     { path: '/profile', component: Profile },
@@ -42,6 +43,7 @@ const publicRoutes = [
     { path: '/success/:session_id', component: Success },
     { path: '/cancel', component: Cancel },
     { path: '/auth/logup', component: Register, layout: null },
+    { path: '/admin/infor', component: InfoAdmin, layout: null },
     {
         path: "/admin",
         component: Admin,

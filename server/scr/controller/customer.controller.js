@@ -23,6 +23,7 @@ const getCustomerByID = async (req, res) => {
 
 const updateCustomer = async (req, res) => {
     const id = req.params.id
+    console.log(req.body)
     const { username, fullname, email, numberphone, address, gender,birthday } = req.body
     if (!username || !fullname || !email || !numberphone || !address || !gender || !birthday) {
         return res.status(403).json({ status: false, message: "Input required !" })
