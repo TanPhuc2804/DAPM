@@ -130,3 +130,17 @@ nav a {
   min-height: 300px; 
 }
 
+.custom-underline {
+  position: relative;
+  display: inline-block; /* Bắt buộc để gạch chân hoạt động chính xác */
+}
+
+.custom-underline::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: -5px; 
+  width: 60%; 
+  height: 2px; 
+  background-color: grey; 
+}

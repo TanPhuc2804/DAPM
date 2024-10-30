@@ -25,7 +25,7 @@ import AddVoucher from "../pages/Admin/pages/Vourchers/AddVoucher";
 import AddOrder from "../pages/Admin/pages/Order/addOrder";
 import Navigation from "../assets/Component/Layout/DefautLayout/Navigation/index.jsx";
 import CategoryPage from "../assets/Component/Layout/DefautLayout/CategoryPage/CategoryPage.jsx";
-
+import FinalOrder from "../pages/user/FinalOrder/FinalOrder.jsx";
 const publicRoutes = [
      { path: '/', component: Home },
     { path: '/auth/profile', component: Profile },
@@ -39,8 +39,10 @@ const publicRoutes = [
     { path: '/customer/order', component: OrderCus },
     { path: '/success', component: Success },
     { path: '/success/:session_id', component: Success },
+    { path: '/auth/StateOrder', component: FinalOrder },
     { path: '/cancel', component: Cancel },
     { path: '/auth/logup', component: Register, layout: null },
+
     {
         path: "/admin",
         component: Admin,
