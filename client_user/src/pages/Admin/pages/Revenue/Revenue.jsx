@@ -6,8 +6,8 @@ import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
 import { openNotification } from '../../../../assets/hooks/notification';
 import { formatCurrency } from '../../../../assets/Function/formatCurrency'
-import { fetchData,updateTemp } from '../../redux/select/selectOrder';
-import { Spin } from 'antd';
+import { fetchData, updateTemp, filterOrder } from '../../redux/select/selectOrder';
+import { Spin, Select } from 'antd';
 // Styled components cho bố cục và các thành phần giao diện
 const Container = styled.div`
   padding: 20px;
@@ -47,7 +47,7 @@ const Label = styled.label`
   font-weight: bold;
 `;
 
-const Select = styled.select`
+const Select1 = styled.select`
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -108,13 +108,14 @@ const StyledHr = styled.hr`
   width: 100%;
 `;
 const Revenue = () => {
-
   dayjs.extend(isBetween);
   const dispatch = useDispatch()
   const [daySearch, setDaySearch] = useState({
     startDay: "",
     endDay: ""
   })
+  const [cate, setCate] = useState("Defauld")
+  const [options, setOption] = useState([])
   useEffect(() => {
     axios.get("http://localhost:3000/order/all-order")
       .then(res => res.data)
@@ -123,15 +124,32 @@ const Revenue = () => {
         dispatch(updateTemp(data.order))
       })
       .catch(err => {
+        console.log(err.response.data.message)
         openNotification(false, "Lấy dữ liệu thất bạt", err.response.data.message)
       })
+
+    axios.get("http://localhost:3000/category/get-categorylist")
+      .then(res => res.data)
+      .then(data => {
+        const cate = data.categories.map(item => ({
+          value: item._id,
+          label: item.name
+        }))
+        cate.push({
+          value: "Defauld",
+          label: "Mặc định"
+        })
+        setOption(cate)
+      })
+      .catch(err => console.log(err))
+
   }, [])
   // xử lý dữ liệu
-  const orders =useSelector(state => state.orders.orders)
-  let tempOrder =  useSelector(state => state.orders.temporder)
-  let productOrder = tempOrder.map(item => item.order_details).flat()
+  const orders = useSelector(state => state.orders.orders)
+  let tempOrder = useSelector(state => state.orders.temporder)
+  let productOrder = tempOrder.map(item => item.order_details ?? item).flat()
   let products = Object.values(productOrder.reduce((acc, current) => {
-    const { _idProduct } = current
+    const _idProduct = current._idProduct._id ?? current._idProduct
     if (acc[_idProduct]) {
       acc[_idProduct].quantity += current.quantity;
     } else {
@@ -139,7 +157,6 @@ const Revenue = () => {
     }
     return acc
   }, {}))
-
   //tính tổng tiền
   const totalPrice = useMemo(() => {
     const result = products.reduce((total, current) => {
@@ -150,25 +167,41 @@ const Revenue = () => {
   }, [products])
 
   const hanldeSearch = (e) => {
+    console.log(cate)
     const startDate = dayjs(String(daySearch.startDay), "DD/MM/YYYY");
     const endDate = dayjs(String(daySearch.endDay), "DD/MM/YYYY");
-    if(endDate.isBefore(startDate)){
-      openNotification(false,"Ngày bắt đầu phải lớn hơn ngày kết thúc","")
+    if (endDate.isBefore(startDate)) {
+      openNotification(false, "Ngày bắt đầu phải lớn hơn ngày kết thúc", "")
       return
     }
+
     tempOrder = orders.filter(order => {
       const orderDate = dayjs(String(order.createdAt));
-     
+      if (startDate.isSame(endDate, 'day')) {
+        return orderDate.isSame(startDate, 'day');
+      }
       return orderDate.isBetween(startDate, endDate, null, '[]')
     })
-    if(tempOrder.length>0){
+
+    // search product for category 
+    if (cate != "Defauld") {
+      const getCateProduct = []
+      tempOrder.forEach(order => {
+        order.order_details.forEach(detail => {
+          if (detail._idProduct.category == cate) {
+            getCateProduct.push(detail)
+          }
+        })
+      })
+      tempOrder = getCateProduct
+    }
+    if (tempOrder.length > 0) {
       dispatch(updateTemp(tempOrder))
-    }else{
+    } else {
       dispatch(updateTemp(tempOrder))
-      openNotification(false,"Không có đơn hàng nào vào"+daySearch.startDay+" - "+daySearch.endDay,"")
+      openNotification(false, "Không có đơn hàng nào vào" + daySearch.startDay + " - " + daySearch.endDay, "")
     }
   }
-
   const hanldeChange = (e) => {
     const { name, value } = e.target
     setDaySearch(pre => ({
@@ -178,21 +211,57 @@ const Revenue = () => {
 
   }
 
+  // const getProductByCate = (orders, categoryId) => {
+  //   let productByCate = []
+
+  //   if(categoryId === "Defauld"){
+  //     return orders
+  //   }else{
+  //     productByCate = products.filter(item =>item._idProduct.category == categoryId)
+
+  //     return productByCate
+  //   }
+
+  // }
+
+  const filterOrderCate = async (value) => {
+    setCate(value)
+  }
+
+  const handleRefresh = () => {
+    setDaySearch({
+      startDay: "",
+      endDay: ""
+    })
+    setCate("Defauld")
+    dispatch(updateTemp(orders))
+  }
+
   return (
     <Container>
       <Header>Báo cáo doanh thu</Header>
       <StyledHr />
-      <ButtonGroup>
-        <Button primary>Thời Gian</Button>
-        <Button>Sản phẩm</Button>
+      <ButtonGroup className='flex items-center justify-between mx-[10px]'>
+        <div>
+          <Button primary>Thời Gian</Button>
+          <Select
+            className='w-[150px] ml-[20px]'
+            value={cate}
+            options={options}
+            onChange={(value) => filterOrderCate(value)}
+          >
+            Sản phẩm</Select>
+        </div>
+
+        <Button primary onClick={handleRefresh}> Tải lại trang </Button>
       </ButtonGroup>
       <StyledHr />
       <FilterSection>
         <Label>Loại thời gian</Label>
-        <Select>
+        <Select1>
           <option>Báo cáo theo ngày</option>
           <option>Báo cáo theo tháng</option>
-        </Select>
+        </Select1>
         <Label>Ngày bắt đầu</Label>
         <Input type="date" name='startDay' onChange={hanldeChange} />
         <Label>Ngày kết thúc</Label>
@@ -220,7 +289,7 @@ const Revenue = () => {
           </thead>
           <tbody>
             {products?.map((item, index) => (
-              <tr key={item._idProduct}>
+              <tr key={item._idProduct._id}>
                 <TableData>{index + 1}</TableData>
                 <TableData>{item.name}</TableData>
                 <TableData>{formatCurrency(item.price)}</TableData>

@@ -1,5 +1,5 @@
 import Home from "../pages/user/Home";
-import Profile from "../pages/user/Profile";
+import Profile from "../pages/user/Profile/profile.jsx";
 import Login from "../pages/auth/login"; 
 import Register from "../pages/auth/Register"; 
 import ListProduct from "../pages/user/ListProduct";
@@ -30,13 +30,17 @@ import AddSupplier from "../pages/Admin/pages/Supplier/AddSupplier.jsx";
 import Customer from "../pages/Admin/pages/Customer/Customer.jsx";
 import EditCustomer from "../pages/Admin/pages/Customer/EditCustomer.jsx";
 import InfoAdmin from "../pages/Admin/components/InforAdmin/InfoAdmin.jsx";
+import Navigation from "../assets/Component/Layout/DefautLayout/Navigation/index.jsx";
+import CategoryPage from "../assets/Component/Layout/DefautLayout/CategoryPage/CategoryPage.jsx";
 const publicRoutes = [
      { path: '/', component: Home },
-    { path: '/profile', component: Profile },
+    { path: '/auth/profile', component: Profile },
     { path: '/auth/login', component: Login, layout: null }, 
     { path: '/auth/register', component: Register, layout: null }, 
     { path: '/product/:id', component: DetailProduct },
-    { path: '/product-category/:id', component: ListProduct }, 
+    { path: '/product-category/:id', component: ListProduct },
+    { path: '/category/get-categorylist', component: Navigation },
+    { path: '/category/get-category/:id', component: CategoryPage },
     { path: '/customer/cart', component: Cart },
     { path: '/customer/order', component: OrderCus },
     { path: '/success', component: Success },

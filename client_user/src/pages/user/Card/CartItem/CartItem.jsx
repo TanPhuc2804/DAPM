@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Quantity from '../../DetailProduct/Quantity/Quantity';
-import { useCart } from '../CartContext/Cartcontext';
+import { useCart } from '../CartContext/cartcontext';
 import axios from 'axios';
 import { openNotification } from '../../../../assets/hooks/notification';
 
@@ -8,13 +8,12 @@ function CartItem({ productId, name, size, price, quantity, image }) {
     const { updateCartItemQuantity, removeFromCart } = useCart();
     // cập nhật số lượng sản phẩm
     const handleQuantityChange = (newQuantity) => {
-        console.log(newQuantity)
         updateCartItemQuantity(productId,size,newQuantity)
     };
 
     // xóa sản phẩm
     const handleRemoveItem = () => {
-       axios.delete(`http://localhost:3000/customer/cart/delete/${productId}`,)
+       axios.put(`http://localhost:3000/customer/cart/delete/${productId}`,{size:size})
         .then(res=>res.data)
         .then(data=>{
             removeFromCart(productId,size)
@@ -26,7 +25,7 @@ function CartItem({ productId, name, size, price, quantity, image }) {
     };
 
     const total = price * quantity; // 
-
+    console.log(size)
     return (
         <div className="px-4 py-2 w-full max-md:pr-5 max-md:max-w-full">
             <div className="flex gap-5 max-md:flex-col">
@@ -51,7 +50,7 @@ function CartItem({ productId, name, size, price, quantity, image }) {
                             className="object-contain shrink-0 self-stretch max-w-full aspect-[0.65] w-[117px]" 
                         />
                         <div className="grow shrink self-stretch my-auto text-3xl font-semibold text-zinc-900 w-[303px]">{name}</div>
-                        <div className="self-stretch my-auto text-xl text-black">{size}</div>
+                        <div className="self-stretch my-auto text-xl text-black">{size.size}</div>
                     </div>
                 </div>
                 <div className="flex flex-col ml-5 w-[45%] max-md:ml-0 max-md:w-full">

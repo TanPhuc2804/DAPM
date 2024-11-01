@@ -14,7 +14,7 @@ function Admin() {
                     <SideBar />
                 </aside>
                 <div className="content-cus">
-                <Outlet />
+                    <Outlet />
                 </div>
 
             </div>

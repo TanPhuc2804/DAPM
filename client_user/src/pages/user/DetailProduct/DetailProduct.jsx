@@ -20,7 +20,7 @@ function DetailProduct() {
     const [product, setProduct] = useState({});
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
-    const [selectedSize, setSelectedSize] = useState(''); 
+    const [selectedSize, setSelectedSize] = useState({}); 
     const {auth} =useContext(AuthContext)
     useEffect(() => {
         axios.get(`http://localhost:3000/products/list-product/${id}`)
@@ -40,8 +40,10 @@ function DetailProduct() {
         axios.post("http://localhost:3000/customer/cart/insert",{product,quantity,size})
             .then(res =>res.data)
             .then(data=>{
-                openNotification(true,data.message,"Thêm giỏ hàng thành công")
-            }).catch(err=>console.log(err))
+                openNotification(true,"Thêm giỏ hàng thành công","")
+            }).catch(err=>{
+                openNotification(false,"Thêm giỏ hàng thất bại","Số lượng mua đã vượt quá số lượng sản phẩm !")
+            })
     }
 
     if (loading) {
@@ -64,9 +66,9 @@ function DetailProduct() {
             <div className="flex flex-col lg:flex-row gap-10 mt-10">
                 <div className="flex flex-col items-center lg:w-1/2">
                     <img 
-                        src={product.image} 
+                        src={product.image[0]} 
                         alt={product.name} 
-                        className="w-full h-auto mb-5 object-contain max-h-[400px]" 
+                        className="w-full h-auto mb-5 object-contain max-h-[600px]" 
                     />
                 </div>
 
@@ -80,7 +82,7 @@ function DetailProduct() {
                     <hr className="mt-3 mb-3 border-t-[1px] border-[#E4E4E4] w-[80%] self-start" />
 
                     <div className="mb-4 w-full">
-                        <Size selectedSize={selectedSize} setSelectedSize={setSelectedSize} />
+                        <Size selectedSize={selectedSize} setSelectedSize={setSelectedSize} productSizes={product.productSizes} />
                     </div>
                     <hr className="mt-3 mb-3 border-t-[1px] border-[#E4E4E4] w-[80%] self-start" />
 
