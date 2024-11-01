@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState } from 'react';
 
 export const AuthContext = createContext({
@@ -11,7 +10,9 @@ export const AuthContext = createContext({
 });
 
 export const AuthWrapper = ({ children }) => {
-    const [auth, setAuth] = useState({
+    const storedAuthData = JSON.parse(localStorage.getItem('authData'));
+
+    const [auth, setAuth] = useState(storedAuthData || {
         isAuthenticated: false,
         user: {
             id: '',
@@ -26,6 +27,5 @@ export const AuthWrapper = ({ children }) => {
         </AuthContext.Provider>
     );
 };
-
 
 export const useAuth = () => useContext(AuthContext);

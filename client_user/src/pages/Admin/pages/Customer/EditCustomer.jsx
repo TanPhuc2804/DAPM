@@ -216,9 +216,8 @@ const EditCustomer = () => {
         <InputField>
           <Label>Giới Tính:</Label>
           <Select value={gioitinh} onChange={(e) => setGioiTinh(e.target.value)}>
-            <option value="Nam">Nam</option>
-            <option value="Nữ">Nữ</option>
-            <option value="Khác">Khác</option>
+            <option value="male">Nam</option>
+            <option value="female">Nữ</option>
           </Select>
         </InputField>
         <InputField>

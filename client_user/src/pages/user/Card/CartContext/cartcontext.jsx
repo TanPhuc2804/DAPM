@@ -15,7 +15,7 @@ export const CartProvider = ({ children }) => {
     const updateCartItemQuantity = (id, size, newQuantity) => {
         const idProduct = id
         const quantity = newQuantity
-        axios.post("http://localhost:3000/customer/cart/update-quantity-cart",{idProduct,quantity})
+        axios.post("http://localhost:3000/customer/cart/update-quantity-cart",{idProduct,quantity,size})
             .then(res=>{
                 if(res.data.status){
                     openNotification(true,res.data.message,"Update quantity successfull !")
@@ -37,11 +37,9 @@ export const CartProvider = ({ children }) => {
 
     //  xoá sản phẩm khỏi giỏ hàng
     const removeFromCart = (id, size) => {
-        console.log("Delete cart",{id, size})
         setCartItems((prevItems) =>
             prevItems.filter((item) => !(item.productId === id && item.size === size))
         );
-        console.log(cartItems)
     };
 
     return (

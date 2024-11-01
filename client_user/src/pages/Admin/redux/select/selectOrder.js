@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
-    orders:[],
+    orders: [],
     selectedRow: {},
-    temporder:[]
+    temporder: []
 }
 
 
@@ -11,7 +11,8 @@ export const orderSlice = createSlice({
     initialState,
     reducers: {
         fetchData: (state, action) => {
-            state.orders = action.payload; // Cập nhật danh sách đơn hàng từ payload
+            state.orders = action.payload; 
+           // Cập nhật danh sách đơn hàng từ payload
         },
         selectData: (state, action) => {
             state.selectedRow = action.payload; // Lưu dữ liệu dòng đã chọn vào selectedRow
@@ -26,9 +27,12 @@ export const orderSlice = createSlice({
         updateTemp: (state, action) => {
             state.temporder = action.payload;
         },
+        filterOrder: (state, action) => {
+           console.log(action)
+        }
     },
 })
 
-export const { fetchData, selectData,updateOrderState,updateTemp } = orderSlice.actions
+export const { fetchData, selectData, updateOrderState, updateTemp, filterOrder } = orderSlice.actions
 
 export default orderSlice.reducer

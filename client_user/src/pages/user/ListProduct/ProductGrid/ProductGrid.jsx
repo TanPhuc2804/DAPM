@@ -1,32 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from '../../Productcard';
 import axios from "axios";
+import { useParams } from 'react-router-dom';
 
-const ProductGrid = ({ categoryId }) => {
+const ProductGrid = () => {
+    const { id } = useParams();
     const [listProduct, setProduct] = useState([]);
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState(''); 
-    axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await axios.get(`http://localhost:3000/products/list-product-category/:id`);
-                if (response.data.status) {
-                    setProduct(response.data.ListProduct);
-                } else {
-                    setError('Không tìm thấy sản phẩm.');
+        axios.get(`http://localhost:3000/products/list-product-category/${id}`)
+            .then(res => {
+                console.log(res.data);
+                if (res.data.status) {
+                    setProduct(res.data.product);
                 }
-            } catch (err) {
-                console.error(err);
-                setError('Đã có lỗi xảy ra khi lấy dữ liệu.');
-            } finally {
-                setLoading(false); 
-            }
-        };
-
-        fetchProducts();
-    }, [categoryId]);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.log(err);
+                setLoading(false);
+            });
+    }, [id]);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
