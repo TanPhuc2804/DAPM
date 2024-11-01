@@ -107,7 +107,13 @@ const EditStaff = () => {
   const [email, setEmail] = useState("");
   const [username, setUserName] = useState("");
   const navigate = useNavigate();
-
+    // Hàm tính tuổi dựa vào ngày sinh
+  const calculateAge = (birthday) => {
+    const birthDate = new Date(birthday);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+  }
   useEffect(() => {
     const fetchstaff = async () => {
       try {
@@ -273,5 +279,6 @@ const EditStaff = () => {
     </Container>
   )
 }
+
 
 export default EditStaff

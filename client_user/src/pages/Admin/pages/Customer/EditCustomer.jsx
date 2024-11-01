@@ -160,20 +160,20 @@ const EditCustomer = () => {
       alert("Địa chỉ không được để trống");
       return;
     }
-     // Kiểm tra tuổi
-  const today = new Date();
-  const birthDate = new Date(ngaysinh);
-  const age = today.getFullYear() - birthDate.getFullYear();
-  const monthDiff = today.getMonth() - birthDate.getMonth();
+    // Kiểm tra tuổi
+    const today = new Date();
+    const birthDate = new Date(ngaysinh);
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
 
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-    age--;
-  }
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
 
-  if (age < 16) {
-    alert("Khách hàng phải đủ 16 tuổi");
-    return;
-  }
+    if (age < 16) {
+      alert("Khách hàng phải đủ 16 tuổi");
+      return;
+    }
     try {
       const updateCustomer = {
         fullname: fullname,
@@ -184,7 +184,7 @@ const EditCustomer = () => {
         address: diachi,
         username: username,
       };
-
+      console.log(updateCustomer)
       await axios.put(`http://localhost:3000/customer/update/${id}`, updateCustomer);
       alert("Cập nhật Customer thành công");
       navigate('/admin/customer');
