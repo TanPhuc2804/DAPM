@@ -10,4 +10,6 @@ orderRouter.get("/list-order",OrderController.getListOrderOfCus)
 orderRouter.post("/list-order-for-state",OrderController.getOrderForState)
 orderRouter.post("/insert-order",OrderController.insertOrder)
 orderRouter.post("/change-state/:id",verifyAdmin,OrderController.updateState)
+orderRouter.post("/test",verifyAdmin,OrderController.sendOrderEmail)
+
 module.exports = orderRouter

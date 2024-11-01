@@ -1,4 +1,5 @@
 const dotenv = require('dotenv');
+const nodemailer = require('nodemailer')
 const express = require('express');
 const swaggerjsdoc = require('swagger-jsdoc')
 const swaggerui = require('swagger-ui-express')
@@ -61,4 +62,4 @@ app.use('/admin', adminRouter);
 app.use('/order', orderRouter);
 app.use('/checkout', checkoutRouter);
 app.use('/Voucher', voucherRouter);
-
+app.use('/sendEmail',orderRouter)
