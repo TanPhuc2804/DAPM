@@ -102,12 +102,12 @@ function InfoAdmin() {
       <HeaderComponent />
       <div className="flex justify-center p-10 bg-gray-100 min-h-auto">
         
-        <div className="w-1/4 p-4 bg-white shadow-lg rounded-lg">
+        <div className="w-1/4 p-4 bg-white shadow-lg rounded-lg flex flex-col items-center justify-center">
           <div className="flex flex-col items-center">
           <img
               src={`http://localhost:3000/${adminData.image}`}
               alt="Profile"
-              className="w-24 h-24 rounded-full object-cover"
+              className="w-60 h-60 rounded-full object-cover mt-4 mb-4"
             />
             <h2 className="text-xl font-bold">{adminData.fullname}</h2>
             <p className="text-sm text-gray-500">{adminData.role}</p>
@@ -122,7 +122,7 @@ function InfoAdmin() {
           </div>
         </div>
 
-        <div className="w-3/4 ml-6 bg-white shadow-lg rounded-lg p-6">
+        <div className="w-[600px] ml-6 bg-white shadow-lg rounded-lg p-6 ">
           <div className="flex justify-between items-center">
             <h4 className="text-2xl font-semibold mb-6">Admin Information</h4>
             <button
