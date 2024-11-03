@@ -3,21 +3,14 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
-import ProductCard from '../Productcard';
-import products from '../Products';
 import BestSelling from './BestSelling/bestselling';
 import HotFashion from './HotFasion/hotfashion';
 import ImageGallery from './ImageGallery/ImageGallery';
 import CustomDesign from './CustomDesign/CustomDesign';
-import { useEffect } from 'react';
-import axios from 'axios'
-function Home() {
 
-  useEffect(()=>{
-    axios.get("http://localhost:3000/products/list-product")
-      .then(res=>console.log(res))
-      .catch(err => console.log(err))
-  },[])
+
+
+function Home() {
 
   return (
     <div className="flex flex-col items-center">
@@ -62,7 +55,7 @@ function Home() {
         <ImageGallery/>
       <HotFashion />
       <CustomDesign/>
-  
+
     </div>
   );
 }

@@ -8,21 +8,26 @@ const CustomDesign = () => {
   ];
 
   return (
-    <section className="mt-50 my-3 max-md:mt-10 max-md:max-w-full">
-      <h2 className="text-5xl font-medium text-green-900 max-md:text-4xl">Thiết kế quần áo cho chính bạn</h2>
-      <p className="mt-12 text-2xl font-medium text-green-900 max-md:mt-10 max-md:max-w-full">
+    <section className="mt-50 my-20 max-md:mt-10 max-md:max-w-full">
+      <h2 className="text-4xl font-medium text-green-900 max-md:text-4xl">Thiết kế quần áo cho chính bạn</h2>
+      <p className="mt-5 text-1xl font-medium text-green-900 max-md:mt-10 max-md:max-w-full">
         Đắm chìm trong thế giới thời trang xa xỉ với thiết kế quần áo được chế tác tỉ mỉ của chúng tôi!
       </p>
-      <div className="mt-30 my-12 w-full max-w-[1377px]  max-md:mt-10 max-md:max-w-full">
-        <div className="flex gap-5 max-md:flex-col">
+      <div className="mt-30 my-12 w-full max-w-[1377px] max-md:mt-10 max-md:max-w-full">
+        <div className="flex gap-3 max-md:flex-col">
           {categories.map((category, index) => (
             <div key={index} className="flex flex-col w-[33%] max-md:ml-0 max-md:w-full">
               <div className="flex flex-col text-center text-neutral-700 max-md:mt-10">
-                <div className="h-[600px] overflow-hidden relative"> {/*  chiều cao hình */}
-                  <img loading="lazy" src={category.image} alt={category.title} className="object-cover w-full h-full" /> {/* Sử dụng object-cover */}
+                <div className="h-[400px] overflow-hidden relative"> 
+                  <img 
+                    loading="lazy" 
+                    src={category.image} 
+                    alt={category.title} 
+                    className="object-contain w-full h-full transition duration-300" 
+                  />
                 </div>
-                <h3 className="self-center mt-6 text-3xl font-semibold">{category.title}</h3>
-                <p className="mt-1.5 text-2xl font-medium leading-8">{category.description}</p>
+                <h3 className="self-center mt-4 text-2xl font-semibold">{category.title}</h3> {/* Giảm kích thước chữ tiêu đề */}
+                <p className="mt-1.5 text-lg font-medium leading-8">{category.description}</p> {/* Giảm kích thước chữ mô tả */}
               </div>
             </div>
           ))}

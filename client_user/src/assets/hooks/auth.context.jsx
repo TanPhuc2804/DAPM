@@ -1,4 +1,6 @@
-import { createContext, useState } from 'react'
+
+import { createContext, useContext, useState } from 'react';
+
 export const AuthContext = createContext({
     isAuthenticated: false,
     user: {
@@ -6,7 +8,7 @@ export const AuthContext = createContext({
         email: '',
         name: ''
     }
-})
+});
 
 export const AuthWrapper = ({ children }) => {
     const [auth, setAuth] = useState({
@@ -14,12 +16,16 @@ export const AuthWrapper = ({ children }) => {
         user: {
             id: '',
             name: '',
-            email:''
+            email: ''
         }
-    })
+    });
+
     return (
         <AuthContext.Provider value={{ auth, setAuth }}>
             {children}
         </AuthContext.Provider>
-    )
-}
+    );
+};
+
+
+export const useAuth = () => useContext(AuthContext);
