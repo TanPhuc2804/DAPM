@@ -64,6 +64,7 @@ const updateCustomer = async (req, res) => {
 }
 
 const changePassword = async (req, res) => {
+    const id = req.params.id;
     const { password } = req.body
     if (!password) {
         return res.status(403).json({ status: false, message: "Input required !" })
@@ -81,7 +82,7 @@ const changePassword = async (req, res) => {
             return res.status(404).json({ status: false, message: "Change pass failed !" })
         return res.json({ status: true, message: "Change password successful !" })
     } catch (err) {
-        return res.json({ status: false, message: "Error server" })
+        return res.json({ status: false, message: "Error server" + err.message })
     }
 }
 

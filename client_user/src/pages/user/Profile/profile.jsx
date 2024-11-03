@@ -27,24 +27,26 @@ const Profile = () => {
           }
         });
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
 
     navigate('/');
   };
 
   return (
-    <div className="mt-14 ml-7 w-full max-w-[1539px] max-md:mt-10 max-md:max-w-full">
-      <div className="flex gap-5 max-md:flex-col">
-        <aside className="flex flex-col w-[28%] max-md:ml-0 max-md:w-full">
-          <nav className="flex flex-col grow items-start px-14 pt-10 pb-80 mt-4 w-full text-2xl leading-none text-black bg-white max-md:px-5 max-md:pb-24 max-md:mt-10">
-            <a href="#" onClick={() => handleSectionChange('account')} className="px-5 py-3 bg-white">Thông tin tài khoản</a>
-            <a href="#" onClick={() => handleSectionChange('password')} className="px-5 pt-2.5 pb-1 mt-10 bg-white">Thay đổi mật khẩu</a>
-            <a href="#" onClick={handleLogout} className="px-5 pt-2.5 pb-1 mt-10 max-w-full bg-white w-[235px] max-md:pr-5">Đăng xuất</a>
+    <div className="mt-4 mx-auto w-full max-w-[1539px] p-5 md:p-10">
+      <div className="flex gap-4 flex-col md:flex-row">
+        <aside className="flex flex-col w-full md:w-1/4">
+          <nav className="flex flex-col grow items-start p-4 bg-white shadow-md rounded-lg">
+            <a href="#" onClick={() => handleSectionChange('account')} className="px-5 py-3 text-lg font-semibold text-black hover:bg-gray-200 transition-colors duration-200">Thông tin tài khoản</a>
+            <a href="#" onClick={() => handleSectionChange('password')} className="px-5 py-3 mt-3 text-lg font-semibold text-black hover:bg-gray-200 transition-colors duration-200">Thay đổi mật khẩu</a>
+            <a href="#" onClick={handleLogout} className="px-5 py-3 mt-3 text-lg font-semibold text-red-600 hover:bg-gray-200 transition-colors duration-200">Đăng xuất</a>
           </nav>
         </aside>
 
-        {activeSection === 'account' && <AccountSettings />}
-        {activeSection === 'password' && <ChangePasswordForm />}
+        <div className="flex-1 mt-4 md:mt-0">
+          {activeSection === 'account' && <AccountSettings />}
+          {activeSection === 'password' && <ChangePasswordForm />}
+        </div>
       </div>
     </div>
   );
