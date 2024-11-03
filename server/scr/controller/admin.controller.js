@@ -1,9 +1,12 @@
 const Staff = require('../models/Staff.model');
+const bcrypt = require('bcrypt');
+const Role = require('../models/Role.model'); // Assuming Role is defined somewhere in your models
 
 // Get Admin by ID
 const getAdmin = async (req, res) => {
+    const id = req.user._id;
     try {
-        const admin = await Staff.findById(req.params.id).select('-password'); // Exclude the password field
+        const admin = await Staff.findById(id).select('-password'); // Exclude the password field
         if (!admin) {
             return res.status(404).json({ status: false, message: 'Admin not found' });
         }
@@ -13,40 +16,53 @@ const getAdmin = async (req, res) => {
     }
 };
 
-
-const getListAdmin = async (req, res) => {
-    try {
-        const admin = await Staff.find({role : '66f8e28b66c55d58fcc3c03f'}).select('-password'); // Filter by role 'Admin' and exclude password
-        if (!admin.length) {
-            return res.status(404).json({ status: false, message: 'No admins found' });
-        }
-        res.status(200).json({ status: true, data: admin });
-    } catch (error) {
-        res.status(500).json({ status: false, message: 'Server error', error: error.message });
-    }
-};
-
 // Create Admin
 const createAdmin = async (req, res) => {
-    const { fullname, username, email, password, role } = req.body;
+    const { fullname, username, email, password, role, numberphone, address, gender, cccd, ngaylamviec, image } = req.body;
 
-    if (!fullname || !username || !email || !password || !role) {
+    // Validate required fields
+    if (!fullname || !username || !email || !password || !role || !cccd || !ngaylamviec) {
         return res.status(400).json({ status: false, message: 'All fields are required' });
     }
 
+    // Validate phone number (e.g., 10 digits)
+    if (!/^\d{10}$/.test(numberphone)) {
+        return res.status(400).json({ status: false, message: 'Phone number must be 10 digits' });
+    }
+
+    // Validate CCCD (only numeric)
+    if (!/^\d+$/.test(cccd)) {
+        return res.status(400).json({ status: false, message: 'CCCD must contain only numbers' });
+    }
+
     try {
-        const existedAdmin = await Staff.findOne({ email: email });
+        const existedAdmin = await Staff.findOne({ email });
         if (existedAdmin) {
             return res.status(400).json({ status: false, message: 'Email already exists' });
         }
 
+        // Verify role
+        const roleExists = await Role.findById(role);
+        if (!roleExists) {
+            return res.status(400).json({ status: false, message: 'Invalid role ID' });
+        }
+
+        // Hash password
         const hashPassword = await bcrypt.hash(password, 10);
+
+        // Create new admin
         const newAdmin = new Staff({
             fullname,
             username,
             email,
             password: hashPassword,
-            role
+            role,
+            numberphone,
+            address,
+            gender,
+            cccd,
+            ngaylamviec,
+            image
         });
 
         await newAdmin.save();
@@ -58,10 +74,21 @@ const createAdmin = async (req, res) => {
 
 // Update Admin by ID
 const updateAdmin = async (req, res) => {
-    const { fullname, username, email, password, role } = req.body;
+    const { fullname, username, email, password, role, numberphone, address, gender, cccd, ngaylamviec, image } = req.body;
+    const id = req.user._id;
+
+    // Validate phone number (e.g., 10 digits)
+    if (numberphone && !/^\d{10}$/.test(numberphone)) {
+        return res.status(400).json({ status: false, message: 'Phone number must be 10 digits' });
+    }
+
+    // Validate CCCD (only numeric)
+    if (cccd && !/^\d+$/.test(cccd)) {
+        return res.status(400).json({ status: false, message: 'CCCD must contain only numbers' });
+    }
 
     try {
-        const admin = await Staff.findById(req.params.id);
+        const admin = await Staff.findById(id);
         if (!admin) {
             return res.status(404).json({ status: false, message: 'Admin not found' });
         }
@@ -74,6 +101,12 @@ const updateAdmin = async (req, res) => {
             admin.password = await bcrypt.hash(password, 10);
         }
         admin.role = role || admin.role;
+        admin.numberphone = numberphone || admin.numberphone;
+        admin.address = address || admin.address;
+        admin.gender = gender || admin.gender;
+        admin.cccd = cccd || admin.cccd;
+        admin.ngaylamviec = ngaylamviec || admin.ngaylamviec;
+        admin.image = image || admin.image;
 
         await admin.save();
         res.status(200).json({ status: true, message: 'Admin updated successfully', data: admin });
@@ -85,6 +118,5 @@ const updateAdmin = async (req, res) => {
 module.exports = {
     getAdmin,
     createAdmin,
-    updateAdmin,
-    getListAdmin
+    updateAdmin
 };
