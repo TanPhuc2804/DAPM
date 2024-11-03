@@ -9,5 +9,5 @@ adminRouter.get('/get-Listadmin/', verifyAdmin, getListAdmin);
 adminRouter.post('/create-admin/', verifyAdmin, createAdmin);
 
 adminRouter.put('/update-admin/:id', verifyAdmin, updateAdmin);
-
+adminRouter.put('/update-profile-image/:id',upload.single('image'), updateProfileImage);
 module.exports = adminRouter;
