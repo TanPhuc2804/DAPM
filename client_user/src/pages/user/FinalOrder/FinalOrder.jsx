@@ -13,6 +13,7 @@ const FinalOrder = () => {
     const fetchOrderItems = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/order/list-order`);
+        console.log(response.data)
         if (Array.isArray(response.data.order)) {
           setOrderItems(response.data.order);
         } else {
@@ -65,15 +66,14 @@ const FinalOrder = () => {
   </div>
   <div className="border-b border-gray-300 my-4" />
   {filteredOrders.length > 0 ? (
-    filteredOrders.map((item) => (
-      <div key={item._id} className="border-b border-gray-300 py-4">
+    filteredOrders.map((item,index) => (
+      <div key={index} className="border-b border-gray-300 py-4">
 
-        {item.order_details.map(detail => {
-          console.log(detail);
+        {item.order_details.map((detail,index) => {
           return (
             <OrderItem
-              key={detail._idProduct}
-              image={detail.img}
+              key={index}
+              img={detail._idProduct.image[0]}
               name={detail.name}
               size={detail.size}
               quantity={detail.quantity}
