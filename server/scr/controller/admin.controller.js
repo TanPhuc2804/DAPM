@@ -1,6 +1,42 @@
 const Staff = require('../models/Staff.model');
 const bcrypt = require('bcrypt');
 const Role = require('../models/Role.model'); // Assuming Role is defined somewhere in your models
+const multer = require('multer');
+const path = require('path');
+
+
+// Configure multer for image upload
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/profile_pictures');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage });
+
+// Update Admin Profile Image
+const updateProfileImage = async (req, res) => {
+  try {
+    const adminId = req.params.id;
+    const admin = await Staff.findById(adminId);
+
+    if (!admin) {
+      return res.status(404).json({ status: false, message: 'Admin not found' });
+    }
+
+    // Save new image path
+    admin.image = req.file.path;
+    await admin.save();
+
+    res.status(200).json({ status: true, message: 'Profile image updated', data: admin });
+  } catch (error) {
+    res.status(500).json({ status: false, message: 'Server error', error: error.message });
+  }
+};
 
 // Get Admin by ID
 const getAdmin = async (req, res) => {
@@ -18,7 +54,7 @@ const getAdmin = async (req, res) => {
 
 // Create Admin
 const createAdmin = async (req, res) => {
-    const { fullname, username, email, password, role, numberphone, address, gender, cccd, ngaylamviec, image } = req.body;
+    const { fullname, username, email, password, role, numberphone, address, gender, cccd, ngaylamviec} = req.body;
 
     // Validate required fields
     if (!fullname || !username || !email || !password || !role || !cccd || !ngaylamviec) {
@@ -62,7 +98,7 @@ const createAdmin = async (req, res) => {
             gender,
             cccd,
             ngaylamviec,
-            image
+            
         });
 
         await newAdmin.save();
@@ -74,7 +110,7 @@ const createAdmin = async (req, res) => {
 
 // Update Admin by ID
 const updateAdmin = async (req, res) => {
-    const { fullname, username, email, password, role, numberphone, address, gender, cccd, ngaylamviec, image } = req.body;
+    const { fullname, username, email, password, role, numberphone, address, gender, cccd, ngaylamviec, birthday, image  } = req.body;
     const id = req.user._id;
 
     // Validate phone number (e.g., 10 digits)
@@ -100,6 +136,7 @@ const updateAdmin = async (req, res) => {
         if (password) {
             admin.password = await bcrypt.hash(password, 10);
         }
+        admin.birthday = birthday || admin.birthday;
         admin.role = role || admin.role;
         admin.numberphone = numberphone || admin.numberphone;
         admin.address = address || admin.address;
@@ -107,6 +144,7 @@ const updateAdmin = async (req, res) => {
         admin.cccd = cccd || admin.cccd;
         admin.ngaylamviec = ngaylamviec || admin.ngaylamviec;
         admin.image = image || admin.image;
+        
 
         await admin.save();
         res.status(200).json({ status: true, message: 'Admin updated successfully', data: admin });
@@ -118,5 +156,5 @@ const updateAdmin = async (req, res) => {
 module.exports = {
     getAdmin,
     createAdmin,
-    updateAdmin
+    updateAdmin,updateProfileImage, upload
 };
