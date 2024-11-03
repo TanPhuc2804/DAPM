@@ -19,7 +19,6 @@ function OrderCus() {
           <PaymentOptions  />
           <AdditionalInfo />
         </div>
-
         <div className="w-[40%]">
           <OrderSummary/>
         </div>

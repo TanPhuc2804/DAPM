@@ -4,31 +4,33 @@ import { Link, useLocation,useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { useInfor } from '../../../../assets/hooks/inforOrder.context';
 import { openNotification } from '../../../../assets/hooks/notification';
+import { useDispatch,useSelector } from 'react-redux'
 function OrderSummary() {
     const navigate =useNavigate()
     const {infor }= useInfor()
+    const voucher = useSelector(state => state.voucher.selectVoucher)
+
     const [cartItems, setCartItem] = useState([])
     const location = useLocation()
     useEffect(() => {
-        console.log(location.state.cartItems)
         setCartItem(location.state.cartItems)
     }, [])
     const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const priceDiscount = total*( voucher?.discount ?? 0)/100
     const handleCheckout = () => {
         if (infor.paymentMethod === "Thanh toán khi nhận hàng") {
             axios.post("http://localhost:3000/order/insert-order", { infor: infor, cart: cartItems })
-                .then(res => res.data)
-                .then(data => {
-                    if (data.status) {
-                       
-                         navigate('/success')
+                .then(res=>res.data)
+                .then(data=>{
+                    if(data.status){
+                        navigate('/success')
                     }
                 })
                 .catch(err => {
                     openNotification(false, err.response.data.message, "Đặt hàng thất bại !");
                 });
         } else {
-            axios.post("http://localhost:3000/checkout", { infor: infor, cart: cartItems })
+            axios.post("http://localhost:3000/checkout", { infor: infor, cart: cartItems,voucher:voucher })
                 .then(res => res.data)
                 .then(data => {
                     if (data.status) {
@@ -77,13 +79,13 @@ function OrderSummary() {
                         </div>
                         <div className="flex gap-10 justify-between items-center mt-3 w-full leading-none">
                             <div className="self-stretch my-auto text-gray-500">Giảm giá</div>
-                            <div className="self-stretch my-auto font-medium text-zinc-900">0</div>
+                            <div className="self-stretch my-auto font-medium text-zinc-900">{priceDiscount}</div>
                         </div>
                     </div>
                     <div className="mt-4 w-full min-h-0 bg-gray-200 border border-gray-200 border-solid" />
                     <div className="flex gap-10 justify-between items-center mt-4 w-full text-3xl leading-none">
                         <div className="self-stretch my-auto text-zinc-900">Tổng cộng</div>
-                        <div className="self-stretch my-auto text-green-900">{total} đ</div>
+                        <div className="self-stretch my-auto text-green-900">{total-(priceDiscount)} đ</div>
                     </div>
                 </div>
             </div>
