@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAdmin, createAdmin, updateAdmin, getListAdmin } = require('../controller/admin.controller');
+const { getAdmin, createAdmin, updateAdmin, getListAdmin, updateProfileImage, upload } = require('../controller/admin.controller');
 const { verifyAdmin } = require('../services/jwt');
 const adminRouter = express.Router();
 
