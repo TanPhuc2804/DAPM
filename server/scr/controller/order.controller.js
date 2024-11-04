@@ -401,7 +401,7 @@ const getListOrderOfCus = async (req, res) => {
     try {
         const listOder = await Order.find({
             idCustomer: idCus
-        })
+        }).populate('idCustomer order_details._idProduct')
         return res.status(200).json({ status: true, message: "Order successfully !", order: listOder })
     } catch (err) {
         return res.status(500).json({ status: false, message: err.message })
