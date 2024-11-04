@@ -52,7 +52,7 @@ const Staff = () => {
     const fetchstaff = async() => {
       try{
         const response = await axios.get("http://localhost:3000/staff/get-allstaff/");
-        console.log(response);
+        console.log(response.data.staffs); // Kiểm tra dữ liệu lấy về từ API
         setStaff(response.data.staffs);
       } catch(error){
         console.error("Lay Voucher that bai", error);
@@ -104,14 +104,14 @@ const formatDate = (dateString) => {
         </thead>
         <tbody>
         {staff.map((staff) => (
-             <tr>
+             <tr key={staff._id}>
              <TableCell>{staff._id}</TableCell>
              <TableCell>{staff.fullname}</TableCell>
              <TableCell>{staff.cccd}</TableCell>
              <TableCell>{formatDate(staff.birthday)}</TableCell>
              <TableCell>{staff.gender}</TableCell>
              <TableCell>{staff.numberphone}</TableCell>
-             <TableCell>{staff.role}</TableCell>
+             <TableCell>{staff.role ? staff.role.name : "Chức vụ không xác định"}</TableCell>
              <TableCell>{staff.address}</TableCell>
              <TableCell>{formatDate(staff.ngaylamviec)}</TableCell>
              <TableCell>

@@ -6,7 +6,7 @@ const roleSchema = new mongoose.Schema({
       unique: true   
   
     }
-  },{Timestamp: true} );
+  },{timestamps: true} );
 
 const Role = mongoose.model("Role",roleSchema)
 module.exports = Role

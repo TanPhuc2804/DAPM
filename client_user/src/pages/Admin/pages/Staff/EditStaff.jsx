@@ -11,7 +11,6 @@ const Container = styled.div`
   background-color: #f5f5f5;
 `;
 
-
 const Form = styled.div`
   display: flex;
   flex-direction: column;
@@ -24,26 +23,19 @@ const Form = styled.div`
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 `;
 
-/* Styling cho ảnh hiển thị */
-const Image = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
-
 const InputField = styled.div`
-   display: flex;
+  display: flex;
   align-items: center;
   margin: 10px 0;
   width: 100%;
 
   & > label {
-    flex: 0.3; /* Chiếm 30% không gian */
+    flex: 0.3;
     margin-right: 10px;
   }
 
   & > input, & > select {
-    flex: 0.7; /* Chiếm 70% không gian */
+    flex: 0.7;
   }
 `;
 
@@ -57,13 +49,14 @@ const Input = styled.input`
   border-radius: 5px;
   width: 100%;
 `;
+
 const Select = styled.select`
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 100%;
-  
 `;
+
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -91,7 +84,6 @@ const Button = styled.button`
   }
 `;
 
-
 const EditStaff = () => {
   const { id } = useParams();
   const [mastaff, setmastaff] = useState(id);
@@ -99,28 +91,33 @@ const EditStaff = () => {
   const [cccd, setCCCD] = useState("");
   const [namsinh, setNamSinh] = useState("");
   const [sdt, setSDT] = useState("");
-  const [currentRole, setCurrentRole] = useState(""); // Giá trị role hiện tại của nhân viên
-  const [allRoles, setAllRoles] = useState([]); // Mảng tất cả vai trò
+  const [currentRole, setCurrentRole] = useState("");
+  const [allRoles, setAllRoles] = useState([]);
   const [diachi, setDiaChi] = useState("");
   const [ngayvaolam, setNgayVaoLam] = useState("");
   const [gioitinh, setGioiTinh] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUserName] = useState("");
   const navigate = useNavigate();
-    // Hàm tính tuổi dựa vào ngày sinh
+  // Hàm tính tuổi dựa vào ngày sinh
   const calculateAge = (birthday) => {
     const birthDate = new Date(birthday);
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-  }
+
+    // Điều chỉnh tuổi nếu ngày sinh chưa tới trong năm hiện tại
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
   useEffect(() => {
-    const fetchstaff = async () => {
+    const fetchStaff = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/staff/get-staff/${id}`);
-        console.log(response);
         const staff = response.data.staff;
-
+        
         setTenNV(staff.fullname);
         setCCCD(staff.cccd);
         setSDT(staff.numberphone);
@@ -137,27 +134,27 @@ const EditStaff = () => {
     };
 
     if (id) {
-      fetchstaff();
+      fetchStaff();
     }
   }, [id]);
-  //Lấy danh sách role từ server
+
   useEffect(() => {
     axios.get("http://localhost:3000/role/get-allrole")
       .then(res => setAllRoles(res.data.role))
       .catch(err => console.log(err));
   }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Kiểm tra từng trường dữ liệu
+    console.log(currentRole);
     if (!tenNV) return alert("Họ tên nhân viên không được để trống.");
     if (!cccd) return alert("CCCD không được để trống.");
     if (!namsinh) return alert("Năm sinh không được để trống.");
-    // Ràng buộc: Tuổi phải đủ 18
-    const age = calculateAge(namsinh);
-    if (age < 18) {
-      return alert("Nhân viên phải đủ 18 tuổi.");
-    }
-
+     // Ràng buộc: Tuổi phải đủ 18
+     const age = calculateAge(namsinh);
+     if (age < 18) {
+       return alert("Nhân viên phải đủ 18 tuổi.");
+     }
     if (!gioitinh) return alert("Vui lòng chọn giới tính.");
     if (!sdt) return alert("Số điện thoại không được để trống.");
     if (!/^\d{10}$/.test(sdt)) {
@@ -173,22 +170,11 @@ const EditStaff = () => {
       alert("Email phải có đuôi @gmail.com");
       return;
     }
-    if (!selectedRole) return alert("Vui lòng chọn chức vụ.");
+    // if (!currentRole) return alert("Vui lòng chọn chức vụ.");
     if (!diachi) return alert("Địa chỉ không được để trống.");
     if (!ngayvaolam) return alert("Ngày vào làm không được để trống.");
     if (!username) return alert("Tên người dùng không được để trống.");
-    if (!password) return alert("Mật khẩu không được để trống.");
-    // Ràng buộc: Mật khẩu phải có ít nhất một chữ cái, một số và một ký tự đặc biệt
-    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    if (!passwordPattern.test(password)) {
-      return alert("Mật khẩu phải chứa ít nhất một chữ cái, một số và một ký tự đặc biệt, và có ít nhất 8 ký tự.");
-    }
-    if (!passwordConfirm) return alert("Vui lòng xác nhận mật khẩu.");
-    // Ràng buộc: CCCD phải là số và có 12 ký tự
-    const cccdPattern = /^[0-9]{12}$/;
-    if (!cccdPattern.test(cccd)) {
-      return alert("CCCD phải là số và có đúng 12 ký tự.");
-    }
+
     try {
       const updatedStaff = {
         fullname: tenNV,
@@ -211,6 +197,7 @@ const EditStaff = () => {
       alert("Cập nhật staff thất bại");
     }
   };
+
   return (
     <Container>
       <Form>
@@ -236,7 +223,6 @@ const EditStaff = () => {
           <Select value={gioitinh} onChange={(e) => setGioiTinh(e.target.value)}>
             <option value="Nam">Nam</option>
             <option value="Nữ">Nữ</option>
-            <option value="Khác">Khác</option>
           </Select>
         </InputField>
         <InputField>
@@ -245,40 +231,37 @@ const EditStaff = () => {
         </InputField>
         <InputField>
           <Label>Email</Label>
-          <Input type="text" value={email} onChange={(e) => setEmail(e.targer.value)} />
+          <Input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
         </InputField>
         <InputField>
           <Label>Chức vụ:</Label>
           <Select value={currentRole} onChange={(e) => setCurrentRole(e.target.value)}>
             {allRoles.map((role) => (
-              <option key={role._id} value={role._id}>
-                {role.name}
-              </option>
+              <option key={role._id} value={role._id}>{role.name}</option>
             ))}
           </Select>
         </InputField>
-        < InputField>
-          <Label>Địa Chỉ:</Label>
+        <InputField>
+          <Label>Địa chỉ</Label>
           <Input type="text" value={diachi} onChange={(e) => setDiaChi(e.target.value)} />
         </InputField>
         <InputField>
-          <Label>Ngày vào làm:</Label>
+          <Label>Ngày vào làm</Label>
           <Input type="date" value={ngayvaolam} onChange={(e) => setNgayVaoLam(e.target.value)} />
         </InputField>
         <InputField>
-          <Label>User Name:</Label>
+          <Label>Tên người dùng:</Label>
           <Input type="text" value={username} onChange={(e) => setUserName(e.target.value)} />
         </InputField>
         <ButtonContainer>
           <Link to="/admin/staff">
-            <Button className="back">Back</Button>
+            <Button className="back">Trở Về</Button>
           </Link>
-          <Button className="update" onClick={handleSubmit}>Cập nhật</Button>
+          <Button onClick={handleSubmit} className="update">Cập Nhật</Button>
         </ButtonContainer>
       </Form>
     </Container>
-  )
-}
+  );
+};
 
-
-export default EditStaff
+export default EditStaff;

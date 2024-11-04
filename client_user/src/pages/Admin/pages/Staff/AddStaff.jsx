@@ -113,6 +113,11 @@ const AddStaff = () => {
     // Kiểm tra từng trường dữ liệu
     if (!tenNV) return alert("Họ tên nhân viên không được để trống.");
     if (!cccd) return alert("CCCD không được để trống.");
+     // Ràng buộc: CCCD phải là số và có 12 ký tự
+     const cccdPattern = /^[0-9]{12}$/;
+     if (!cccdPattern.test(cccd)) {
+       return alert("CCCD phải là số và có đúng 12 ký tự.");
+     }
     if (!namsinh) return alert("Năm sinh không được để trống.");
     // Ràng buộc: Tuổi phải đủ 18
     const age = calculateAge(namsinh);
@@ -146,11 +151,6 @@ const AddStaff = () => {
       return alert("Mật khẩu phải chứa ít nhất một chữ cái, một số và một ký tự đặc biệt, và có ít nhất 8 ký tự.");
     }
     if (!passwordConfirm) return alert("Vui lòng xác nhận mật khẩu.");
-    // Ràng buộc: CCCD phải là số và có 12 ký tự
-    const cccdPattern = /^[0-9]{12}$/;
-    if (!cccdPattern.test(cccd)) {
-      return alert("CCCD phải là số và có đúng 12 ký tự.");
-    }
     if (password !== passwordConfirm) {
       alert("Password không trùng khớp với Password Confirm");
       return;
@@ -240,7 +240,6 @@ const AddStaff = () => {
             <option value="">Chọn giới tính</option>
             <option value="Nam">Nam</option>
             <option value="Nữ">Nữ</option>
-            <option value="Khác">Khác</option>
           </Select>
         </InputField>
 

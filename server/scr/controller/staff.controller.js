@@ -34,7 +34,7 @@ const getStaffById = async (req, res) => {
 // Get all staff
 const getAllStaff = async (req, res) => {
     try {
-        const staffs = await Staff.find({});
+        const staffs = await Staff.find({}).populate('role', 'name'); // Thêm 'name' để chỉ lấy trường tên của role;
         res.status(200).json({ status: true, staffs });
     } catch (error) {
         res.status(500).json({ status: false, message: 'Server error', error: error.message });

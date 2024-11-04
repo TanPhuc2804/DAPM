@@ -23,9 +23,9 @@ const getCustomerByID = async (req, res) => {
 
 const updateCustomer = async (req, res) => {
     const id = req.params.id
-    const { username, fullname, email, phone, address, gender, birthday } = req.body
-    console.log({ username, fullname, email, phone, address })
-    if (!username || !fullname || !email || !phone || !address) {
+    const { username, fullname, email, numberphone, address, gender, birthday } = req.body
+    console.log({ username, fullname, email, numberphone, address })
+    if (!username || !fullname || !email || !numberphone || !address || !gender || !birthday) {
         return res.status(403).json({ status: false, message: "Input required !" })
     }
 
@@ -41,7 +41,7 @@ const updateCustomer = async (req, res) => {
             fullname: fullname,
             email: email,
             gender: gender,
-            numberphone: phone,
+            numberphone: numberphone,
             address: address,
             birthday: birthday
         })
@@ -59,8 +59,6 @@ const updateCustomer = async (req, res) => {
         return res.status(500).json({ status: false, message: "Error server" })
 
     }
-
-
 }
 
 const changePassword = async (req, res) => {

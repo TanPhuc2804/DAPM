@@ -32,7 +32,7 @@ const staffSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
-    enum: ['Nam', 'Nữ', 'Khác']
+    enum: ['Nam', 'Nữ']
   },
   birthday: {
     type: Date,

@@ -58,6 +58,9 @@ const ActionContainer = styled.div`
   align-items: center;
   justify-content: center;
 `;
+const convertGender = (gender) => {
+    return gender === 'male' ? 'Nam' : 'Nữ';
+}
 const Customer = () => {
     const [customers,setCustomers] = useState([]);
     // lấy danh sách Customers
@@ -124,7 +127,7 @@ const Customer = () => {
                         <TableCell>{customer.fullname}</TableCell>
                         <TableCell>{customer.numberphone}</TableCell>
                         <TableCell>{new Date(customer.birthday).toLocaleDateString('vi-VN')}</TableCell>
-                        <TableCell>{customer.gender}</TableCell>
+                        <TableCell>{convertGender(customer.gender)}</TableCell>
                         <TableCell>{customer.address}</TableCell>
                         <TableCell>
                             <ActionContainer>
