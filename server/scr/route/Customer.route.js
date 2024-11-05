@@ -14,6 +14,8 @@ customerRouter.put('/update-customer/:id',verifyAdmin,customerControler.updateCu
 customerRouter.post('/cart/update-quantity-cart',verifyLogin,customerControler.updateQuanityCart)
 customerRouter.put('/cart/delete/:id',verifyLogin,customerControler.deleteCart)
 customerRouter.post('/cart/insert',verifyLogin,customerControler.insertProductToCard)
-customerRouter.post('/change-password/:id',customerControler.changePassword)
-customerRouter.put('/update/:id',verifyLogin,customerControler.updateCustomer)
+
+customerRouter.post('/change-password',verifyLogin,customerControler.changePassword)
+customerRouter.post('/update/:id',verifyLogin,customerControler.updateCustomer)
+
 module.exports =customerRouter

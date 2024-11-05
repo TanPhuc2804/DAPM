@@ -32,6 +32,7 @@ import EditCustomer from "../pages/Admin/pages/Customer/EditCustomer.jsx";
 import InfoAdmin from "../pages/Admin/components/InforAdmin/InfoAdmin.jsx";
 import Navigation from "../assets/Component/Layout/DefautLayout/Navigation/index.jsx";
 import CategoryPage from "../assets/Component/Layout/DefautLayout/CategoryPage/CategoryPage.jsx";
+import FinalOrder from "../pages/user/FinalOrder/FinalOrder.jsx";
 const publicRoutes = [
      { path: '/', component: Home },
     { path: '/auth/profile', component: Profile },
@@ -45,6 +46,7 @@ const publicRoutes = [
     { path: '/customer/order', component: OrderCus },
     { path: '/success', component: Success },
     { path: '/success/:session_id', component: Success },
+    { path: '/auth/StateOrder', component: FinalOrder },
     { path: '/cancel', component: Cancel },
     { path: '/auth/logup', component: Register, layout: null },
     { path: '/admin/infor', component: InfoAdmin, layout: null },

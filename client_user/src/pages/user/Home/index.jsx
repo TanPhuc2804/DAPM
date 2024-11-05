@@ -8,10 +8,7 @@ import HotFashion from './HotFasion/hotfashion';
 import ImageGallery from './ImageGallery/ImageGallery';
 import CustomDesign from './CustomDesign/CustomDesign';
 
-
-
 function Home() {
-
   return (
     <div className="flex flex-col items-center">
       <Swiper
