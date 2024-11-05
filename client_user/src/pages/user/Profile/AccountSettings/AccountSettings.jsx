@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../../../assets/hooks/auth.context';
 import axios from 'axios';
+import { openNotification } from "../../../../assets/hooks/notification"
+import dayjs from 'dayjs';
 
 const AccountSettings = () => {
   const { auth } = useContext(AuthContext);
@@ -21,7 +23,12 @@ const AccountSettings = () => {
         const id = auth.user.id;
         try {
           const response = await axios.get(`http://localhost:3000/customer/list-customer/${id}`);
-          setUserData(response.data.message); 
+          let user = response.data.message
+          user = {
+            ...user,
+            phone: user.numberphone
+          }
+          setUserData(user);
         } catch (error) {
           setError('Error fetching user data. Please try again.');
         }
@@ -29,7 +36,23 @@ const AccountSettings = () => {
     };
     fetchUserData();
   }, [auth]);
-  
+
+  function calculateAge(birthDate) {
+    const today = dayjs();
+    const birth = dayjs(birthDate);
+
+    // Tính tuổi bằng cách lấy năm hiện tại trừ năm sinh
+    let age = today.year() - birth.year();
+
+    // Kiểm tra nếu ngày hiện tại trước ngày sinh nhật năm nay thì trừ 1 tuổi
+    const birthdayThisYear = birth.set('year', today.year());
+    if (today.isBefore(birthdayThisYear)) {
+      age--;
+    }
+
+    return age;
+  }
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserData((prev) => ({ ...prev, [name]: value }));
@@ -38,11 +61,18 @@ const AccountSettings = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const id = auth.user.id;
+    const age = calculateAge(userData.birthday)
+
+    if(age <16){
+      openNotification(false,"Cập nhật thất bại !","Tuổi phải trên 16")
+      return
+    }
+
     try {
       const response = await axios.post(`http://localhost:3000/customer/update/${id}`, userData);
-      console.log('Update successful:', response.data);
+      openNotification(true, "Cập nhật thành công !", "")
     } catch (error) {
-      setError('Error updating information. Please try again.');
+      openNotification(false, "Cập nhật thất bại !", error.response?.data.message ?? "")
     }
   };
 
@@ -149,8 +179,8 @@ const AccountSettings = () => {
               />
             </div>
           </div>
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="mt-4 px-6 py-3 text-sm font-bold tracking-normal leading-10 text-white uppercase bg-green-700 rounded-md shadow hover:bg-green-800 transition duration-200"
           >
             Cập nhật

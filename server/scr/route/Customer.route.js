@@ -13,6 +13,6 @@ customerRouter.get("/list-customer/unblock/:id",verifyAdmin,customerControler.un
 customerRouter.post('/cart/update-quantity-cart',verifyLogin,customerControler.updateQuanityCart)
 customerRouter.put('/cart/delete/:id',verifyLogin,customerControler.deleteCart)
 customerRouter.post('/cart/insert',verifyLogin,customerControler.insertProductToCard)
-customerRouter.post('/change-password/:id',customerControler.changePassword)
+customerRouter.post('/change-password',verifyLogin,customerControler.changePassword)
 customerRouter.post('/update/:id',verifyLogin,customerControler.updateCustomer)
 module.exports =customerRouter

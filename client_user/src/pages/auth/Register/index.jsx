@@ -2,7 +2,8 @@ import { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../assets/hooks/auth.context';
-
+import { Form, Modal, Input } from 'antd'
+import { openNotification } from '../../../assets/hooks/notification';
 function Register() {
   const [username, setUsername] = useState('');
   const [fullname, setName] = useState('');
@@ -10,41 +11,48 @@ function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
+  const [visible, setVisible] = useState(false)
+  const [form] = Form.useForm()
 
   const { setAuth } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setErrorMessage('Mật khẩu xác nhận không khớp.');
       return;
     }
-
-    axios
-  .post("http://localhost:3000/auth/registerCus", { username, fullname, password, email })
-  .then((res) => {
-    if (res.data.status) {
-      setAuth({
-        isAuthenticated: true,
-        user: {
-          id: res.data.id,
-          email: res.data.email,
-          name: res.data.name,
-        },
-      });
-      navigate(res.data.redirect || '/');
-    } else {
-      setErrorMessage(res.data.message || 'Đăng ký thất bại.');
+    const otpResponse = await axios.post("http://localhost:3000/auth/send-otp-create",{email:email})
+    if (otpResponse.data.status) {
+      setVisible(true)
     }
-  })
-  .catch((err) => {
-    console.error('Error response:', err.response);
-    setErrorMessage('Đã xảy ra lỗi. Vui lòng thử lại sau.');
-  });
   };
+
+
+  const onFinish = (values) => {
+    const { otp } = values
+    axios.post("http://localhost:3000/auth/verify-otp", { inputOTP: otp })
+      .then(res => res.data)
+      .then(data => {
+        if (data.status) {
+          setVisible(false)
+          axios.post("http://localhost:3000/auth/registerCus", { username, fullname, password, email })
+            .then((res) => {
+              if (res.data.status) {
+                navigate('/login');
+              }
+            })
+            .catch((err) => {
+              openNotification(false,"Đăng ký thất bại",err.response?.data?.message || " Đã xảy ra lỗi. Vui lòng thử lại sau")
+            });
+        }
+      })
+      .catch(err => {
+        openNotification(false, "Xác thực OTP th", err.response?.data.message ?? "")
+      })
+  }
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -56,9 +64,9 @@ function Register() {
           <h1 className="text-2xl font-bold mb-4">Tạo tài khoản</h1>
           <p className="mb-4">
             Bạn đã có tài khoản?{' '}
-            <span 
+            <span
               className="text-orange-500 underline cursor-pointer"
-              onClick={() => navigate('/auth/login')} 
+              onClick={() => navigate('/auth/login')}
             >
               Đăng nhập
             </span>
@@ -133,6 +141,26 @@ function Register() {
           </p>
         </div>
       </div>
+      <Modal
+        okText="Xác thực mã OTP"
+        cancelText="Quay lại"
+        onOk={() => form.submit()}
+        open={visible}
+        onClose={() => setVisible(false)}
+        title={(<p className='text-[20px]'>Xác thực email</p>)}
+      >
+        <Form
+          onFinish={onFinish}
+          form={form}
+        >
+          <Form.Item
+            label="Nhập mã OTP"
+            name="otp"
+          >
+            <Input.OTP />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }
