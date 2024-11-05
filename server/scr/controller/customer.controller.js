@@ -23,10 +23,10 @@ const getCustomerByID = async (req, res) => {
 
 const updateCustomer = async (req, res) => {
     const id = req.params.id
-    const { username, fullname, email, numberphone, address, gender, birthday } = req.body
-    console.log({ username, fullname, email, numberphone, address })
-    if (!username || !fullname || !email || !numberphone || !address || !gender || !birthday) {
-        return res.status(403).json({ status: false, message: "Input required !" })
+    const { username, fullname, email, phone, address, gender, birthday } = req.body
+    console.log({ username, fullname, email, phone, address })
+    if (!username || !fullname || !email || !phone || !address) {
+        return res.status(403).json({ status: false, message: "Nhập đầy đủ thông tin !" })
     }
 
     try {
@@ -34,7 +34,7 @@ const updateCustomer = async (req, res) => {
             _id: id
         })
         if (!customer) {
-            return res.status(401).json({ status: false, message: "Customer not found !" })
+            return res.status(401).json({ status: false, message: "Không tìm thấy khách hàng !" })
         }
         customer.set({
             username: username,
@@ -48,7 +48,7 @@ const updateCustomer = async (req, res) => {
 
         customer.save()
             .then(value => {
-                return res.json({ status: true, message: "Update successfull !" })
+                return res.json({ status: true, message: "Cập nhật thành công !" })
             })
             .catch(err => {
                 console.log(err.message ?? "Loi update")
@@ -62,24 +62,31 @@ const updateCustomer = async (req, res) => {
 }
 
 const changePassword = async (req, res) => {
-    const { password } = req.body
-    if (!password) {
+    const id = req.user._id
+    const { oldPassword,newPassword } = req.body
+    if (!newPassword) {
         return res.status(403).json({ status: false, message: "Input required !" })
-
     }
-    const newPassword = await bcrypt.hash(password, 10)
+
+    const customer = await Customer.findById({_id:id})
+    const checkPass = await bcrypt.compare(oldPassword,customer.password)
+    if(!checkPass){
+        return res.status(400).json({ status: false, message: "Mật khẩu hiện tại không khớp !" })
+    }
+
+    const hashPassword = await bcrypt.hash(newPassword, 10)
     try {
         const customer = await Customer.findByIdAndUpdate({
             _id: id
         }, {
-            password: newPassword
+            password: hashPassword
         })
 
         if (!customer)
-            return res.status(404).json({ status: false, message: "Change pass failed !" })
-        return res.json({ status: true, message: "Change password successful !" })
+            return res.status(400).json({ status: false, message: "Thay đổi mật khẩu thất bại !" })
+        return res.json({ status: true, message: "Thay đổi mật khẩu thành công !" })
     } catch (err) {
-        return res.json({ status: false, message: "Error server" })
+        return res.json({ status: false, message: "Error server" + err.message })
     }
 }
 

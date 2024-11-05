@@ -19,30 +19,28 @@ function OrderSummary() {
     const priceDiscount = total*( voucher?.discount ?? 0)/100
     const handleCheckout = () => {
         if (infor.paymentMethod === "Thanh toán khi nhận hàng") {
-            axios.post("http://localhost:3000/order/insert-order", { infor: infor, cart: cartItems,voucher:voucher })
+            axios.post("http://localhost:3000/order/insert-order", { infor: infor, cart: cartItems })
                 .then(res=>res.data)
                 .then(data=>{
                     if(data.status){
                         navigate('/success')
                     }
                 })
-                .catch(err=>{
-                    openNotification(false,err.response.data.message,"Đặt hàng thất bại !")
-                })
+                .catch(err => {
+                    openNotification(false, err.response.data.message, "Đặt hàng thất bại !");
+                });
         } else {
             axios.post("http://localhost:3000/checkout", { infor: infor, cart: cartItems,voucher:voucher })
                 .then(res => res.data)
-                .then(data =>{
-                    if(data.status){
-                        window.location.href = data.message
+                .then(data => {
+                    if (data.status) {
+                  
+                        navigate('/auth/StateOrder');
                     }
-                }
-                )
-                .catch(err => console.log(err))
+                })
+                .catch(err => console.log(err));
         }
-
     }
-
 
     return (
         <div className="flex overflow-hidden flex-col grow shrink justify-center items-center pb-6 bg-white rounded border border-gray-200 border-solid min-h-[700px] min-w-[300px] w-[500px] max-md:max-w-full">
