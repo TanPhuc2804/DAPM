@@ -1,7 +1,7 @@
 
 const Product = require('../models/Product.model');
-const Category = require('../models/Category.model');
 const Order = require('../models/Order.model');
+const Category = require('../models/Category.model');
 const Customer = require('../models/Customer.model');
 //Create a new product
 const createProduct = async (req, res) => {

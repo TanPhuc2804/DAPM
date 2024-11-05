@@ -63,6 +63,19 @@ const ViewDetailProduct = () => {
 
     fetchProducts();
   }, []);
+
+  ///Xóa sản phẩm
+  const handleDelete = async (id) => {
+    if(window.confirm('Bạn có chắc chắn muốn xóa sản phẩm này không ?')){
+      try{
+        await axios.delete(`http://localhost:3000/products/delete-product/${id}`);
+        setProducts(products.filter((products)=> products._id !== id));
+        console.log("Xóa thành công");
+      } catch(error){
+        console.error("Xóa thất bại",error);
+      }
+    }
+  };
   return (
     <div>
       <h1>{title}</h1>
@@ -78,6 +91,7 @@ const ViewDetailProduct = () => {
             <ThTd>Trạng Thái</ThTd>
             <ThTd>Nhà Cung cấp</ThTd>
             <ThTd>Ngày nhập</ThTd>
+            <ThTd>Hành động</ThTd>
           </tr>
         </thead>
         <tbody>
@@ -92,18 +106,19 @@ const ViewDetailProduct = () => {
               <Td>{product.status}</Td>
               <Td>{product.supplier}</Td>
               <Td>{moment(product.updateAt).format("DD/MM/YYYY")}</Td>
+              <Td><Link to="/delete-product">
+                <Button style={{ backgroundColor: "red", color: "black", borderRadius: "10px" }}>Xóa</Button>
+              </Link>
+                <Link to="/admin/updateproduct">
+                  <Button style={{ backgroundColor: "yellow", color: "black", borderRadius: "10px" }}>Sửa</Button>
+                </Link></Td>
             </tr>
           ))}
         </tbody>
       </Table>
 
       <ButtonGroup>
-        <Link to="/delete-product">
-          <Button style={{ backgroundColor: "red", color: "black", borderRadius: "10px" }}>Xóa</Button>
-        </Link>
-        <Link to="/admin/updateproduct">
-          <Button style={{ backgroundColor: "yellow", color: "black", borderRadius: "10px" }}>Sửa</Button>
-        </Link>
+
         <Link to="/admin/addproduct">
           <Button style={{ backgroundColor: "green", color: "black", borderRadius: "10px" }}>Thêm</Button>
         </Link>

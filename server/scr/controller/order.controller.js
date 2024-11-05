@@ -3,8 +3,8 @@ const Product = require("../models/Product.model")
 const Customer = require("../models/Customer.model")
 const Voucher = require("../models/Voucher.model")
 const nodemailer = require("nodemailer")
-const sendEmailOrderSuccess = async (customer, orderData,res) => {
-    if (!customer|| !orderData) {
+const sendEmailOrderSuccess = async (customer, orderData, res) => {
+    if (!customer || !orderData) {
         console.log("Bị mất dữ liệu !")
         return
     }
@@ -64,7 +64,7 @@ const sendEmailOrderSuccess = async (customer, orderData,res) => {
 
     const mailOptions = {
         from: "phantanphuc282004@gmail.com",
-        to: "phucphantan68@gmail.com",
+        to: customer.email,
         subject: "Chi tiết đơn hàng",
         html: emailHtml
     }
@@ -72,9 +72,9 @@ const sendEmailOrderSuccess = async (customer, orderData,res) => {
     try {
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-              return res.status(500).json({ error: 'Không thể gửi email' });
+                return res.status(500).json({ error: 'Không thể gửi email' });
             }
-          });
+        });
     } catch (err) {
         console.log(err)
     }
@@ -299,8 +299,8 @@ const sendOrderEmail = async (req, res) => {
         "gender": "male",
         "numberphone": "0357699782"
     }
-    await sendEmailOrderSuccess(customer, order,res)
-      
+    await sendEmailOrderSuccess(customer, order, res)
+
 
 };
 
@@ -375,7 +375,7 @@ const insertOrder = async (req, res) => {
         })
 
         const orderSave = await (await order.save()).populate("order_details._idProduct")
-        sendEmailOrderSuccess(customer,orderSave)
+        sendEmailOrderSuccess(customer, orderSave)
         customer.set({
             carts: []
         })

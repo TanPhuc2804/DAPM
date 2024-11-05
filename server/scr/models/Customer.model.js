@@ -31,7 +31,7 @@ const customerSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
-    enum: ['male', 'female', 'other']
+    enum: ['male', 'female']
   },
   address: {
     type: String,
@@ -72,7 +72,6 @@ const customerSchema = new mongoose.Schema({
       },
       image: {
         type: String,
-        required: true
       },
       size: {
         type: Object,

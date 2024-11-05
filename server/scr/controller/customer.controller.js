@@ -41,7 +41,7 @@ const updateCustomer = async (req, res) => {
             fullname: fullname,
             email: email,
             gender: gender,
-            numberphone: phone,
+            numberphone: numberphone,
             address: address,
             birthday: birthday
         })
@@ -59,8 +59,6 @@ const updateCustomer = async (req, res) => {
         return res.status(500).json({ status: false, message: "Error server" })
 
     }
-
-
 }
 
 const changePassword = async (req, res) => {

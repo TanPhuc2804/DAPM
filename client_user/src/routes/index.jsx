@@ -23,6 +23,13 @@ import ViewDetailProduct from "../pages/Admin/pages/Product/ViewDetailProduct";
 import EditVoucher from "../pages/Admin/pages/Vourchers/EditVoucher";
 import AddVoucher from "../pages/Admin/pages/Vourchers/AddVoucher";
 import AddOrder from "../pages/Admin/pages/Order/addOrder";
+import AddStaff from "../pages/Admin/pages/Staff/AddStaff";
+import EditStaff from "../pages/Admin/pages/Staff/EditStaff";
+import EditSupplier from "../pages/Admin/pages/Supplier/EditSupplier.jsx";
+import AddSupplier from "../pages/Admin/pages/Supplier/AddSupplier.jsx";
+import Customer from "../pages/Admin/pages/Customer/Customer.jsx";
+import EditCustomer from "../pages/Admin/pages/Customer/EditCustomer.jsx";
+import InfoAdmin from "../pages/Admin/components/InforAdmin/InfoAdmin.jsx";
 import Navigation from "../assets/Component/Layout/DefautLayout/Navigation/index.jsx";
 import CategoryPage from "../assets/Component/Layout/DefautLayout/CategoryPage/CategoryPage.jsx";
 import FinalOrder from "../pages/user/FinalOrder/FinalOrder.jsx";
@@ -42,7 +49,7 @@ const publicRoutes = [
     { path: '/auth/StateOrder', component: FinalOrder },
     { path: '/cancel', component: Cancel },
     { path: '/auth/logup', component: Register, layout: null },
-
+    { path: '/admin/infor', component: InfoAdmin, layout: null },
     {
         path: "/admin",
         component: Admin,
@@ -101,6 +108,30 @@ const publicRoutes = [
             {
                 path: 'addorder',
                 page: AddOrder,
+            },
+            {
+                path: 'addstaff',
+                page: AddStaff,
+            },
+            {
+                path: 'editstaff/:id',
+                page: EditStaff,
+            },
+            {
+                path: 'editsupplier/:id',
+                page: EditSupplier,
+            },
+            {
+                path: 'addsupplier',
+                page: AddSupplier,
+            },
+            {
+                path:'customer',
+                page: Customer,
+            },
+            {
+                path:'editcustomer/:id',
+                page: EditCustomer,
             },
         ]
     }
