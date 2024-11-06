@@ -78,6 +78,7 @@ const sendEmailOrderSuccess = async (customer, orderData,res) => {
             if (error) {
               return res.status(500).json({ error: 'Không thể gửi email' });
             }
+            console.log(info)
           });
     } catch (err) {
         console.log(err)
@@ -95,7 +96,7 @@ const checkoutProcess = async (req, res) => {
             ...infor,
             voucher:voucher
         }
-        console.log(infor)
+        
     }
     const inforJson = JSON.stringify(infor);
     const encodedInforJson = encodeURIComponent(inforJson);
