@@ -2,45 +2,56 @@ import React from 'react';
 
 function InfoSection() {
   return (
-    <section className="flex flex-col justify-center items-center px-16 py-20 mt-40 w-full bg-zinc-300 max-md:px-5 max-md:mt-10 max-md:max-w-full">
-      <div className="ml-4 w-full max-w-[1496px] max-md:max-w-full">
-        <div className="flex gap-5 max-md:flex-col">
-          <div className="flex flex-col w-[73%] max-md:ml-0 max-md:w-full">
-            <div className="flex flex-col w-full max-md:mt-10 max-md:max-w-full">
-              <div className="flex flex-wrap gap-5 justify-between max-w-full text-2xl font-bold leading-tight text-black w-[852px]">
-                <div className="flex gap-6">
-                  <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/0bfb33ad30e1261c0b5900c432780319caa1bbf14b628aecb0e37b20945b346f?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101" className="object-contain shrink-0 aspect-square w-[68px]" alt="" />
-                  <div className="flex-auto my-auto">THANH TOÁN & GIAO HÀNG</div>
+    <section className="flex flex-col justify-center items-center px-8 py-20 mt-20 w-full bg-zinc-300 max-md:px-4 max-md:mt-10">
+      <div className="w-full max-w-[1200px]">
+        <div className="flex gap-8 max-md:flex-col">
+          <div className="flex flex-col w-[70%] max-md:w-full">
+            <div className="flex flex-col w-full gap-6">
+              <div className="flex flex-wrap gap-8 text-xl font-bold leading-tight text-black max-md:text-lg">
+                <div className="flex items-center gap-4">
+                  <img
+                    loading="lazy"
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/0bfb33ad30e1261c0b5900c432780319caa1bbf14b628aecb0e37b20945b346f?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101"
+                    className="object-contain w-16"
+                    alt="Thanh toán & giao hàng"
+                  />
+                  <span>THANH TOÁN & GIAO HÀNG</span>
                 </div>
-                <div className="flex gap-2.5  tracking-normal">
-                  <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/565c6d49c264bc7ea31c9491b52c7043ba000a513b9c35aece9e1470f0d80cb1?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101" className="object-contain shrink-0 aspect-square w-[68px]" alt="" />
-                  <div className="my-auto basis-auto">GIỜ MỞ CỬA</div>
+                <div className="flex items-center gap-4">
+                  <img
+                    loading="lazy"
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/565c6d49c264bc7ea31c9491b52c7043ba000a513b9c35aece9e1470f0d80cb1?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101"
+                    className="object-contain w-16"
+                    alt="Giờ mở cửa"
+                  />
+                  <span>GIỜ MỞ CỬA</span>
                 </div>
               </div>
-              <div className="mt-2 ml-6 max-md:max-w-full">
-                <div className="flex gap-5 max-md:flex-col">
-                  <div className="flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
-                    <div className="text-2xl font-light leading-8 text-black tracking-[4px] max-md:mt-10 max-md:max-w-full">
-                      Miễn phí vẫn chuyển cho các đơn hàng trên 599.000VNĐ
-                      <br />- Giao hàng và thu tiền tận nơi - Chuyển khoản và giao hàng - Mua hàng tại shop
-                    </div>
+              <div className="mt-4 max-md:mt-6">
+                <div className="flex gap-8 max-md:flex-col">
+                  <div className="w-1/2 text-lg font-light tracking-wide max-md:w-full">
+                    Miễn phí vận chuyển cho các đơn hàng trên 599.000 VNĐ
+                    <br />- Giao hàng và thu tiền tận nơi - Chuyển khoản và giao hàng - Mua hàng tại shop
                   </div>
-                  <div className="flex flex-col ml-5 w-6/12 max-md:ml-0 max-md:w-full">
-                    <div className="text-2xl font-light leading-8 text-black tracking-[4px] max-md:mt-10">
-                      <span className="font-semibold">8h30 đến 22:00</span> - Tất cả các ngày trong tuần - Áp dụng cho tất cả các chi nhánh hệ thống cửa hàng FMEN
-                    </div>
+                  <div className="w-1/2 text-lg font-light tracking-wide max-md:w-full">
+                    <span className="font-semibold">8h30 đến 22:00</span> - Tất cả các ngày trong tuần - Áp dụng cho tất cả các chi nhánh hệ thống cửa hàng FMEN
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="flex flex-col ml-5 w-[27%] max-md:ml-0 max-md:w-full">
-            <div className="flex flex-col w-full text-2xl text-black max-md:mt-10">
-              <div className="flex gap-5 self-start font-medium tracking-normal leading-none max-md:ml-2">
-                <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/103e82eb673c3d6986c7588429ee24345237cc6016207acf485fe16a2449f647?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101" className="object-contain shrink-0 aspect-square w-[68px]" alt="" />
-                <div className="my-auto basis-auto">Hỗ trợ 24/7</div>
+          <div className="w-[30%] max-md:w-full">
+            <div className="flex flex-col gap-4 text-xl text-black max-md:text-lg">
+              <div className="flex items-center gap-4 font-medium">
+                <img
+                  loading="lazy"
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/103e82eb673c3d6986c7588429ee24345237cc6016207acf485fe16a2449f647?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101"
+                  className="object-contain w-16"
+                  alt="Hỗ trợ 24/7"
+                />
+                <span>HỖ TRỢ 24/7</span>
               </div>
-              <div className="mt-2.5 font-light leading-8 tracking-[4px]">
+              <div className="text-lg font-light tracking-wide">
                 Gọi ngay cho chúng tôi khi bạn có thắc mắc - 0774218430
               </div>
             </div>

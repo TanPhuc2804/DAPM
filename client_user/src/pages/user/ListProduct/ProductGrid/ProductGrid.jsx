@@ -2,30 +2,11 @@ import React, { useState, useEffect } from 'react';
 import ProductCard from '../../Productcard';
 import axios from "axios";
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const ProductGrid = () => {
     const { id } = useParams();
-    const [listProduct, setProduct] = useState([]);
-    const [loading, setLoading] = useState(true); 
-    const [error, setError] = useState(''); 
-
-    useEffect(() => {
-        axios.get(`http://localhost:3000/products/list-product-category/${id}`)
-            .then(res => {
-                console.log(res.data);
-                if (res.data.status) {
-                    setProduct(res.data.product);
-                }
-                setLoading(false);
-            })
-            .catch(err => {
-                console.log(err);
-                setLoading(false);
-            });
-    }, [id]);
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
+    const listProduct = useSelector(state=>state.product.productTemps)
 
     return (
         <section className="mt-custom ml-4 max-md:mt-10 max-md:max-w-full">
