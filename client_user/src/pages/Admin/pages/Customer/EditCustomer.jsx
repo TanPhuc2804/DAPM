@@ -144,7 +144,7 @@ const EditCustomer = () => {
     const today = new Date();
     const birthDate = new Date(ngaysinh);
     const age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
+    let monthDiff = today.getMonth() - birthDate.getMonth();
 
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--;
@@ -178,7 +178,7 @@ const EditCustomer = () => {
     try {
       const updateCustomer = {
         fullname: fullname,
-        numberphone: sdt,
+        phone: sdt,
         email: email,
         birthday: ngaysinh,
         gender: gioitinh,

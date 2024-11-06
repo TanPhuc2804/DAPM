@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../assets/hooks/auth.context';
-
+import {openNotification}from "../../../assets/hooks/notification"
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -19,7 +19,6 @@ function Login() {
             .post('http://localhost:3000/auth/login', { username, password })
             .then((res) => {
                 if (res.data.status) {
-                  
                     const userData = {
                         isAuthenticated: true,
                         user: {
@@ -40,7 +39,7 @@ function Login() {
             })
             .catch((err) => {
                 console.error(err);
-                setErrorMessage('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+                openNotification(false,"Đăng nhập thất bại",err.response?.data.message ?? "Đã xảy ra lỗi")
             });
     };
 

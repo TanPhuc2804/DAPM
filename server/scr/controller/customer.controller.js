@@ -41,7 +41,7 @@ const updateCustomer = async (req, res) => {
             fullname: fullname,
             email: email,
             gender: gender,
-            numberphone: numberphone,
+            numberphone: phone,
             address: address,
             birthday: birthday
         })
@@ -56,7 +56,7 @@ const updateCustomer = async (req, res) => {
             })
     } catch (err) {
         console.log(err)
-        return res.status(500).json({ status: false, message: "Error server" })
+        return res.status(500).json({ status: false, message: "Error server" +err.message})
 
     }
 }

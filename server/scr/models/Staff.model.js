@@ -23,6 +23,9 @@ const staffSchema = new mongoose.Schema({
       message: 'Invalid email address'
     }
   },
+  image:{
+    type:String
+  },
   address: {
     type: String,
   },

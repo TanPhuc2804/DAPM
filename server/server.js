@@ -54,7 +54,7 @@ mongoose.connect(process.env.StringUrlMongo)
 
 // Serve static files
 app.use(express.static("public"));
-
+app.use(express.static("uploads"));
 app.use("/auth", authRouter);
 app.use("/products", router);  // Example product routes
 app.use("/supplier", supplierRoute);
