@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
-function Sidebar({ products = [], setFilteredProducts }) { // Thiết lập giá trị mặc định là mảng rỗng
+import { useDispatch } from 'react-redux';
+import { filterProductPrice } from '../../../Admin/redux/Product/productSlice';
+function Sidebar() { // Thiết lập giá trị mặc định là mảng rỗng
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch()
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const res = await axios.get('http://localhost:3000/category/get-categorylist');
         if (res.data.status) {
-          setCategories(res.data.categories);
+          let cate = res.data.categories
+          const defaultCate = {
+            name:"Mặc định",
+            _id:"defauld"
+          }
+          cate.push(defaultCate)
+          setCategories(cate);
         }
       } catch (err) {
         console.log(err);
@@ -22,26 +29,11 @@ function Sidebar({ products = [], setFilteredProducts }) { // Thiết lập giá
   }, []);
 
   const handleCategoryClick = (categoryId) => {
-    navigate(`/product-category/${categoryId}`);
+      navigate(`/product-category/${categoryId}`);
   };
 
   const handlePriceRangeClick = (range) => {
-    const [minPrice, maxPrice] = range.split('-').map(Number);
-    
-    // Kiểm tra products có phải là mảng và có dữ liệu
-    if (Array.isArray(products) && products.length > 0) {
-      const filtered = products.filter(product => {
-        if (maxPrice) {
-          return product.price >= minPrice && product.price <= maxPrice;
-        }
-        return product.price > minPrice; 
-      });
-      setFilteredProducts(filtered); 
-      navigate(`/products/price-range/${range}`);
-    } else {
-      console.log("Không có sản phẩm nào để lọc");
-      setFilteredProducts([]); // Đặt sản phẩm đã lọc về mảng rỗng nếu không có sản phẩm
-    }
+    dispatch(filterProductPrice(range))
   };
 
   return (
@@ -75,7 +67,7 @@ function Sidebar({ products = [], setFilteredProducts }) { // Thiết lập giá
           <button onClick={() => handlePriceRangeClick('200000-500000')} className="text-lg text-indigo-950">
             200,000 - 500,000 VND
           </button>
-          <button onClick={() => handlePriceRangeClick('500000+')} className="text-lg text-indigo-950">
+          <button onClick={() => handlePriceRangeClick('500000')} className="text-lg text-indigo-950">
             Trên 500,000 VND
           </button>
         </div>
