@@ -19,7 +19,7 @@ function OrderSummary() {
     const priceDiscount = total*( voucher?.discount ?? 0)/100
     const handleCheckout = () => {
         if (infor.paymentMethod === "Thanh toán khi nhận hàng") {
-            axios.post("http://localhost:3000/order/insert-order", { infor: infor, cart: cartItems })
+            axios.post("http://localhost:3000/order/insert-order", { infor: infor, cart: cartItems,voucher:voucher })
                 .then(res=>res.data)
                 .then(data=>{
                     if(data.status){
@@ -34,8 +34,7 @@ function OrderSummary() {
                 .then(res => res.data)
                 .then(data => {
                     if (data.status) {
-                  
-                        navigate('/auth/StateOrder');
+                        window.location.href = data.message
                     }
                 })
                 .catch(err => console.log(err));
