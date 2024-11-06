@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Bold, Weight } from "lucide-react";
 import axios from "axios";
+import dayjs from 'dayjs';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -44,6 +47,21 @@ const InputField = styled.div`
 
   & > input, & > select {
     flex: 0.7; /* Chiếm 70% không gian */
+  }
+  
+   /* Wrapper for DatePicker */
+  .date-picker-wrapper {
+    flex: 0.7;
+    display: flex;
+  }
+
+  /* DatePicker style */
+  .date-picker {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
   }
 `;
 
@@ -102,6 +120,14 @@ const EditCustomer = () => {
   const [gioitinh, setGioiTinh] = useState("");
   const [diachi, setDiaChi] = useState("");
   const navigate = useNavigate();
+  // Hàm kiểm tra ngày
+  const checkDateField = (date, fieldName) => {
+    if (!date) {
+      alert(`Vui lòng chọn ${fieldName}!`);
+      return false;
+    }
+    return true;
+  };
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
@@ -111,9 +137,8 @@ const EditCustomer = () => {
         setFullName(customer.fullname);
         setSDT(customer.numberphone);
         setEmail(customer.email);
-        // Chuyển đổi định dạng ngày
-        const formattedDate = customer.birthday ? customer.birthday.split("T")[0] : "";
-        setNgaySinh(formattedDate);
+         // Sử dụng dayjs để chuyển đổi ngày từ cơ sở dữ liệu sang định dạng ngày/tháng/năm
+        setNgaySinh(dayjs(customer.birthday).toDate());
         setGioiTinh(customer.gender);
         setDiaChi(customer.address);
       } catch (error) {
@@ -136,8 +161,7 @@ const EditCustomer = () => {
       alert("Tên đăng nhập không được để trống");
       return;
     }
-    if (!ngaysinh.trim()) {
-      alert("Ngày sinh không được để trống");
+    if (!checkDateField(ngaysinh,"Ngày sinh không được để trống")) {
       return;
     }
     // Kiểm tra tuổi
@@ -162,6 +186,10 @@ const EditCustomer = () => {
       alert("Số điện thoại phải là số và phải có 10 ký tự");
       return;
     }
+    if (!sdt.startsWith("0")) {
+      alert("SĐT phải bắt đầu là số 0");
+      return;
+    }
     if (!email.trim()) {
       alert("Email không được để trống");
       return;
@@ -180,7 +208,7 @@ const EditCustomer = () => {
         fullname: fullname,
         numberphone: sdt,
         email: email,
-        birthday: ngaysinh,
+        birthday: dayjs(ngaysinh).format('YYYY-MM-DD'),
         gender: gioitinh,
         address: diachi,
         username: username,
@@ -212,7 +240,15 @@ const EditCustomer = () => {
         </InputField>
         <InputField>
           <Label>Ngày Sinh:</Label>
-          <Input type="date" value={ngaysinh} onChange={(e) => setNgaySinh(e.target.value)} />
+          <div className="date-picker-wrapper">
+            <DatePicker
+              selected={ngaysinh}
+              onChange={(date) => setNgaySinh(date)}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="Chọn ngày bắt đầu"
+              className="date-picker"
+            />
+          </div>
         </InputField>
         <InputField>
           <Label>Giới Tính:</Label>

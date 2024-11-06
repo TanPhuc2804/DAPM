@@ -3,7 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import axios from "axios";
-
+import dayjs from 'dayjs';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -36,6 +38,21 @@ const InputField = styled.div`
 
   & > input, & > select {
     flex: 0.7;
+  }
+
+  /* Wrapper for DatePicker */
+  .date-picker-wrapper {
+    flex: 0.7;
+    display: flex;
+  }
+
+  /* DatePicker style */
+  .date-picker {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
   }
 `;
 
@@ -112,6 +129,15 @@ const EditStaff = () => {
     }
     return age;
   };
+
+  // Hàm kiểm tra ngày
+  const checkDateField = (date, fieldName) => {
+    if (!date) {
+      alert(`Vui lòng chọn ${fieldName}!`);
+      return false;
+    }
+    return true;
+  };
   useEffect(() => {
     const fetchStaff = async () => {
       try {
@@ -126,8 +152,9 @@ const EditStaff = () => {
         setGioiTinh(staff.gender);
         setEmail(staff.email);
         setUserName(staff.username);
-        setNamSinh(new Date(staff.birthday).toISOString().split('T')[0]);
-        setNgayVaoLam(new Date(staff.ngaylamviec).toISOString().split('T')[0]);
+        // Sử dụng dayjs để chuyển đổi ngày từ cơ sở dữ liệu sang định dạng ngày/tháng/năm
+        setNamSinh(dayjs(staff.birthday).toDate());
+        setNgayVaoLam(dayjs(staff.ngaylamviec).toDate());
       } catch (error) {
         console.error("Failed to fetch staff", error);
       }
@@ -149,7 +176,9 @@ const EditStaff = () => {
     console.log(currentRole);
     if (!tenNV) return alert("Họ tên nhân viên không được để trống.");
     if (!cccd) return alert("CCCD không được để trống.");
-    if (!namsinh) return alert("Năm sinh không được để trống.");
+    if(!checkDateField(namsinh,"Năm sinh")){
+      return;
+    }
      // Ràng buộc: Tuổi phải đủ 18
      const age = calculateAge(namsinh);
      if (age < 18) {
@@ -172,18 +201,20 @@ const EditStaff = () => {
     }
     // if (!currentRole) return alert("Vui lòng chọn chức vụ.");
     if (!diachi) return alert("Địa chỉ không được để trống.");
-    if (!ngayvaolam) return alert("Ngày vào làm không được để trống.");
+    if(!checkDateField(ngayvaolam,"Ngày vào làm")){
+      return;
+    }
     if (!username) return alert("Tên người dùng không được để trống.");
 
     try {
       const updatedStaff = {
         fullname: tenNV,
         cccd: cccd,
-        birthday: namsinh,
+        birthday: dayjs(namsinh).format('YYYY-MM-DD'),
         numberphone: sdt,
         role: currentRole,
         address: diachi,
-        ngaylamviec: ngayvaolam,
+        ngaylamviec: dayjs(ngayvaolam).format('YYYY-MM-DD'),
         gender: gioitinh,
         email: email,
         username: username,
@@ -216,7 +247,15 @@ const EditStaff = () => {
         </InputField>
         <InputField>
           <Label>Năm Sinh:</Label>
-          <Input type="date" value={namsinh} onChange={(e) => setNamSinh(e.target.value)} />
+          <div className="date-picker-wrapper">
+            <DatePicker
+              selected={namsinh}
+              onChange={(date) => setNamSinh(date)}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="Chọn ngày bắt đầu"
+              className="date-picker"
+            />
+          </div>
         </InputField>
         <InputField>
           <Label>Giới Tính:</Label>
@@ -246,8 +285,16 @@ const EditStaff = () => {
           <Input type="text" value={diachi} onChange={(e) => setDiaChi(e.target.value)} />
         </InputField>
         <InputField>
-          <Label>Ngày vào làm</Label>
-          <Input type="date" value={ngayvaolam} onChange={(e) => setNgayVaoLam(e.target.value)} />
+          <Label>Ngày vào làm:</Label>
+          <div className="date-picker-wrapper">
+            <DatePicker
+              selected={ngayvaolam}
+              onChange={(date) => setNgayVaoLam(date)}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="Chọn ngày bắt đầu"
+              className="date-picker"
+            />
+          </div>
         </InputField>
         <InputField>
           <Label>Tên người dùng:</Label>
