@@ -8,6 +8,7 @@ import { openNotification } from '../../../../assets/hooks/notification';
 import { formatCurrency } from '../../../../assets/Function/formatCurrency'
 import { fetchData, updateTemp, filterOrder } from '../../redux/select/selectOrder';
 import { Spin, Select } from 'antd';
+import ChartRevenue from './Chart';
 // Styled components cho bố cục và các thành phần giao diện
 const Container = styled.div`
   padding: 20px;
@@ -114,7 +115,9 @@ const Revenue = () => {
     startDay: "",
     endDay: ""
   })
+
   const [cate, setCate] = useState("Defauld")
+  const [typeRevenue, setTypeRevenue] = useState("day")
   const [options, setOption] = useState([])
   useEffect(() => {
     axios.get("http://localhost:3000/order/all-order")
@@ -211,6 +214,16 @@ const Revenue = () => {
 
   }
 
+  const optionsRevenue = [
+    {
+      value: "day",
+      label: "Báo cáo theo ngày"
+    },
+    {
+      value: "month",
+      label: "Báo cáo theo tháng"
+    },
+  ]
   // const getProductByCate = (orders, categoryId) => {
   //   let productByCate = []
 
@@ -237,6 +250,92 @@ const Revenue = () => {
     dispatch(updateTemp(orders))
   }
 
+  const handleChangTypeRevenue = (value) => {
+    setTypeRevenue(value)
+  }
+
+  const getDataSet = (orders) => {
+    let result = [
+      {
+        month: 1,
+        revenue: 0
+      },
+      {
+        month: 2,
+        revenue: 0
+      },
+      {
+        month: 3,
+        revenue: 0
+      },
+      {
+        month: 4,
+        revenue: 0
+      },
+      {
+        month: 5,
+        revenue: 0
+      },
+      {
+        month: 6,
+        revenue: 0
+      },
+      {
+        month: 7,
+        revenue: 0
+      },
+      {
+        month: 8,
+        revenue: 0
+      },
+      {
+        month: 9,
+        revenue: 0
+      },
+      {
+        month: 10,
+        revenue: 0
+      },
+      {
+        month: 11,
+        revenue: 0
+      },
+      {
+        month: 12,
+        revenue: 0
+      }
+    ]
+
+    for (let item of orders) {
+      const data = {
+        month: dayjs(item.createdAt).month() + 1,
+        revenue: item.totalPrice
+      }
+
+      if (result.length <= 0) {
+        result.push(data)
+      } else {
+        const index = result.findIndex(item => item.month === data.month)
+        if (index < 0) {
+          result.push(data)
+        } else {
+          result[index] = {
+            ...result[index],
+            revenue: result[index].revenue + data.revenue
+          }
+        }
+      }
+    }
+    return result
+  }
+
+  const dataset = getDataSet(orders)
+    .sort((a, b) => a.month - b.month)
+    .map(item => ({
+      ...item,
+      month: "Tháng" + item.month
+    }));
+
   return (
     <Container>
       <Header>Báo cáo doanh thu</Header>
@@ -258,10 +357,7 @@ const Revenue = () => {
       <StyledHr />
       <FilterSection>
         <Label>Loại thời gian</Label>
-        <Select1>
-          <option>Báo cáo theo ngày</option>
-          <option>Báo cáo theo tháng</option>
-        </Select1>
+        <Select options={optionsRevenue} value={typeRevenue} onChange={handleChangTypeRevenue} className='h-[50px] font-bold'></Select>
         <Label>Ngày bắt đầu</Label>
         <Input type="date" name='startDay' onChange={hanldeChange} />
         <Label>Ngày kết thúc</Label>
@@ -269,38 +365,50 @@ const Revenue = () => {
         <SearchButton onClick={hanldeSearch}>Tìm kiếm</SearchButton>
       </FilterSection>
       <StyledHr />
-      <StatsContainer>
-        <StatItem>
-          <p>Doanh thu</p>
-          <p>{formatCurrency(totalPrice)}</p>
-        </StatItem>
-      </StatsContainer>
-      <StyledHr />
-      {products.length > 0 ?
-        <Table>
-          <thead>
-            <tr>
-              <TableHeader>STT</TableHeader>
-              <TableHeader>Tên sản phẩm</TableHeader>
-              <TableHeader>Giá tiền</TableHeader>
-              <TableHeader>Số lượng</TableHeader>
-              <TableHeader>Doanh thu</TableHeader>
-            </tr>
-          </thead>
-          <tbody>
-            {products?.map((item, index) => (
-              <tr key={item._idProduct._id}>
-                <TableData>{index + 1}</TableData>
-                <TableData>{item.name}</TableData>
-                <TableData>{formatCurrency(item.price)}</TableData>
-                <TableData>{item.quantity}</TableData>
-                <TableData>{formatCurrency(item.quantity * item.price)}</TableData>
+
+
+
+      {typeRevenue === "day" ?
+        <>
+          <StatsContainer>
+            <StatItem>
+              <p>Doanh thu</p>
+              <p>{formatCurrency(totalPrice)}</p>
+            </StatItem>
+          </StatsContainer>
+          <StyledHr />
+          <Table>
+            <thead>
+              <tr>
+                <TableHeader>STT</TableHeader>
+                <TableHeader>Tên sản phẩm</TableHeader>
+                <TableHeader>Giá tiền</TableHeader>
+                <TableHeader>Số lượng</TableHeader>
+                <TableHeader>Doanh thu</TableHeader>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-        : <Spin></Spin>
+            </thead>
+            <tbody>
+              {products?.map((item, index) => (
+                <tr key={item._idProduct._id}>
+                  <TableData>{index + 1}</TableData>
+                  <TableData>{item.name}</TableData>
+                  <TableData>{formatCurrency(item.price)}</TableData>
+                  <TableData>{item.quantity}</TableData>
+                  <TableData>{formatCurrency(item.quantity * item.price)}</TableData>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </>
+        :
+        <div className="flex justify-center">
+          <ChartRevenue dataset={dataset} />
+        </div>
       }
+      {/* {products.length > 0 ?
+       
+        : <Spin></Spin>
+      } */}
 
     </Container>
   );
