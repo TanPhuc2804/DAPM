@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Flex, Input } from 'antd';
 // Thành phần cho từng danh mục
 const CategoryItem = ({ name, onClick, isSelected }) => (
   <div 
@@ -61,13 +62,15 @@ const AddCategory = ({ onAdd, onCancelAdd }) => {
     >
       {isAdding ? (
         <>
-          <input 
+         <Flex vertical gap={12}>
+            <Input 
             type="text" 
             value={newCategory} 
             onChange={(e) => setNewCategory(e.target.value)} 
             placeholder="Nhập tên danh mục" 
             style={{ border: 'none', outline: 'none', width: '80px' }}
           />
+         </Flex>
           <button onClick={handleCancel} style={{marginRight: '10px', backgroundColor:'#FF3399',marginLeft: '10px'}}> Hủy </button>
           <button onClick={handleAddClick} style={{ marginLeft: '10px', backgroundColor: '#D8F3DC' }}>Thêm</button>
         </>
