@@ -1,8 +1,27 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
+import { AuthContext } from '../../../../hooks/auth.context';
 const UserDropdown = ({ username, onLogout }) => {
   const navigate = useNavigate();
+  const {setAuth} = useContext(AuthContext)
+  const handleLogout = () => {
+    axios.get("http://localhost:3000/auth/logout")
+      .then(res => res.data)
+      .then(data => {
+        setAuth({
+          isAuthenticated: false,
+          user: {
+            id: '',
+            name: '',
+            email: ''
+          }
+        });
+      })
+      .catch(err => console.log(err));
+
+    navigate('/');
+  };
 
   return (
     <div className="relative group">
@@ -30,7 +49,7 @@ const UserDropdown = ({ username, onLogout }) => {
           <li>
             <button 
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left bg-white"
-              onClick={onLogout}
+              onClick={handleLogout}
             >
               Đăng Xuất
             </button>

@@ -19,6 +19,7 @@ function OrderSummary() {
     const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const priceDiscount = total*( voucher?.discount ?? 0)/100
     const handleCheckout = () => {
+        
         if (infor.paymentMethod === "Thanh toán khi nhận hàng") {
             axios.post("http://localhost:3000/order/insert-order", { infor: infor, cart: cartItems,voucher:voucher })
                 .then(res=>res.data)

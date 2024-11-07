@@ -36,6 +36,7 @@ function Register() {
 
   const onFinish = (values) => {
     const { otp } = values;
+    console.log(values)
     axios.post("http://localhost:3000/auth/verify-otp", { inputOTP: otp })
       .then(res => res.data)
       .then(data => {
@@ -44,15 +45,19 @@ function Register() {
           axios.post("http://localhost:3000/auth/registerCus", { username, fullname, password, email })
             .then((res) => {
               if (res.data.status) {
+                openNotification(true,"Đăng ký thành công","")
                 navigate('/auth/login');
+
               }
             })
             .catch((err) => {
-              openNotification(false, "Đăng ký thất bại", err.response?.data?.message || " Đã xảy ra lỗi. Vui lòng thử lại sau");
+              console.log(err)
+              openNotification(false, "Đăng ký thất bại", err.response?.data?.errr || " Đã xảy ra lỗi. Vui lòng thử lại sau");
             });
         }
       })
       .catch(err => {
+        
         openNotification(false, "Xác thực OTP thất bại", err.response?.data.message ?? "");
       });
   };
@@ -174,7 +179,7 @@ function Register() {
       >
         <Form onFinish={onFinish} form={form}>
           <Form.Item label="Nhập mã OTP" name="otp">
-            <Input />
+            <Input.OTP  />
           </Form.Item>
         </Form>
       </Modal>

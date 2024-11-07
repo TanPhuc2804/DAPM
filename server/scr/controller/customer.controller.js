@@ -23,9 +23,9 @@ const getCustomerByID = async (req, res) => {
 
 const updateCustomer = async (req, res) => {
     const id = req.params.id
-    const { username, fullname, email, numberphone, address, gender, birthday } = req.body
-    console.log({ username, fullname, email, numberphone, address,gender,birthday })
-    if (!username || !fullname || !email || !numberphone || !address) {
+    const { username, fullname, email, phone, address, gender, birthday } = req.body
+    console.log({ username, fullname, email, phone, address,gender,birthday })
+    if (!username || !fullname || !email || !phone || !address) {
         return res.status(403).json({ status: false, message: "Nhập đầy đủ thông tin !" })
     }
 

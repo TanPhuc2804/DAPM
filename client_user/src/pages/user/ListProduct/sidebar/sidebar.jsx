@@ -58,16 +58,16 @@ function Sidebar() { // Thiết lập giá trị mặc định là mảng rỗng
       <div className="flex flex-col mt-6">
         <h2 className="text-xl font-medium text-indigo-950 mb-2">Khoảng giá (VND)</h2>
         <div className="flex flex-col space-y-2">
-          <button onClick={() => handlePriceRangeClick('0-100000')} className="text-lg text-indigo-950">
+          <button onClick={() => handlePriceRangeClick('0-100000')} className="text-lg text-indigo-950 bg-white">
             0 - 100,000 VND
           </button>
-          <button onClick={() => handlePriceRangeClick('100000-200000')} className="text-lg text-indigo-950">
+          <button onClick={() => handlePriceRangeClick('100000-200000')} className="text-lg text-indigo-950 bg-white">
             100,000 - 200,000 VND
           </button>
-          <button onClick={() => handlePriceRangeClick('200000-500000')} className="text-lg text-indigo-950">
+          <button onClick={() => handlePriceRangeClick('200000-500000')} className="text-lg text-indigo-950 bg-white">
             200,000 - 500,000 VND
           </button>
-          <button onClick={() => handlePriceRangeClick('500000')} className="text-lg text-indigo-950">
+          <button onClick={() => handlePriceRangeClick('500000')} className="text-lg text-indigo-950 bg-white">
             Trên 500,000 VND
           </button>
         </div>

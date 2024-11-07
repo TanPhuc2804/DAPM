@@ -1,14 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-import { FaShoppingCart, FaBars, FaTimes } from "react-icons/fa"; 
+import { FaShoppingCart, FaBars, FaTimes } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../../hooks/auth.context';
 import SearchComponent from '../SearchComponent/searchcomponent';
 import UserDropdown from '../UserMenu';
 
 const Navigation = () => {
-    const [cartItemCount, setCartItemCount] = useState(0); 
-    const [isMenuOpen, setIsMenuOpen] = useState(false); 
+    const [cartItemCount, setCartItemCount] = useState(0);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null); // State lưu trữ category đã chọn
     const { auth } = useContext(AuthContext);
@@ -30,23 +30,23 @@ const Navigation = () => {
     // Lấy số lượng sản phẩm trong giỏ hàng
     useEffect(() => {
         if (auth.isAuthenticated) {
-            axios.get('http://localhost:3000/cart/get-cart-item-count', { 
+            axios.get('http://localhost:3000/cart/get-cart-item-count', {
                 headers: { Authorization: `Bearer ${auth.token}` }
             })
-            .then(res => {
-                if (res.data.status) {
-                    setCartItemCount(res.data.count);
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            });
+                .then(res => {
+                    if (res.data.status) {
+                        setCartItemCount(res.data.count);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         }
     }, [auth.isAuthenticated]);
 
     const handleCategoryClick = (categoryId) => {
         setSelectedCategory(categoryId); // Cập nhật category đã chọn
-        navigate(`/product-category/${categoryId}`); 
+        navigate(`/product-category/${categoryId}`);
     };
 
     const handleLogout = () => {
@@ -81,17 +81,17 @@ const Navigation = () => {
 
                         {/* Dropdown for Product Categories */}
                         <div className="relative group">
-                            <Link 
-                                to="product-category/defauld" 
-                                className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" 
+                            <Link
+                                to="product-category/defauld"
+                                className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110"
                                 style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}
                             >
                                 Sản phẩm
                             </Link>
 
                             {/* Dropdown Content */}
-                            <div 
-                                className="absolute  mt-2 bg-white shadow-xl rounded-lg w-48 opacity-0 group-hover:opacity-100 group-hover:block transition-opacity duration-300"
+                            <div
+                                className="absolute mt-0 bg-white shadow-xl rounded-lg w-48 opacity-0 group-hover:opacity-100 hidden group-hover:block transition-opacity duration-300"
                             >
                                 <ul>
                                     {categories.map(category => (
@@ -99,8 +99,8 @@ const Navigation = () => {
                                             <button
                                                 onClick={() => handleCategoryClick(category._id)}
                                                 className={`w-full bg-white text-[#224F34] transition-all duration-300 ease-in-out text-lg border-none bg-none rounded-md py-2 px-4 focus:outline-none 
-                                                    ${selectedCategory === category._id ? 'bg-green-200' : 'hover:bg-green-100'}
-                                                `}
+                            ${selectedCategory === category._id ? 'bg-green-200' : 'hover:bg-green-100'}
+                        `}
                                             >
                                                 {category.name}
                                             </button>
@@ -109,6 +109,7 @@ const Navigation = () => {
                                 </ul>
                             </div>
                         </div>
+
                         <Link to="/about" className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}>
                             Giới Thiệu
                         </Link>
@@ -122,9 +123,9 @@ const Navigation = () => {
 
                             {/* Login Button */}
                             {auth.isAuthenticated ? (
-                                <UserDropdown 
-                                    username={auth.user.name} 
-                                    onLogout={handleLogout} 
+                                <UserDropdown
+                                    username={auth.user.name}
+                                    onLogout={handleLogout}
                                 />
                             ) : (
                                 <Link to={"/auth/login"} className="ml-4 px-3 py-2 rounded-md text-sm font-medium text-white bg-green-500 hover:bg-green-600">

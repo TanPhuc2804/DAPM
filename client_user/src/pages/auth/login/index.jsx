@@ -28,7 +28,7 @@ function Login() {
                         user: {
                             id: res.data.id,
                             email: res.data.email,
-                            name: res.data.fullname,
+                            name: res.data.fullanme,
                         },
                     };
 
