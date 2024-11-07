@@ -123,7 +123,7 @@ function DetailProduct() {
                     <div className="flex flex-col sm:flex-row items-center mb-12 mx-5 mt-6 w-full">
                         <Quantity value={quantity} onChange={setQuantity} />
                         <Link
-                            onClick={handleAddToCart}  // Gọi hàm handleAddToCart khi nhấn vào nút
+                            onClick={handleAddToCart}  
                             className="bg-green-500 text-white px-6 py-3 mt-4 sm:mt-0 sm:ml-5 border rounded-md transition-all duration-200 transform hover:bg-green-600 hover:scale-105 flex items-center"
                         >
                             <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
@@ -136,7 +136,7 @@ function DetailProduct() {
                 </div>
             </div>
 
-            {/* Mô tả sản phẩm và các sản phẩm liên quan */}
+
             <hr className="my-10 border-neutral-200" />
             <ProductDescription product={product} />
             <hr className="my-10 border-neutral-200" />

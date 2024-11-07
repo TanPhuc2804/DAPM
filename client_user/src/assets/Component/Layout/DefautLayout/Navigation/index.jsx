@@ -10,6 +10,7 @@ const Navigation = () => {
     const [cartItemCount, setCartItemCount] = useState(0); 
     const [isMenuOpen, setIsMenuOpen] = useState(false); 
     const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(null); // State lưu trữ category đã chọn
     const { auth } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -44,6 +45,7 @@ const Navigation = () => {
     }, [auth.isAuthenticated]);
 
     const handleCategoryClick = (categoryId) => {
+        setSelectedCategory(categoryId); // Cập nhật category đã chọn
         navigate(`/product-category/${categoryId}`); 
     };
 
@@ -71,21 +73,45 @@ const Navigation = () => {
                         </button>
                     </div>
 
-                    <div className={`flex-1 items-baseline justify-center space-x-12 ${isMenuOpen ? "block" : "hidden"} md:flex`}>
+                    {/* Navigation Links */}
+                    <div className={`flex-1 items-baseline justify-center space-x-12 ${isMenuOpen ? "block" : "hidden"} md:flex z-50`}>
                         <Link to="/" className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}>
                             Trang chủ
                         </Link>
-                        {categories.map(category => (
-                            <div key={category._id} className="relative">
-                                <button
-                                    onClick={() => handleCategoryClick(category._id)}
-                                    className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110"
-                                    style={{ border: 'none', background: 'none', padding: 0 }}
-                                >
-                                    {category.name}
-                                </button>
+
+                        {/* Dropdown for Product Categories */}
+                        <div className="relative group">
+                            <Link 
+                                to="product-category/defauld" 
+                                className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" 
+                                style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}
+                            >
+                                Sản phẩm
+                            </Link>
+
+                            {/* Dropdown Content */}
+                            <div 
+                                className="absolute  mt-2 bg-white shadow-xl rounded-lg w-48 opacity-0 group-hover:opacity-100 group-hover:block transition-opacity duration-300"
+                            >
+                                <ul>
+                                    {categories.map(category => (
+                                        <li key={category._id} className="p-2 hover:bg-green-100 rounded-md transition-all duration-300 ease-in-out">
+                                            <button
+                                                onClick={() => handleCategoryClick(category._id)}
+                                                className={`w-full text-[#224F34] transition-all duration-300 ease-in-out text-lg border-none bg-none rounded-md py-2 px-4 focus:outline-none 
+                                                    ${selectedCategory === category._id ? 'bg-green-200' : 'hover:bg-green-100'}
+                                                `}
+                                            >
+                                                {category.name}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
-                        ))}
+                        </div>
+                        <Link to="/about" className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110" style={{ fontSize: 'calc(1.5rem - 0.5vw)' }}>
+                            Giới Thiệu
+                        </Link>
                     </div>
 
                     {/* Search and Actions */}
@@ -126,16 +152,26 @@ const Navigation = () => {
                         <Link to="/" className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110">
                             Trang chủ
                         </Link>
-                        {categories.map(category => (
-                            <button
-                                key={category._id}
-                                onClick={() => handleCategoryClick(category._id)}
-                                className="text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110"
-                                style={{ border: 'none', background: 'none', padding: 0 }}
-                            >
-                                {category.name}
+                        {/* Mobile dropdown for products */}
+                        <div>
+                            <button className="text-[#224F34] transition-all duration-300 ease-in-out text-lg">
+                                Sản phẩm
                             </button>
-                        ))}
+                            <ul className="space-y-2">
+                                {categories.map(category => (
+                                    <li key={category._id}>
+                                        <button
+                                            onClick={() => handleCategoryClick(category._id)}
+                                            className={`text-[#224F34] transition-all duration-300 ease-in-out text-lg hover:underline hover:scale-110 
+                                                ${selectedCategory === category._id ? 'bg-green-200' : ''}
+                                            `}
+                                        >
+                                            {category.name}
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

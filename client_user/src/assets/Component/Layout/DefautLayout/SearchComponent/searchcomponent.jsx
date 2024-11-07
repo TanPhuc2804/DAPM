@@ -53,6 +53,12 @@ const SearchComponent = () => {
     };
   }, []);
 
+  // Hàm xử lý khi chọn sản phẩm
+  const handleProductSelect = () => {
+    setIsVisible(false); // Đóng kết quả tìm kiếm
+    setSearchTerm(''); // Xóa nội dung của input tìm kiếm
+  };
+
   return (
     <div className="relative">
       <div className="relative flex items-center">
@@ -72,7 +78,12 @@ const SearchComponent = () => {
           <div className="flex flex-col w-full">
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product) => (
-                <div key={product._id} className="flex items-center p-3 border-b border-gray-200 last:border-0">
+                <Link
+                  to={`/product/${product._id}`}
+                  key={product._id}
+                  onClick={handleProductSelect} // Gọi hàm khi chọn sản phẩm
+                  className="flex items-center p-3 border-b border-gray-200 last:border-0 hover:bg-gray-100"
+                >
                   <img
                     loading="lazy"
                     src={product.image}
@@ -80,12 +91,9 @@ const SearchComponent = () => {
                     className="object-contain w-16 h-16 mr-3"
                   />
                   <div className="text-sm text-zinc-800">
-                    {/* Link đến trang chi tiết sản phẩm */}
-                    <Link to={`/product/${product._id}`} className="hover:text-green-500">
-                      {product.name}
-                    </Link>
+                    {product.name}
                   </div>
-                </div>
+                </Link>
               ))
             ) : (
               <p className="p-3 text-center text-gray-500">Không tìm thấy sản phẩm phù hợp.</p>
