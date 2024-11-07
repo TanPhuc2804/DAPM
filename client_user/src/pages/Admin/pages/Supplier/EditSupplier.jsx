@@ -139,6 +139,10 @@ const EditSupplier = () => {
       alert("Vui lòng nhập số điện thoại.");
       return;
   }
+  if (!sdt.startsWith("0")) {
+    alert("SĐT phải bắt đầu là số 0");
+    return;
+  }
   if (!/^\d{10}$/.test(sdt)) {
     alert("Số điện thoại phải là số và phải có 10 ký tự");
     return;

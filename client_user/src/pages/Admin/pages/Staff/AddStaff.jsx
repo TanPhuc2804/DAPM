@@ -4,6 +4,10 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import axios from 'axios'; // Thêm axios để gửi yêu cầu HTTP
 import { Bold, User } from "lucide-react";
+import dayjs from "dayjs";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -36,6 +40,21 @@ const InputField = styled.div`
 
  & > input, & > select {
     flex: 0.7; /* Chiếm 70% không gian */
+  }
+
+   /* Wrapper for DatePicker */
+  .date-picker-wrapper {
+    flex: 0.7;
+    display: flex;
+  }
+
+  /* DatePicker style */
+  .date-picker {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
   }
 `;
 
@@ -94,6 +113,10 @@ const AddStaff = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const navigate = useNavigate();
+
+  // Định dạng lại ngày thành dd/MM/yyyy trước khi hiển thị trên giao diện
+  const formattedNamSinh = dayjs(namsinh).format("YYYY-MM-DD");
+  const formattedNgayVaoLam = dayjs(ngayvaolam).format("YYYY-MM-DD");
   // Hàm tính tuổi dựa vào ngày sinh
   const calculateAge = (birthday) => {
     const birthDate = new Date(birthday);
@@ -159,11 +182,11 @@ const AddStaff = () => {
     const staffData = {
       fullname: tenNV,
       cccd: cccd,
-      birthday: namsinh,
+      birthday: formattedNamSinh,
       numberphone: sdt,
       role: selectedRole,
       address: diachi,
-      ngaylamviec: ngayvaolam,
+      ngaylamviec: formattedNgayVaoLam,
       gender: gioitinh,
       email: email,
       username: username,
@@ -220,13 +243,15 @@ const AddStaff = () => {
 
         <InputField>
           <Label>Năm Sinh:</Label>
-          <Input
-            type="date"
-            value={namsinh}
-            onChange={(e) => setNamSinh(e.target.value)}
-            required
-            style={{ marginBottom: "10px" }}
+          <div className="date-picker-wrapper">
+          <DatePicker
+            selected={namsinh}
+            onChange={(date) => setNamSinh(date)}
+            dateFormat= "dd/MM/yyy"
+            placeholderText="dd/mm/yyyy"
+            className="date-picker"
           />
+          </div>
         </InputField>
 
         <InputField>
@@ -293,13 +318,15 @@ const AddStaff = () => {
 
         <InputField>
           <Label>Ngày vào làm:</Label>
-          <Input
-            type="date"
-            value={ngayvaolam}
-            onChange={(e) => setNgayVaoLam(e.target.value)}
-            required
-            style={{ marginBottom: "10px" }}
+          <div className="date-picker-wrapper">
+          <DatePicker
+            selected={ngayvaolam}
+            onChange={(date) => setNgayVaoLam(date)}
+            dateFormat="dd/MM/yyyy"
+            placeholderText="dd/mm/yyy"
+            className="date-picker"
           />
+          </div>
         </InputField>
 
         <InputField>

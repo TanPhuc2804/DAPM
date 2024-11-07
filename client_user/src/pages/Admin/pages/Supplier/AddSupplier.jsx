@@ -106,6 +106,10 @@ const AddSupplier = () => {
       alert("Số điện thoại phải là số và phải có 10 ký tự");
       return;
     }
+    if (!sdt.startsWith("0")) {
+      alert("SĐT phải bắt đầu là số 0");
+      return;
+    }
     if (!diachi.trim()) {
         alert("Vui lòng nhập địa chỉ.");
         return;

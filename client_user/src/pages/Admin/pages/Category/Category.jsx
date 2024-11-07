@@ -98,6 +98,12 @@ const Category = () => {
   },[])
  
   const handleAddCategory = async (name) => {
+    // Kiểm tra xem danh mục đã tồn tại chưa
+  const isDuplicate = categories.some(category => category.name === name.trim());
+  if (isDuplicate) {
+    alert("Danh mục đã tồn tại!");
+    return; // Ngừng việc thêm nếu danh mục trùng
+  }
     try {
       const res = await axios.post("http://localhost:3000/category/create-category", { name });
       if (res.data.status) {
