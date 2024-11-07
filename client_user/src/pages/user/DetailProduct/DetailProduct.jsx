@@ -38,8 +38,8 @@ function DetailProduct() {
 
     useEffect(() => {
         // Lấy dữ liệu sản phẩm từ API khi ID thay đổi
-        setLoading(true);  
-        setTimeout(() => {  
+        setLoading(true);
+        setTimeout(() => {
             axios.get(`http://localhost:3000/products/list-product/${id}`)
                 .then(res => {
                     if (res.data.status) {
@@ -51,8 +51,8 @@ function DetailProduct() {
                     console.log(err);
                     setLoading(false);  // Đặt trạng thái loading thành false nếu có lỗi
                 });
-        }, 500);  
-    }, [id]);  
+        }, 500);
+    }, [id]);
 
     // Cấu hình Swiper cho carousel ảnh sản phẩm
     const settings = {
@@ -67,16 +67,27 @@ function DetailProduct() {
             disableOnInteraction: false,
         },
     };
-
+    const addCartInDB = (product, quantity, size) => {
+        axios.post("http://localhost:3000/customer/cart/insert", { product, quantity, size })
+            .then(res => res.data)
+            .then(data => {
+                openNotification(true, "Thêm giỏ hàng thành công", "")
+            }).catch(err => {
+                openNotification(false, "Thêm giỏ hàng thất bại", "Số lượng mua đã vượt quá số lượng sản phẩm !")
+            })
+    }
     // Định nghĩa hàm handleAddToCart
     const handleAddToCart = () => {
-        if (!auth) {
-            openNotification("Chưa đăng nhập", "Bạn cần đăng nhập trước khi thêm sản phẩm vào giỏ hàng.", "error");
-            return;
+        if (!auth.isAuthenticated) {
+            openNotification(false, "Vui lòng đăng nhập", "Đăng nhập để mua sắm")
+            return
+        } else {
+            addCartInDB(product, quantity, selectedSize)
+            addToCart({ ...product, quantity, size: selectedSize });
         }
-        addToCart(product, quantity, selectedSize);
-        openNotification("Thêm vào giỏ hàng thành công", `${product.name} đã được thêm vào giỏ hàng!`, "success");
     };
+
+
 
     if (loading) {
         return <LoadingSpinner />;  // Hiển thị vòng tròn xoay khi loading
@@ -123,7 +134,7 @@ function DetailProduct() {
                     <div className="flex flex-col sm:flex-row items-center mb-12 mx-5 mt-6 w-full">
                         <Quantity value={quantity} onChange={setQuantity} />
                         <Link
-                            onClick={handleAddToCart}  
+                            onClick={handleAddToCart}
                             className="bg-green-500 text-white px-6 py-3 mt-4 sm:mt-0 sm:ml-5 border rounded-md transition-all duration-200 transform hover:bg-green-600 hover:scale-105 flex items-center"
                         >
                             <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
