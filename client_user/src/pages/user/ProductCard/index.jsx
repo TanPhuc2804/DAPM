@@ -13,7 +13,7 @@ const ProductCard = ({ _id, image, name, price, originalPrice, discount, descrip
         <div className="flex relative flex-col items-center self-stretch px-2 pt-3 text-2xl font-extralight leading-none text-black whitespace-nowrap bg-blend-darken min-h-[400px] pb-4 max-md:pr-5 max-md:pb-16">
           <img
             loading="lazy"
-            src={image}
+            src={image[0] }
             alt={name}
             className="object-cover w-full h-full transition duration-300 group-hover:opacity-75"
           />

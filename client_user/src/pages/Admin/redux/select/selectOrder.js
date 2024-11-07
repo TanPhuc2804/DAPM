@@ -19,10 +19,16 @@ export const orderSlice = createSlice({
         },
         updateOrderState: (state, action) => {
             const { id, stateOrder } = action.payload;
-            const order = state.orders.find(order => order._id === id);
-            if (order) {
-                order.stateOrder = stateOrder; // Cập nhật trạng thái đơn hàng
-            }
+            state.temporder = state.orders.map(order => {
+                if(order._id === id){
+                    return {
+                        ...order,
+                        stateOrder:stateOrder
+                    }
+                }
+                return order
+            });
+            
         },
         updateTemp: (state, action) => {
             state.temporder = action.payload;
