@@ -439,7 +439,7 @@ const getOrderForState = async (req, res) => {
     try {
         const order = await Order.find({
             stateOrder: stateOrder
-        })
+        }).populate("idCustomer")
         return res.status(200).json({ status: true, message: "Change state successfully !", order: order })
 
     } catch (err) {

@@ -13,7 +13,6 @@ const FinalOrder = () => {
     const fetchOrderItems = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/order/list-order`);
-        console.log(response.data)
         if (Array.isArray(response.data.order)) {
           setOrderItems(response.data.order);
         } else {

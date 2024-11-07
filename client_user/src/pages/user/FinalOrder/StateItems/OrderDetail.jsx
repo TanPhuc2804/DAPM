@@ -2,7 +2,6 @@ import React from 'react'
 import { Col, Row, Image } from 'antd'
 import { formatCurrency } from '../../../../assets/Function/formatCurrency'
 function OrderDetail({ product }) {
-    console.log(product)
     return (
         <Row className="m-[10px] text-left" justify="space-between">
             {/* Hình ảnh sản phẩm */}
