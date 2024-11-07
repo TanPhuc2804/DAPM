@@ -9,11 +9,11 @@ const UserDropdown = ({ username, onLogout }) => {
       <button className="ml-4 px-3 py-2 rounded-md text-sm font-medium text-white bg-green-500 hover:bg-green-600">
         {username}
       </button>
-      <div className="absolute right-0 bg-white shadow-lg rounded-lg mt-2 w-48 z-10 hidden group-hover:block transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100">
+      <div className="absolute right-0 top-[30px] bg-white shadow-lg rounded-lg mt-2 w-48 z-10 hidden group-hover:block transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100">
         <ul className="flex flex-col">
           <li>
             <button 
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left bg-white"
               onClick={() => navigate('/auth/profile')}
             >
               Thông Tin Cá Nhân
@@ -21,7 +21,7 @@ const UserDropdown = ({ username, onLogout }) => {
           </li>
           <li>
             <button 
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left bg-white"
               onClick={() => navigate('/auth/StateOrder')}
             >
               Đơn Hàng
@@ -29,7 +29,7 @@ const UserDropdown = ({ username, onLogout }) => {
           </li>
           <li>
             <button 
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left bg-white"
               onClick={onLogout}
             >
               Đăng Xuất

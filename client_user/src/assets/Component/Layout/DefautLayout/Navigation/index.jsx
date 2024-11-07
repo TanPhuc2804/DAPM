@@ -98,7 +98,7 @@ const Navigation = () => {
                                         <li key={category._id} className="p-2 hover:bg-green-100 rounded-md transition-all duration-300 ease-in-out">
                                             <button
                                                 onClick={() => handleCategoryClick(category._id)}
-                                                className={`w-full text-[#224F34] transition-all duration-300 ease-in-out text-lg border-none bg-none rounded-md py-2 px-4 focus:outline-none 
+                                                className={`w-full bg-white text-[#224F34] transition-all duration-300 ease-in-out text-lg border-none bg-none rounded-md py-2 px-4 focus:outline-none 
                                                     ${selectedCategory === category._id ? 'bg-green-200' : 'hover:bg-green-100'}
                                                 `}
                                             >

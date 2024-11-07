@@ -74,7 +74,7 @@ const ChangePasswordForm = ({ Id }) => {
               <button
                 type="button"
                 onClick={() => setShowCurrentPassword((prev) => !prev)}
-                className="focus:outline-none"
+                className="focus:outline-none bg-white"
               >
                 <img
                   loading="lazy"
@@ -101,7 +101,7 @@ const ChangePasswordForm = ({ Id }) => {
               <button
                 type="button"
                 onClick={() => setShowNewPassword((prev) => !prev)}
-                className="focus:outline-none"
+                className="focus:outline-none bg-white"
               >
                 <img
                   loading="lazy"
@@ -128,7 +128,7 @@ const ChangePasswordForm = ({ Id }) => {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword((prev) => !prev)}
-                className="focus:outline-none"
+                className="focus:outline-none bg-white"
               >
                 <img
                   loading="lazy"
