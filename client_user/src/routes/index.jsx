@@ -2,6 +2,7 @@ import Home from "../pages/user/Home";
 import Profile from "../pages/user/Profile/profile.jsx";
 import Login from "../pages/auth/login"; 
 import Register from "../pages/auth/Register"; 
+import About from "../assets/Component/Layout/DefautLayout/AboutComponent/about.jsx";
 import ListProduct from "../pages/user/ListProduct";
 import DetailProduct from "../pages/user/DetailProduct/DetailProduct";
 import Cart from "../pages/user/Card/Pagecart";
@@ -33,6 +34,7 @@ import InfoAdmin from "../pages/Admin/components/InforAdmin/InfoAdmin.jsx";
 import Navigation from "../assets/Component/Layout/DefautLayout/Navigation/index.jsx";
 import CategoryPage from "../assets/Component/Layout/DefautLayout/CategoryPage/CategoryPage.jsx";
 import FinalOrder from "../pages/user/FinalOrder/FinalOrder.jsx";
+
 const publicRoutes = [
      { path: '/', component: Home },
     { path: '/auth/profile', component: Profile },
@@ -48,6 +50,7 @@ const publicRoutes = [
     { path: '/success/:session_id', component: Success },
     { path: '/auth/StateOrder', component: FinalOrder },
     { path: '/cancel', component: Cancel },
+    { path: '/about', component: About },
     { path: '/auth/logup', component: Register, layout: null },
     { path: '/admin/infor', component: InfoAdmin, layout: null },
     {

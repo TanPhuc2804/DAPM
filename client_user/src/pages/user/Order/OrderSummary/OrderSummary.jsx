@@ -4,7 +4,8 @@ import { Link, useLocation,useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { useInfor } from '../../../../assets/hooks/inforOrder.context';
 import { openNotification } from '../../../../assets/hooks/notification';
-import { useDispatch,useSelector } from 'react-redux'
+import { useDispatch,useSelector } from 'react-redux';
+
 function OrderSummary() {
     const navigate =useNavigate()
     const {infor }= useInfor()

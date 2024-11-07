@@ -10,7 +10,7 @@ import CustomDesign from './CustomDesign/CustomDesign';
 
 function Home() {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center ">
       <Swiper
         modules={[Pagination, Navigation, Autoplay]}
         spaceBetween={30}
@@ -26,7 +26,7 @@ function Home() {
       >
         <SwiperSlide>
           <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/6d6c1932e7205cd05b749dcf6350cee7f8eea3c2039e669285bfcd113bf0a58b?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101"
+            src="https://owen.cdn.vccloud.vn/media/amasty/webp/codazon/slideshow/h/e/hero_1366x532_061124_jpg.webp"
             alt="Banner 1"
             className="object-contain w-full aspect-[2.56] max-md:mt-10 max-md:max-w-full"
           />
