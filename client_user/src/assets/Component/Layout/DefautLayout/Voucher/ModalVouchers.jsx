@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { Modal } from 'antd'
 import VoucherCard from './VoucherCard'
 import axios from 'axios'
+import dayjs from 'dayjs'
 import { useDispatch } from 'react-redux'
 import { selectVoucher } from '../../../../../pages/Admin/redux/Voucher/voucherSlice'
-function ModalVouchers({ visible, close }) {
+function  ModalVouchers({ visible, close }) {
     const [vouchers, setVouchers] = useState([])
     const dispatch = useDispatch()
+    
     useEffect(() => {
         axios.get("http://localhost:3000/Voucher/get-allvoucher")
             .then(res => res.data)
@@ -32,7 +34,11 @@ function ModalVouchers({ visible, close }) {
             <div className='d-flex justify-center items-center'>
                 {vouchers.length > 0 &&
                     vouchers.map((item) => {
-                        if (item.quantity > 0) {
+                        const dayNow = dayjs()
+                        const startDay =dayjs(item.createdAt)
+                        const endDay = dayjs(item.expiryDate)
+                        console.log(endDay,startDay)
+                        if (item.quantity > 0 && dayNow.isAfter(startDay) && dayNow.isBefore(endDay) ) {
                             return (
                                 <div key={item._id} className='m-[20px]'>
                                     <VoucherCard voucher={item} ></VoucherCard>

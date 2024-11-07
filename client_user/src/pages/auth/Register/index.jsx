@@ -41,7 +41,7 @@ function Register() {
           axios.post("http://localhost:3000/auth/registerCus", { username, fullname, password, email })
             .then((res) => {
               if (res.data.status) {
-                navigate('/login');
+                navigate('/auth/login');
               }
             })
             .catch((err) => {

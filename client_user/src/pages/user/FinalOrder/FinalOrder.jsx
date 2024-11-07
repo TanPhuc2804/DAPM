@@ -52,35 +52,15 @@ const FinalOrder = () => {
         </div>
       </div>
     </div>
-    <div className="flex gap-8 my-auto text-2xl leading-none">
-      <div data-layername="chờXacNhận" className="grow text-emerald-300">
-        Chờ xác nhận
-      </div>
-      <div className="flex gap-2.5 text-orange-600">
-        <div className="shrink-0 w-px border border-solid border-neutral-400 h-[25px]" />
-        <div data-layername="daThanhToan" className="my-auto basis-auto">
-          Đã thanh toán
-        </div>
-      </div>
-    </div>
+
   </div>
-  <div className="border-b border-gray-300 my-4" />
+  <div className="bo  rder-b border-gray-300 my-4" />
   {filteredOrders.length > 0 ? (
     filteredOrders.map((item,index) => (
-      <div key={index} className="border-b border-gray-300 py-4">
-
-        {item.order_details.map((detail,index) => {
-          return (
+      <div key={index} className="border border-gray-300 py-4 m-[10px] bg-white rounded-lg">
             <OrderItem
-              key={index}
-              img={detail._idProduct.image[0]}
-              name={detail.name}
-              size={detail.size}
-              quantity={detail.quantity}
-              price={detail.price}
+              order={item}
             />
-          );
-        })}
       </div>
     ))
   ) : (
