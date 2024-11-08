@@ -174,7 +174,6 @@ const OrderAdmin = () => {
 
   const hanldeFilterOrder = (value) => {
     if (value == "defauld") {
-      console.log("defauld")
       dispatch(updateTemp(orderMain))
 
     } else {

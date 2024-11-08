@@ -152,6 +152,7 @@ const EditCustomer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     // Kiểm tra các trường dữ liệu không được để trống
     if (!fullname.trim()) {
       alert("Tên khách hàng không được để trống");
@@ -164,16 +165,17 @@ const EditCustomer = () => {
     if (!checkDateField(ngaysinh,"Ngày sinh không được để trống")) {
       return;
     }
+    
     // Kiểm tra tuổi
     const today = new Date();
     const birthDate = new Date(ngaysinh);
-    const age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-
+    let age = today.getFullYear() - birthDate.getFullYear(); // Change `const` to `let`
+    let monthDiff = today.getMonth() - birthDate.getMonth();
+  
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
-
+  
     if (age < 16) {
       alert("Khách hàng phải đủ 16 tuổi");
       return;
@@ -206,14 +208,14 @@ const EditCustomer = () => {
     try {
       const updateCustomer = {
         fullname: fullname,
-        numberphone: sdt,
+        phone: sdt,
         email: email,
         birthday: dayjs(ngaysinh).format('YYYY-MM-DD'),
         gender: gioitinh,
         address: diachi,
         username: username,
       };
-      console.log(updateCustomer)
+      console.log(updateCustomer);
       await axios.put(`http://localhost:3000/customer/update-customer/${id}`, updateCustomer);
       alert("Cập nhật Customer thành công");
       navigate('/admin/customer');
@@ -221,7 +223,8 @@ const EditCustomer = () => {
       console.error("Cập nhật Customer thất bại", error);
       alert("Cập nhật thất bại");
     }
-  }
+  };
+  
   return (
     <Container>
       <Form >

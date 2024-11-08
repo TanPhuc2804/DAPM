@@ -3,7 +3,7 @@ import { useInfor } from '../../../../assets/hooks/inforOrder.context';
 
 const paymentMethods = [
   { name: 'Thanh toán khi nhận hàng', image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/8c001ac09fd9daed91303d647a3d139c287df1b25dd0afe39b756aaf4642de55?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101' },
-  { name: 'Thanh toán bằng Stripe', image: 'https://tse2.mm.bing.net/th?id=OIP.7w5wVVFd9_K68l_g4XHQcAHaEK&pid=Api&P=0&h=180' },
+  { name: 'Thanh toán Online', image: 'https://tse2.mm.bing.net/th?id=OIP.7w5wVVFd9_K68l_g4XHQcAHaEK&pid=Api&P=0&h=180' },
 ];
 
 function PaymentOptions() {

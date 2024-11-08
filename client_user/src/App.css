@@ -1,16 +1,24 @@
+/* Cấu hình container gốc */
 #root {
-  max-width: auto;
+  width: 100%;
   margin: 0 auto;
-
   text-align: center;
+  overflow: visible; /* Đảm bảo dropdown không bị cắt */
 }
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.navigation-container {
+  position: relative;
+  overflow: visible; /* Đảm bảo không che mất SearchComponent */
+}
 .mySwiper {
   width: 100%;
   height: auto;
 }
+
 .logo {
   height: 7em;
   padding: 1.5em;
@@ -46,42 +54,55 @@
 .read-the-docs {
   color: #888;
 }
-.container {
-  width: 100%; 
-  max-width: 100%; 
+
+
+.relative:hover .dropdown {
+  display: block;
+  opacity: 1;
 }
 
-/* Tùy chỉnh nút mũi tên trái */
-.swiper-button-prev {
-  color: #ffffff !important; 
-  background-color: transparent !important; 
-  border-radius: 50%; 
-  width: 20px; 
-  height: 20px; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s;
+/* Liên kết trong navbar */
+nav a {
+  transition: font-size 0.3s ease;
 }
 
-/* Tùy chỉnh nút mũi tên phải */
+/* Nút mũi tên của Swiper */
+.swiper-button-prev,
 .swiper-button-next {
-  color: #ffffff !important; 
-  background-color: transparent !important; 
-  border-radius: 50%; 
-  width: 24px; 
-  height: 24px; 
+  color: #ffffff !important;
+  background-color: transparent !important;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.2s;
 }
 
-/* Hiệu ứng khi hover vào các nút */
 .swiper-button-prev:hover,
 .swiper-button-next:hover {
-  transform: scale(1.2); 
+  transform: scale(1.2);
 }
+
+.swiper-button-prev {
+  width: 20px;
+  height: 20px;
+}
+
+.swiper-button-next {
+  width: 24px;
+  height: 24px;
+}
+
+/* Hiệu ứng hover cho thẻ sản phẩm */
+.product-card {
+  transition: transform 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Danh sách sản phẩm và các phần tử */
 .product-list {
   display: flex;
   flex-wrap: wrap;
@@ -92,32 +113,24 @@
   margin: 1em;
   text-align: center;
 }
+
+.product-image {
+  width: 100px;
+  height: auto;
+}
+
 .slick-slider {
-  height: 400px; 
+  height: 400px;
 }
 
 .slick-slide {
-  height: 100%; 
+  height: 100%;
   display: flex;
-  justify-content: center; 
-  align-items: center; 
+  justify-content: center;
+  align-items: center;
 }
 
-.product-image {
-  width: 100px; 
-  height: auto; 
-}
-.product-card {
-  transition: transform 0.3s; 
-}
-
-.product-card:hover {
-  transform: translateY(-5px); 
-}
-nav a {
-  transition: font-size 0.3s ease;
-}
-
+/* Slide sản phẩm */
 .product-slide {
   width: 100%;
   height: 100%;
@@ -127,20 +140,83 @@ nav a {
 }
 
 .slick-slide {
-  min-height: 300px; 
+  min-height: 300px;
 }
 
+/* Hiệu ứng gạch chân tuỳ chỉnh */
 .custom-underline {
   position: relative;
-  display: inline-block; /* Bắt buộc để gạch chân hoạt động chính xác */
+  display: inline-block;
 }
 
 .custom-underline::after {
   content: '';
   position: absolute;
   right: 0;
-  bottom: -5px; 
-  width: 60%; 
-  height: 2px; 
-  background-color: grey; 
+  bottom: -5px;
+  width: 60%;
+  height: 2px;
+  background-color: grey;
 }
+
+/* Điều chỉnh cho chế độ sáng */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+}
+
+:root, body {
+  color-scheme: light;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.container, .content {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+
+
+.slick-slide img {
+  transition: transform 0.3s ease;
+}
+
+.slick-slide:hover img {
+  transform: scale(1.05);
+}
+
+.slider-container {
+  width: 100%;
+  height: auto;
+  max-height: 600px; 
+}
+
+/* Chỉnh sửa hình ảnh trong Slider */
+.slider-container img {
+  width: 100%;
+  height: auto;
+  object-fit: contain; 
+}
+/* Custom Navigation Arrows */
+.swiper-button-next,
+.swiper-button-prev {
+  color: gray !important; /* Set arrow color to gray */
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: darkgray !important; /* Optional: Darker shade on hover */
+}
+
+/* Custom Pagination Dots */
+.swiper-pagination-bullet {
+  background-color: gray !important; /* Set bullet color to gray */
+}
+
+.swiper-pagination-bullet-active {
+  background-color: darkgray !important; /* Active bullet in dark gray */
+}
+

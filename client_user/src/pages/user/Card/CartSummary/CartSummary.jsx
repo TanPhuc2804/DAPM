@@ -49,7 +49,7 @@ function CartSummary({ cartItems }) {
                         <div className="self-stretch my-auto text-green-900">{total - priceDiscount } đ</div>
                     </div>
                 </div>
-                <Link to="/customer/order" state={{ cartItems}} className="flex gap-3 justify-center items-center px-8 max-w-full text-2xl font-bold tracking-wide text-white uppercase bg-green-900 rounded leading-[56px] w-[376px] max-md:px-5">
+                <Link to={cartItems.length >0 ? "/customer/order" : "/"} state={{ cartItems}} className="flex gap-3 justify-center items-center px-8 max-w-full text-2xl font-bold tracking-wide text-white uppercase bg-green-900 rounded leading-[56px] w-[376px] max-md:px-5">
                     <span className="self-stretch my-auto">Đặt hàng</span>
                     <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/74d0a6f01a231e01c69ace0cdebd528f5732141fec6416bc339330bdc548e330?placeholderIfAbsent=true&apiKey=78644689b17e4755b6c14634047ca101" alt="" className="object-contain shrink-0 self-stretch my-auto w-6 aspect-square" />
                 </Link>
