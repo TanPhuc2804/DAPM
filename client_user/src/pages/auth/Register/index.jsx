@@ -51,8 +51,8 @@ function Register() {
               }
             })
             .catch((err) => {
-              console.log(err)
-              openNotification(false, "Đăng ký thất bại", err.response?.data?.errr || " Đã xảy ra lỗi. Vui lòng thử lại sau");
+              console.log(err.response.data.message)
+              openNotification(false, "Đăng ký thất bại", err.response?.data?.message || " Đã xảy ra lỗi. Vui lòng thử lại sau");
             });
         }
       })

@@ -1,12 +1,12 @@
-const { message } = require('antd');
+
 const Voucher = require('../models/Voucher.model');
 
 // Create a new voucher
 const createVoucher = async (req, res) => {
     try{
         const voucher = new Voucher(req.body);
-        await voucher.save();
-        res.status(201).json({status:true, message:"Voucher created succesfully!",voucher});
+        const data=await voucher.save();
+        res.status(201).json({status:true, message:"Voucher created succesfully!",voucher:data});
     }catch(error){
         res.status(400).json({status:false, message:"Failed to create voucher",error: error.message});
     }
@@ -53,8 +53,8 @@ const updateVoucher = async (req, res) => {
         voucher.createdAt = createdAt || voucher.createdAt;
         voucher.isActive = isActive !== undefined ? isActive : voucher.isActive;
 
-        await voucher.save();
-        res.status(200).json({ status: true, message: 'Voucher updated successfully', voucher });
+        const data=await voucher.save();
+        res.status(200).json({ status: true, message: 'Voucher updated successfully', voucher:data });
     } catch (error) {
         res.status(500).json({ status: false, message: 'Server error', error: error.message });
     }

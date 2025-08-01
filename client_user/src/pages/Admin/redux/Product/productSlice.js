@@ -15,13 +15,34 @@ export const productSlice = createSlice({
             state.productTemps = action.payload
             state.selectProduct = {}
         },
+        addProduct: (state, action) => {
+            const newProduct = action.payload
+            state.products.push(newProduct)
+            state.productTemps.push(newProduct)
+        },
+        updateProduct: (state, action) => {
+            const updatedProduct = action.payload
+            const products = state.products.map(item => {
+                if (item._id === updatedProduct._id) {
+                    return updatedProduct
+                }
+                return item
+            })
+            state.products = products
+            state.productTemps = products
+        },
         selectedProduct: (state, action) => {
             state.selectProduct = action.payload
         },
-        filterProductCate: (state, action) => {
-            state.productTemps = state.products.filter(item => item.category._id == action.payload)
-        },
-        deleteProduct: (state, action) => {
+        filterProduct: (state, action) => {
+            const { cate, supplier } = action.payload
+            state.productTemps = state.products.filter(item => {
+                if (cate == "1" && supplier == "1") return true
+                if (cate == "1") return item.supplier._id == supplier
+                if (supplier == "1") return item.category._id == cate
+                return (item.category._id == cate) && (item.supplier._id == supplier)
+            })
+        }, deleteProduct: (state, action) => {
             state.products = state.products.filter(item => item._id != action.payload)
             state.productTemps = state.products.filter(item => item._id != action.payload)
         },
@@ -34,8 +55,22 @@ export const productSlice = createSlice({
                 return product.price > minPrice;
             })
         },
+        resetProduct: (state) => {
+            state.selectProduct = {}
+        },
+        setCateInProduct: (state, action) => {
+            const { id, name } = action.payload
+            const newProducts = state.productTemps.map(item => {
+                if (item.category._id === id) {
+                    item.category.name = name
+                }
+                return item
+            })
+            state.productTemps = newProducts
+            state.products = newProducts
+        }
     }
 })
 
-export const { setProduct, selectedProduct, filterProductCate, deleteProduct,filterProductPrice } = productSlice.actions
-export default productSlice.reducer 
+export const { setProduct, selectedProduct, filterProduct, deleteProduct, filterProductPrice, resetProduct, updateProduct, addProduct, setCateInProduct } = productSlice.actions
+export default productSlice.reducer

@@ -20,8 +20,8 @@ const createSupplier = async (req, res) => {
             description: supplier.description
         })
 
-        await newSupplier.save()
-        return res.status(200).json({ status: true, message: "Create supplier successful !" })
+        const dataSupplier= await newSupplier.save()
+        return res.status(200).json({ status: true, message: "Create supplier successful !" ,supplier:dataSupplier})
     } catch (err) {
         return res.status(500).json({ status: false, message: err.message })
     }
@@ -72,11 +72,11 @@ const updateSupplier = async (req, res) => {
         return res.status(403).json({status:false,message:"ID disappear !"})
     if(!newSupplier )
         return res.status(403).json({status:false,message:"Input required !"})
-    await Supplier.findByIdAndUpdate({
+    const data= await Supplier.findByIdAndUpdate({
         _id:id
     },newSupplier)
 
-    return res.status(200).json({status:true,message:"Update supplier successfull ! !"})
+    return res.status(200).json({status:true,message:"Update supplier successfull ! !",supplier:newSupplier})
 
 }
 module.exports = {

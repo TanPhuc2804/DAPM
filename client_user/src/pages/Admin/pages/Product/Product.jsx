@@ -2,63 +2,25 @@ import React, { useEffect, useState } from 'react'
 import styled from "styled-components";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { Table, Image, Button, Popconfirm } from 'antd'
+import { Table, Image, Button, Popconfirm, Typography, Select, Modal } from 'antd'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { openNotification } from "../../../../assets/hooks/notification"
 import dayjs from 'dayjs';
 import axios from 'axios';
-import { setProduct, selectedProduct,filterProductCate,deleteProduct } from '../../redux/Product/productSlice';
+import { setProduct, selectedProduct, filterProduct, deleteProduct } from '../../redux/Product/productSlice';
+import ModelFormProduct from '../../components/Product/ModelFormProduct';
+import ModalCategory from '../../components/Product/ModalCategory';
 
-const WrapperProduct = styled.div`
-    width: 150px;
-    padding: 20px;
-    margin: 10px;
-    background-color: #fff;
-    border-radius: 8px;
-    border-left: 6px solid ${props => props.color};
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    font-size: 16px;
-    color: black;
-`;
-const WrapperProduct1 = styled.p`
-    margin: 0;
-    font-weight: bold;
-    color: black;
-`;
-const WrapperProductBackground = styled.div`
-    background-color: #FFF0F5;
-`;
-
-
-
-const ViewProduct = ({ title, color, item, hanldeFilterCate }) => {
-  return (
-    <WrapperProductBackground>
-      <WrapperProduct color={color}>
-        <div>
-          <WrapperProduct1>
-            <Link onClick={()=>hanldeFilterCate(item)}>
-              <p>{title}</p>
-            </Link>
-          </WrapperProduct1>
-        </div>
-      </WrapperProduct>
-    </WrapperProductBackground>
-  );
-};
 const Product = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const products = useSelector(state => state.product.products)
-  const productTemps = useSelector(state => state.product.productTemps)
-
   const [categories, setCategories] = useState([])
-
-  const hanldeFilterCate = (category) => {
-    dispatch(filterProductCate(category._id))
-  }
+  const [suppliers, setSuppliers] = useState([])
+  const [filterData, setFilterData] = useState({ cate: "1", supplier: "1" })
+  const productTemps = useSelector(state => state.product.productTemps)
+  const [visible, setVisible] = useState(false)
+  const [visibleModalCate, setVisibleModalCate] = useState(false)
 
   const handleDeleted = (record) => {
     axios.delete(`http://localhost:3000/products/delete-product/${record._id}`)
@@ -73,7 +35,11 @@ const Product = () => {
   }
   const handleUpdate = (record) => {
     dispatch(selectedProduct(record))
-    navigate('/admin/addproduct')
+    setVisible(true)
+  }
+
+  const handleFilterProduct = () => {
+    dispatch(filterProduct(filterData))
   }
 
   const columns = [
@@ -168,12 +134,35 @@ const Product = () => {
     }
   ];
 
+  useEffect(() => {
+    handleFilterProduct()
+  }, [filterData])
 
   useEffect(() => {
     axios.get("http://localhost:3000/category/get-categorylist ")
       .then(res => res.data)
       .then(data => {
-        setCategories(data.categories)
+        const formattedCate = data.categories.map(cate => (
+          {
+            value: cate._id,
+            label: cate.name
+          }
+        ))
+        setCategories([{ value: "1", label: "Tất cả danh mục" }, ...formattedCate])
+      })
+      .catch(err => console.log(err))
+    axios.get("http://localhost:3000/supplier/list-supplier")
+      .then(res => res.data)
+      .then(data => {
+
+        const formattedSuppliers = data.suppliers.map(supplier => (
+          {
+            value: supplier._id,
+            label: supplier.companyName
+          }
+        ))
+
+        setSuppliers([{ value: "1", label: "Tất cả nhà cung cấp" }, ...formattedSuppliers])
       })
       .catch(err => console.log(err))
     axios.get("http://localhost:3000/products/list-product")
@@ -185,32 +174,47 @@ const Product = () => {
         console.log(err)
       })
   }, [])
-
   return (
     <>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center',alignItems:"center", padding: '20px', backgroundColor: '#ffffff' }}>
-        {categories.map((item, index) => (
-          <ViewProduct
-            title={item.name}
-            key={index}
-            color="blue"
-            item={item}
-            hanldeFilterCate = {hanldeFilterCate}
-          />
-        ))}
-        <Button onClick={()=>dispatch(setProduct(products))}>Mặc định</Button>
-      </div>
-      <Link to={"/admin/addproduct"} className='flex items-start justify-start mx-[20px] mb-[10px]'>
+      <div className='flex justify-between items-center mb-[20px]'>
         <Button
+          className=' bg-blue-600 text-white'
           type='primary'
           icon={<FontAwesomeIcon icon={faPlus} />}
+          onClick={() => { setVisible(true) }}
         >
-          Thêm sản phẩm
+          <Typography.Text className='text-white font-semibold'>Thêm sản phẩm</Typography.Text>
         </Button>
-      </Link>
+        <div>
+          <Select
+            style={{ width: "250px" }}
+            options={suppliers}
+            defaultValue={"1"}
+            onChange={(value) => {
+              setFilterData(pre => ({ ...pre, supplier: value }))
+            }}>
 
+          </Select>
+          <Select
+            style={{ width: "250px", marginLeft: "20px" }}
+            options={categories}
+            defaultValue={"1"}
+            onChange={(value) => {
+              setFilterData(pre => ({ ...pre, cate: value }))
+            }}>
 
-      <div className='max-w-[1000px]'>
+          </Select>
+          <Button
+            className='ml-[20px] bg-blue-600 text-white'
+            type='primary'
+            onClick ={()=> setVisibleModalCate(true)}
+          >
+            <Typography.Text className='text-white font-semibold'>Danh mục</Typography.Text>
+          </Button>
+        </div>
+      </div>
+
+      <div className='max-w-[1400px]'>
         <Table
           bordered
           columns={columns}
@@ -221,6 +225,8 @@ const Product = () => {
 
         ></Table>
       </div>
+      <ModelFormProduct visible={visible} onClose={() => setVisible(false)} supliers={suppliers} categories={categories} />
+      <ModalCategory visible={visibleModalCate} onClose={() => setVisibleModalCate(false)} />
     </>
 
   )

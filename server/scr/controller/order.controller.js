@@ -389,7 +389,7 @@ const insertOrder = async (req, res) => {
 
 const getListOrder = async (req, res) => {
     try {
-        const listOder = await Order.find({}).populate('idCustomer order_details._idProduct')
+        const listOder = await Order.find({}).populate('idCustomer order_details._idProduct order_details._idProduct.category')
         return res.status(200).json({ status: true, message: "Order successfully !", order: listOder })
     } catch (err) {
         return res.status(500).json({ status: false, message: err.message })

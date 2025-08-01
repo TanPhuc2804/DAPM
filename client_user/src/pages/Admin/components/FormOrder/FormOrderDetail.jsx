@@ -10,7 +10,6 @@ function FormOrderDetail({ order }) {
     price:formatCurrency(item.price),
     total_price: formatCurrency(item.quantity * item.price)
   })))
-  console.log(data)
 
   const columns = [
     {
@@ -61,9 +60,9 @@ function FormOrderDetail({ order }) {
         return 'Lỗi'
     }
   }
-  console.log("FormOrderDetail", order)
   return (
     <>
+      
       <div>
         <h2 className='text-black text-[17px] font-bold'>Thông tin khách hàng</h2>
         <div className='m-[10px] text-[15px] text-black '>

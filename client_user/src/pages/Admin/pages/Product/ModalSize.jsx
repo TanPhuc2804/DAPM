@@ -27,20 +27,19 @@ function ModalSize({ visible, close, setSizes, productSizes, idPro }) {
 
     const handleInputChange = (index, event) => {
         const { name, value } = event.target;
-        // Tạo một bản sao của fields và cập nhật giá trị
         const newFields = fields.map((field, i) => {
             if (i === index) {
-                return { ...field, [name]: value }; // Cập nhật thuộc tính
+                return { ...field, [name]: value };
             }
-            return field; // Giữ nguyên các trường khác
+            return field;
         });
-        setFields(newFields); // Cập nhật trạng thái
+        setFields(newFields);
     };
     useEffect(() => {
         if (productSizes) {
             setFields(productSizes);
         } else {
-            setFields([{ size: '', quantity: '' }]); // Khởi tạo với trường mặc định nếu không có productSizes
+            setFields([{ size: '', quantity: '' }]);
         }
     }, [productSizes]);
     return (

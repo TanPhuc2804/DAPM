@@ -6,37 +6,25 @@ import About from "../assets/Component/Layout/DefautLayout/AboutComponent/about.
 import ListProduct from "../pages/user/ListProduct";
 import DetailProduct from "../pages/user/DetailProduct/DetailProduct";
 import Cart from "../pages/user/Card/Pagecart";
-import OrderAdmin from "../pages/Admin/pages/Order/Order.jsx";
 import Cancel from "../pages/checkout/Cancel";
 import Success from "../pages/checkout/Success";
 import Admin from "../pages/Admin/pages";
 import Product from "../pages/Admin/pages/Product/Product";
-import Category from "../pages/Admin/pages/Category/Category";
 import OrderCus  from "../pages/user/Order/Order.jsx";
-import Revenue from "../pages/Admin/pages/Revenue/Revenue";
-import Staff from "../pages/Admin/pages/Staff/Staff";
-import Supplier from "../pages/Admin/pages/Supplier/Supplier";
-import Vourchers from "../pages/Admin/pages/Vourchers/Vourchers";
 import Pricing from "../pages/Admin/pages/Pricing/Pricing";
-import AddProduct from "../pages/Admin/pages/Product/AddProduct";
-import UpdateProduct from "../pages/Admin/pages/Product/UpdateProduct";
-import ViewDetailProduct from "../pages/Admin/pages/Product/ViewDetailProduct";
-import EditVoucher from "../pages/Admin/pages/Vourchers/EditVoucher";
-import AddVoucher from "../pages/Admin/pages/Vourchers/AddVoucher";
-import AddOrder from "../pages/Admin/pages/Order/addOrder";
-import AddStaff from "../pages/Admin/pages/Staff/AddStaff";
-import EditStaff from "../pages/Admin/pages/Staff/EditStaff";
-import EditSupplier from "../pages/Admin/pages/Supplier/EditSupplier.jsx";
-import AddSupplier from "../pages/Admin/pages/Supplier/AddSupplier.jsx";
-import Customer from "../pages/Admin/pages/Customer/Customer.jsx";
-import EditCustomer from "../pages/Admin/pages/Customer/EditCustomer.jsx";
-import InfoAdmin from "../pages/Admin/components/InforAdmin/InfoAdmin.jsx";
 import Navigation from "../assets/Component/Layout/DefautLayout/Navigation/index.jsx";
 import CategoryPage from "../assets/Component/Layout/DefautLayout/CategoryPage/CategoryPage.jsx";
 import FinalOrder from "../pages/user/FinalOrder/FinalOrder.jsx";
+import Category from "../pages/Admin/pages/Category/Category.jsx";
+import RevernuePage from "../pages/Admin/pages/Revenue/RevernuePage.jsx";
+import OrderPage from "../pages/Admin/pages/Order/OrderPage.jsx";
+import StaffPage from "../pages/Admin/pages/Staff/StaffPage.jsx";
+import CustomerPage from "../pages/Admin/pages/Customer/CustomerPage.jsx";
+import SupplierPage from "../pages/Admin/pages/Supplier/SupplierPage.jsx";
+import VoucherPage from "../pages/Admin/pages/Vourchers/VoucherPage.jsx";
 
 const publicRoutes = [
-     { path: '/', component: Home },
+    { path: '/', component: Home },
     { path: '/auth/profile', component: Profile },
     { path: '/auth/login', component: Login, layout: null }, 
     { path: '/auth/register', component: Register, layout: null }, 
@@ -52,90 +40,20 @@ const publicRoutes = [
     { path: '/cancel', component: Cancel },
     { path: '/about', component: About },
     { path: '/auth/logup', component: Register, layout: null },
-    { path: '/admin/infor', component: InfoAdmin, layout: null },
     {
         path: "/admin",
         component: Admin,
         isAdmin: true,
         children: [
-            { path: "", page: Product },
-            {
-                path: 'category',
-                page: Category,
-            },
-            {
-                path: 'order',
-                page: OrderAdmin,
-            },
-            {
-                path: 'revenue',
-                page: Revenue,
-            },
-            {
-                path: 'staff',
-                page: Staff,
-            },
-            {
-                path: 'supplier',
-                page: Supplier,
-            },
-            {
-                path: 'vouchers',
-                page: Vourchers,
-            },
-            {
-                path: 'pricing',
-                page: Pricing,
-            },
-            {
-                path: 'addproduct',
-                page: AddProduct,
-            },
-            {
-                path: 'updateproduct',
-                page: UpdateProduct,
-                isShowHeader: true
-            },
-            {
-                path: 'viewdetailproduct/:id',
-                page: ViewDetailProduct,
-            },
-            {
-                path: 'editvoucher/:id',
-                page: EditVoucher,
-            },
-            {
-                path: 'addvoucher',
-                page: AddVoucher,
-            },
-            {
-                path: 'addorder',
-                page: AddOrder,
-            },
-            {
-                path: 'addstaff',
-                page: AddStaff,
-            },
-            {
-                path: 'editstaff/:id',
-                page: EditStaff,
-            },
-            {
-                path: 'editsupplier/:id',
-                page: EditSupplier,
-            },
-            {
-                path: 'addsupplier',
-                page: AddSupplier,
-            },
-            {
-                path:'customer',
-                page: Customer,
-            },
-            {
-                path:'editcustomer/:id',
-                page: EditCustomer,
-            },
+            { path: "products", page: Product },
+            { path: "", page: RevernuePage },
+            { path: "revenue", page: RevernuePage },
+            { path: "orders", page: OrderPage },
+            { path: "staffs", page: StaffPage },
+            { path:"customers",page:CustomerPage},
+            { path:"suppliers",page:SupplierPage},
+            { path:"vouchers",page:VoucherPage}
+            
         ]
     }
 ];

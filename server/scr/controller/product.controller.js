@@ -6,20 +6,58 @@ const Customer = require('../models/Customer.model');
 //Create a new product
 const createProduct = async (req, res) => {
     try {
-        const product = new Product(req.body);
-        await product.save();
-        res.status(201).json({ status: true, message: "Product created successfully", product });
+        const newProduct = new Product(req.body);
+        const product = await newProduct.save();
+        const data = await Product.findById({ _id: product._id })
+            .populate('category', 'name')
+            .populate('supplier', 'companyName')
+        res.status(201).json({ status: true, message: "Product created successfully", product: data });
     } catch (error) {
         res.status(400).json({ status: false, message: "Failed to create product", error: error.message });
     }
 };
 
-// Get all products
+// Get all products với pagination và tối ưu query
 const getAllProducts = async (req, res) => {
     try {
-        const products = await Product.find({}).populate('category supplier') // Lấy thông tin nhà cung cấp
-            ; // Chỉ lấy các trường cần thiết
-        res.status(200).json({ status: true, products });
+        const { page = 1, limit = 10, category, minPrice, maxPrice, search } = req.query;
+        
+        // Build query filter
+        let filter = {};
+        if (category) filter.category = category;
+        if (minPrice || maxPrice) {
+            filter.price = {};
+            if (minPrice) filter.price.$gte = Number(minPrice);
+            if (maxPrice) filter.price.$lte = Number(maxPrice);
+        }
+        if (search) {
+            filter.name = { $regex: search, $options: 'i' };
+        }
+
+        const skip = (Number(page) - 1) * Number(limit);
+        
+        // Sử dụng lean() để tăng performance và chỉ select fields cần thiết
+        const products = await Product.find(filter)
+            .populate('category', 'name') // Chỉ lấy field name từ category
+            .populate('supplier', 'companyName') // Chỉ lấy field name từ supplier  
+            .select('name price description image productSizes status createdAt updatedAt')
+            .lean() // Trả về plain JavaScript objects thay vì Mongoose documents
+            .skip(skip)
+            .limit(Number(limit))
+            .sort({ createdAt: -1 }); // Sort theo thời gian tạo mới nhất
+            
+        const total = await Product.countDocuments(filter);
+        
+        res.status(200).json({ 
+            status: true, 
+            products,
+            pagination: {
+                page: Number(page),
+                limit: Number(limit),
+                total,
+                pages: Math.ceil(total / Number(limit))
+            }
+        });
     } catch (error) {
         res.status(500).json({ status: false, message: "Failed to retrieve products", error: error.message });
     }
@@ -55,7 +93,8 @@ const updateProduct = async (req, res) => {
         if (!product) {
             return res.status(404).json({ status: false, message: "Product not found" });
         }
-        res.status(200).json({ status: true, message: "Product updated successfully", product });
+        const dataProduct = await Product.findById(product._id).populate('supplier', 'companyName').populate('category', 'name');
+        res.status(200).json({ status: true, message: "Product updated successfully", product: dataProduct });
     } catch (error) {
         res.status(400).json({ status: false, message: "Failed to update product", error: error.message });
     }

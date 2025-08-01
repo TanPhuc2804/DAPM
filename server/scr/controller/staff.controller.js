@@ -1,13 +1,24 @@
-const { message } = require('antd');
+
 const Staff = require('../models/Staff.model');
 const bcrypt = require('bcrypt')
 //create a new staff
 const createStaff = async (req, res) => {
     try {
+        const { email, numberphone, username } = req.body
+        const emailExisted = await Staff.findOne({ email: email })
+        if (emailExisted)
+            return res.status(403).json({ status: false, message: 'Email đã tồn tại' });
+        const numberphoneExisted = await Staff.findOne({ numberphone: numberphone })
+        if (numberphoneExisted)
+            return res.status(403).json({ status: false, message: 'Số điện thoại đã tồn tại' });
+        const usernameExisted = await Staff.findOne({ username: username })
+        if (usernameExisted)
+            return res.status(403).json({ status: false, message: 'Username đã tồn tại' });
+
         const password = await bcrypt.hash(req.body.password, 10)
         const staffInput = {
             ...req.body,
-            password:password
+            password: password
         }
         const staff = new Staff(staffInput);
 
@@ -45,9 +56,17 @@ const updateStaff = async (req, res) => {
     const { staffcode, fullname, cccd, birthday, gender, numberphone, email, role, address, ngaylamviec, isActive } = req.body;
 
     try {
-        const staff = await Staff.findById(req.params.id);
+        const idStaff = req.params.id
+        const staff = await Staff.findById(idStaff);
         if (!staff) {
             return res.status(404).json({ status: false, message: 'Staff not found' });
+        }
+        const emailExisted = await Staff.findOne({
+            email: email
+        })
+
+        if (emailExisted && emailExisted._id != idStaff) {
+            return res.status(403).json({ status: false, message: 'Email đã tồn tại' });
         }
 
         // Update voucher fields
