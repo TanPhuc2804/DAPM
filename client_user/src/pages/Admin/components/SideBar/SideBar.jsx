@@ -26,7 +26,7 @@ const SideBar = () => {
             <Link to="/admin/revenue">Quản lý doanh thu</Link>
         </Menu.Item>
         <Menu.Item key="6">
-            <Link to="/admin/pricing">Quản lý đánh giá sản phẩm</Link>
+            <Link to="/admin/customer">Quản lý khách hàng</Link>
         </Menu.Item>
         <Menu.Item key="7">
             <Link to="/admin/supplier">Quản lý nhà cung cấp</Link>

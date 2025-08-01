@@ -58,7 +58,6 @@ const deleteCategory = async (req, res) => {
     }
     try {
         const countCategoryInProduct = await Product.countDocuments({category:id})
-        console.log(countCategoryInProduct)
         if(countCategoryInProduct >0){
             return res.status(400).json({ status: false, message: "Dont deleted category !" });
         }

@@ -1,35 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from '../../Productcard';
 import axios from "axios";
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-const ProductGrid = ({ categoryId }) => {
-    const [listProduct, setProduct] = useState([]);
-    const [loading, setLoading] = useState(true); 
-    const [error, setError] = useState(''); 
-    axios.defaults.withCredentials = true;
-
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await axios.get(`http://localhost:3000/products/list-product-category/:id`);
-                if (response.data.status) {
-                    setProduct(response.data.ListProduct);
-                } else {
-                    setError('Không tìm thấy sản phẩm.');
-                }
-            } catch (err) {
-                console.error(err);
-                setError('Đã có lỗi xảy ra khi lấy dữ liệu.');
-            } finally {
-                setLoading(false); 
-            }
-        };
-
-        fetchProducts();
-    }, [categoryId]);
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
+const ProductGrid = () => {
+    const { id } = useParams();
+    const listProduct = useSelector(state=>state.product.productTemps)
 
     return (
         <section className="mt-custom ml-4 max-md:mt-10 max-md:max-w-full">

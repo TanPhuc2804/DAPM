@@ -4,7 +4,7 @@ import ProductCard from '../../ProductCard';
 import products from '../../Products'; 
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-
+import { useParams, Link } from 'react-router-dom';
 const PrevArrow = (props) => {
   const { onClick } = props;
   return (
@@ -73,9 +73,9 @@ const BestSelling = () => {
           )}
         </Slider>
       </div>
-      <button className="flex justify-center py-4 mt-12 w-56 text-2xl font-medium text-green-900 rounded border-2 border-green-900 border-solid max-md:px-5">
+      <Link  to="product-category/defauld"  className="flex justify-center py-4 mt-12 w-56 text-2xl font-medium text-green-900 rounded border-2 border-green-900 border-solid max-md:px-5">
         See all
-      </button>
+      </Link>
     </section>
   );
 };

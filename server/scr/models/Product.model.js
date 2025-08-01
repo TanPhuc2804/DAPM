@@ -10,11 +10,7 @@ const productSchema = new mongoose.Schema({
       required: true,
       min: 0 // Ensure non-negative price
     },
-    quantity: {
-      type: Number,
-      required: true,
-      min: 0 // Ensure non-negative quantity
-    },
+    
     description: {
       type: String,
       required: true,
@@ -24,10 +20,17 @@ const productSchema = new mongoose.Schema({
       type: [String],
       required: true // Assuming at least one image is required
     },
-    size: {
-      type: String,
-      trim: true
-    },
+    productSizes:[{
+      size: {
+        type: String,
+        trim: true
+      },
+      quantity: {
+        type: Number,
+        required: true,
+        min: 0 // Ensure non-negative quantity
+      },
+    }],
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category', // Reference to the Category schema

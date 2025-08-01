@@ -1,10 +1,13 @@
 import { Col } from "antd";
-import React from "react";
+import React,{useContext} from "react";
+import { Link } from "react-router-dom";
+import {AuthContext} from "../../../../assets/hooks/auth.context"
 import { WrapperHeader, WrapperHeaderAccount, WrapperText1Header, WrapperTextHeader } from "./style";
 import Search from "antd/es/transfer/search";
 import {BellOutlined, HomeOutlined, UserOutlined} from '@ant-design/icons';
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
 const HeaderComponent = () => {
+    const {auth} = useContext(AuthContext)
     return (
         <div >
         <WrapperHeader gutter={16}>
@@ -26,11 +29,11 @@ const HeaderComponent = () => {
         <div>
             <BellOutlined style={{fontSize: '25px'}}/>
         </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+            <Link to={"/admin/infor"} style={{ display: "flex", alignItems: "center", gap: "5px", color:"black"}}>
                 <UserOutlined style={{ fontSize: '25px' }} />
-                <span>Tài khoản</span>
-            </div>
-        </WrapperHeaderAccount>          
+                <span >{auth.isAuthenticated ?auth.user.name : "Tài khoản"}</span>
+            </Link>
+        </WrapperHeaderAccount>                                                                                                 
         </Col>
       </WrapperHeader>
       </div>

@@ -10,7 +10,6 @@ function FormOrderDetail({ order }) {
     price:formatCurrency(item.price),
     total_price: formatCurrency(item.quantity * item.price)
   })))
-  console.log(data)
 
   const columns = [
     {
@@ -43,26 +42,27 @@ function FormOrderDetail({ order }) {
 
   const getStateOrder = (state) => {
     switch (state) {
+      case "waiting":
+        return 'Chờ xác nhận'
       case "comfirmed":
         return 'Đã xác nhận'
-      case "waitting":
-        return 'Chờ xác nhận'
       case "cancelled":
         return 'Đã hủy'
       case "shipping":
         return 'Đang giao hàng'
       case "delivered":
-        return 'Đã giao hàng'
+        return "Giao hàng thành công"
       case "success":
         return 'Đơn hàng thành công'
+      case "paymented":
+        return 'Thanh toán thành công'
       default:
-        return 'Chờ xác nhận'
-
+        return 'Lỗi'
     }
   }
-  console.log("FormOrderDetail", order)
   return (
     <>
+      
       <div>
         <h2 className='text-black text-[17px] font-bold'>Thông tin khách hàng</h2>
         <div className='m-[10px] text-[15px] text-black '>

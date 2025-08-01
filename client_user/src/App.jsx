@@ -15,7 +15,6 @@ function App() {
   useEffect(() => {
     axios.get("http://localhost:3000/auth/verify ")
       .then(res => {
-        console.log(res);
         setAuth({
           isAuthenticated: true,
           user: {
@@ -25,47 +24,55 @@ function App() {
           }
         })
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        setAuth({
+          isAuthenticated: false,
+          user: {
+            id: "",
+            email: "",
+            name: ""
+          }
+        })
+      })
   }, [])
-  console.log(auth)
   return (
     <Router>
       <CartProvider>
 
-      <div className="App bg-white">
-        <Routes>
-          {publicRoutes.map((route, index) => {
-            if (route.isAdmin) {
+        <div className="App bg-white">
+          <Routes>
+            {publicRoutes.map((route, index) => {
+              if (route.isAdmin) {
+                console.log("Route isAdmin:", route);
+
+                return (
+                  <Route key={index} path={route.path} element={<route.component />}>
+                    {route.children && route.children.map((child, childIndex) => {
+                      const ChildPage = child.page;
+                      return (
+                        <Route
+                          key={childIndex}
+                          path={child.path}
+                          element={<ChildPage />}
+                        />
+                      );
+                    })}
+                  </Route>
+                );
+
+              }
+
+              const Layout = route.layout === null ? Fragment : DefaultLayout;
               const Page = route.component;
               return (
-                <Route
-                  key={index}
+                <Route key={index}
                   path={route.path}
-                  element={<route.component />}
-                >
-                  {route.children && route.children.map((child, index) => (
-                    <Route
-                      key={index}
-                      path={child.path}
-                      element={<child.page />}
-                    />
-                  ))}
+                  element={<Layout><Page /></Layout>} />
+              );
+            })}
+          </Routes>
+        </div>
 
-                </Route>
-              )
-            }
-
-            const Layout = route.layout === null ? Fragment : DefaultLayout;
-            const Page = route.component;
-            return (
-              <Route key={index}
-                path={route.path}
-                element={<Layout><Page /></Layout>} />
-            );
-          })}
-        </Routes>
-      </div>
-              
       </CartProvider>
     </Router>
   )
