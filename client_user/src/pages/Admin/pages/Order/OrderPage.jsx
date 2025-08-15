@@ -134,9 +134,7 @@ function OrderPage() {
                     return true
                 const startDate = value[0]
                 const endDate = value[1]
-                console.log(startDate,endDate)
                 const recordDate =dayjs(record.createdAt)
-                //console.log("Reocrd",record.createdAt)
                 return (recordDate.isAfter(startDate,"day","[]") && recordDate.isBefore(endDate.endOf("day"),"[]")) || recordDate.isSame(startDate,"day") || recordDate.isSame(endDate,"day")
             }
 
@@ -153,7 +151,6 @@ function OrderPage() {
                         onClick={(e) => {
                             e.stopPropagation();
                         }}
-                        //onChange={(value)=>{console.log(value)}}
                         onChange={(value) => hanldeChangeState(value, record._id)}
                         value={record.stateOrder}
                         options={items}

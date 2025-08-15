@@ -184,14 +184,12 @@ function RevernuePage() {
             return orderDate.isBetween(startDate, endDate, null, '[]')
         })
         if (tempOrder.length > 0) {
-            console.log("Nhay zo day")
             dispatch(updateTemp(tempOrder))
         } else {
             dispatch(updateTemp(tempOrder))
             openNotification(false, "Không có đơn hàng nào vào" + daySearch.startDay + " - " + daySearch.endDay, "")
         }
     }
-    //console.log(tempOrder)
     return (
         <>
             <Space className='flex justify-end mx-[40px]'>

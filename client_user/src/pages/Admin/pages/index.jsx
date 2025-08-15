@@ -2,19 +2,16 @@ import React, { useState } from 'react'
 
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { Breadcrumb, Layout, Menu, theme, Typography } from 'antd'
-import { items } from '../config/itemMenu.jsx'
+import { items, itemUser } from '../config/itemMenu.jsx'
+import HeaderAdmin from '../components/HeaderComponents/HeaderAdmin.jsx'
 const { Header, Content, Footer, Sider } = Layout
-
-
-
 function Admin() {
     const [collapsed, setCollapsed] = useState(false);
     const location = useLocation();
 
     const currentKey = location.pathname.split("/").pop();
-    const breadcrumbItems = findBreadcrumbPath(items, currentKey) || [];
+    const breadcrumbItems = findBreadcrumbPath(items, currentKey) || findBreadcrumbPath(itemUser, currentKey) || [];
     const navigate = useNavigate()
-
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -49,10 +46,18 @@ function Admin() {
                 </Typography.Title>
                 <Menu
                     theme='dark'
-                    defaultOpenKeys={['product-list']}
+                    defaultOpenKeys={['revenue']}
                     selectedKeys={[currentKey]}
                     mode='inline'
                     items={items}
+                    onClick={(e) => handleClickMenu(e.key)}
+                />
+                <hr className='w-[170px] my-[10px] mx-[auto] ' />
+                <Menu
+                    theme='dark'
+                    selectedKeys={[currentKey]}
+                    mode='inline'
+                    items={itemUser}
                     onClick={(e) => handleClickMenu(e.key)}
                 />
             </Sider>
@@ -61,12 +66,12 @@ function Admin() {
                     padding: 0,
                     background: colorBgContainer,
                 }}>
-                    <div className="text-2xl font-bold text-gray-800">Quản trị viên</div>
+                    <HeaderAdmin/>
                 </Header>
                 <Content
                     style={{
                         padding: "0 24px",
-                        minHeight: 280, 
+                        minHeight: 280,
                         background: colorBgContainer,
                         borderRadius: borderRadiusLG
                     }}

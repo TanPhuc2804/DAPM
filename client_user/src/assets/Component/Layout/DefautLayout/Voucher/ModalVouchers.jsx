@@ -37,7 +37,6 @@ function  ModalVouchers({ visible, close }) {
                         const dayNow = dayjs()
                         const startDay =dayjs(item.createdAt)
                         const endDay = dayjs(item.expiryDate)
-                        console.log(endDay,startDay)
                         if (item.quantity > 0 && dayNow.isAfter(startDay) && dayNow.isBefore(endDay) ) {
                             return (
                                 <div key={item._id} className='m-[20px]'>

@@ -63,6 +63,7 @@ const login = async (req, res) => {
             gender: customer.gender,
             address: customer.address,
             voucher: customer.vouchers,
+            role:"customer"
         })
 
         return res.cookie("token", access_token, { httpOnly: true, secure: true })
@@ -94,7 +95,8 @@ const login = async (req, res) => {
             gender: staff.gender,
             address: staff.address,
             voucher: staff.vouchers,
-            role: staff.role
+            img:staff.image ?? "",
+            role: "admin"
         })
 
         return res

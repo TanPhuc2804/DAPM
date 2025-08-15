@@ -45,7 +45,7 @@ const Navigation = () => {
     }, [auth.isAuthenticated]);
 
     const handleCategoryClick = (categoryId) => {
-        setSelectedCategory(categoryId); // Cập nhật category đã chọn
+        setSelectedCategory(categoryId); 
         navigate(`/product-category/${categoryId}`);
     };
 

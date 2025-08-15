@@ -44,7 +44,7 @@ const verifyAdmin = async (req,res,next)=>{
         return res.status(401).json({message:"You aren't an admin !"})
     }
     const userPayload = decode
-    req.user = userPayload
+    req.user = {...userPayload,role:"admin"}
     next()
 }
 
