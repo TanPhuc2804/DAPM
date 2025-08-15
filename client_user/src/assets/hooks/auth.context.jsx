@@ -5,7 +5,9 @@ export const AuthContext = createContext({
     user: {
         id: '',
         email: '',
-        name: ''
+        name: '',
+        img:'',
+        role:''
     }
 });
 
@@ -17,7 +19,9 @@ export const AuthWrapper = ({ children }) => {
         user: {
             id: '',
             name: '',
-            email: ''
+            email: '',
+            img:"",
+            role:''
         }
     });
 

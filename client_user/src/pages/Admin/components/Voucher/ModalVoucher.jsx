@@ -42,7 +42,6 @@ function ModalVoucher({ visible, onClose }) {
             axios.post("http://localhost:3000/Voucher/create-voucher/", values)
                 .then(res => res.data)
                 .then(data => {
-                    console.log(data.voucher)
                     dispatch(addVoucher(data.voucher))
                     openNotification(true, "Tạo thành công voucher", "")
                     onClose()

@@ -89,7 +89,7 @@ function TableProductRevenue({ productOrders, filterCate }) {
                 pagination={false}
                 bordered
                 onChange={(pagination, filters, sorter) => {
-                    console.log(sorter)
+                    
                     setSortInfo(sorter);
                 }}
             >

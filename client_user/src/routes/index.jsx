@@ -22,6 +22,7 @@ import StaffPage from "../pages/Admin/pages/Staff/StaffPage.jsx";
 import CustomerPage from "../pages/Admin/pages/Customer/CustomerPage.jsx";
 import SupplierPage from "../pages/Admin/pages/Supplier/SupplierPage.jsx";
 import VoucherPage from "../pages/Admin/pages/Vourchers/VoucherPage.jsx";
+import AccountPage from "../pages/Admin/pages/Account/AccountPage.jsx";
 
 const publicRoutes = [
     { path: '/', component: Home },
@@ -52,7 +53,8 @@ const publicRoutes = [
             { path: "staffs", page: StaffPage },
             { path:"customers",page:CustomerPage},
             { path:"suppliers",page:SupplierPage},
-            { path:"vouchers",page:VoucherPage}
+            { path:"vouchers",page:VoucherPage},
+            { path:"account",page:AccountPage}
             
         ]
     }

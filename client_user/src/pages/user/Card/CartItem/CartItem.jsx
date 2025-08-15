@@ -24,8 +24,7 @@ function CartItem({ productId, name, size, price, quantity, image }) {
         })
     };
 
-    const total = price * quantity; // 
-    console.log(size)
+    const total = price * quantity;
     return (
         <div className="px-4 py-2 w-full max-md:pr-5 max-md:max-w-full">
             <div className="flex gap-5 max-md:flex-col">

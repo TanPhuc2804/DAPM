@@ -40,7 +40,6 @@ function ModalSupplier({ visible, onClose }) {
                 .then(res => res.data)
                 .then(data => {
                     const supplier = data.supplier
-                    console.log(data)
                     dispatch(addSupplier(supplier))
                     onClose()
                     openNotification(True, "Thêm nhà cung cấp thành công !", "")

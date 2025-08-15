@@ -2,7 +2,7 @@ import React from 'react';
 
 const Size = ({ selectedSize, setSelectedSize, productSizes }) => {
     const sizes = productSizes.sort((a, b) => parseInt(a.size) - parseInt(b.size));
-    console.log(productSizes)
+   
     const handleScrollToSizeGuide = () => {
         const element = document.getElementById('size-guide');
         if (element) {
@@ -42,9 +42,8 @@ const Size = ({ selectedSize, setSelectedSize, productSizes }) => {
             </div>
             <div className="mt-3.5 text-xl text-gray-400 text-left">Chọn size</div>
             <div className="grid grid-cols-5 gap-5 mt-3.5 max-w-full text-xl text-black">
-                {console.log(sizes)}
+              
                 {sizes.map((size) => {
-                    console.log(size)
                     return (
                         <div key={size.size} className="flex-1">
                             <button

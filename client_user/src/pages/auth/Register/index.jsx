@@ -36,7 +36,6 @@ function Register() {
 
   const onFinish = (values) => {
     const { otp } = values;
-    console.log(values)
     axios.post("http://localhost:3000/auth/verify-otp", { inputOTP: otp })
       .then(res => res.data)
       .then(data => {

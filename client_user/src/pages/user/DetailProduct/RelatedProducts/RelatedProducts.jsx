@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import ProductCard from '../../Productcard';
+import ProductCard from '../../ProductCard';
 import axios from 'axios';
 
 const RelatedProducts = () => {
@@ -9,11 +9,9 @@ const RelatedProducts = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("Product ID:", id); 
 
     axios.get("http://localhost:3000/products/list-product")
       .then(res => {
-        console.log("Response Data:", res.data); 
 
         if (res.data.status) {
           setRelatedProducts(res.data.products);
